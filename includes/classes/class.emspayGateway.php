@@ -1,6 +1,6 @@
 <?php
 
-require_once('vendors/ing-php/vendor/autoload.php');
+require_once('vendors/ems-php/vendor/autoload.php');
 
 /**
  * Class emspay
