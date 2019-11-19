@@ -140,7 +140,7 @@ class ingpsp_klarna extends ingpspGateway
         return [
             'id' => $this->code,
             'fields' => $fields,
-            'module' => "<img src='".DIR_WS_IMAGES."ingpsp/".$this->code.".png' /> ".$this->title
+            'module' => "<img src='".DIR_WS_IMAGES."emspay/".$this->code.".png' /> ".$this->title
         ];
     }
 

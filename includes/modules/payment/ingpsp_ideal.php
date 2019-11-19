@@ -123,7 +123,7 @@ class ingpsp_ideal extends ingpspGateway
 
         return array(
             'id' => $this->code,
-            'module' => "<img src='".DIR_WS_IMAGES."ingpsp/".$this->code.".png' /> ".$this->title,
+            'module' => "<img src='".DIR_WS_IMAGES."emspay/".$this->code.".png' /> ".$this->title,
             'fields' => $fields,
         );
     }

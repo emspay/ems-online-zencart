@@ -3,14 +3,14 @@
 require_once(dirname(dirname(dirname(dirname(__FILE__)))).'/includes/classes/class.ingpspGateway.php');
 
 /**
- * Class ingpsp
+ * Class emspay
  */
 class ingpsp extends ingpspGateway
 {
-    public $code = 'ingpsp';
+    public $code = 'emspay';
 
     /**
-     * ingpsp constructor.
+     * emspay constructor.
      */
     function __construct()
     {

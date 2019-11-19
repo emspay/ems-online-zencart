@@ -3,7 +3,7 @@
 require_once('vendors/ing-php/vendor/autoload.php');
 
 /**
- * Class ingpsp
+ * Class emspay
  */
 class ingpspGateway extends base
 {
@@ -93,7 +93,7 @@ class ingpspGateway extends base
      * @param string $code
      * @return \GingerPayments\Payment\Client
      */
-    public static function getClient($code = 'ingpsp')
+    public static function getClient($code = 'emspay')
     {
         $ingpsp = null;
 
@@ -432,7 +432,7 @@ class ingpspGateway extends base
                 || $ingOrder->status()->isError()
                 || $ingOrder->status()->isExpired()
             ) {
-                static::loadLanguageFile('ingpsp');
+                static::loadLanguageFile('emspay');
                 $reason = $ingOrder->transactions()->current()->getReason()?:MODULE_PAYMENT_INGPSP_ERROR_TRANSACTION;
                 $messageStack->add_session('checkout_payment', $reason, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
