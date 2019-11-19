@@ -10,10 +10,10 @@ require_once(DIR_WS_INCLUDES.'classes/class.emspayGateway.php');
 $breadcrumb->add(NAVBAR_TITLE);
 
 if ($_POST['processing']) {
-    $ingOrderId = filter_input(INPUT_GET, 'order_id', FILTER_SANITIZE_STRING);
-    $ingpspOrder = ingpspGateway::getClient()->getOrder($ingOrderId);
+    $emsOrderId = filter_input(INPUT_GET, 'order_id', FILTER_SANITIZE_STRING);
+    $emspayOrder = ingpspGateway::getClient()->getOrder($emsOrderId);
 
     die(json_encode([
-        'redirect' => $ingpspOrder->status()->isProcessing()
+        'redirect' => $emspayOrder->status()->isProcessing()
     ]));
 }
