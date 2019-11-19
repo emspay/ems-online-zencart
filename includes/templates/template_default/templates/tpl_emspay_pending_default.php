@@ -1,23 +1,23 @@
 <?php if ($_GET['failed']): ?>
     <h3>
-        <?php echo INGPSP_ORDER_PENDING; ?>
+        <?php echo EMSPAY_ORDER_PENDING; ?>
     </h3>
     <p>
-        <?php echo INGPSP_ORDER_PENDING_MESSAGE; ?>
+        <?php echo EMSPAY_ORDER_PENDING_MESSAGE; ?>
     </p>
 <?php else: ?>
     <h3>
-        <?php echo INGPSP_ORDER_PROCESSING; ?>
+        <?php echo EMSPAY_ORDER_PROCESSING; ?>
     </h3>
     <p>
-        <?php echo INGPSP_PLEASE_WAIT; ?>
+        <?php echo EMSPAY_PLEASE_WAIT; ?>
     </p>
     <div>
-        <img src="<?php echo DIR_WS_IMAGES ?>/ingpsp/ajax-loader.gif"/>
+        <img src="<?php echo DIR_WS_IMAGES ?>/emspay/ajax-loader.gif"/>
     </div>
 
     <script language="JavaScript">
-        var fallback_url = '<?php echo htmlspecialchars_decode(zen_href_link(FILENAME_INGPSP_PENDING, '&failed=1', 'SSL')); ?>';
+        var fallback_url = '<?php echo htmlspecialchars_decode(zen_href_link(FILENAME_EMSPAY_PENDING, '&failed=1', 'SSL')); ?>';
         var validation_url = '<?php echo htmlspecialchars_decode(zen_href_link(FILENAME_CHECKOUT_PROCESS, '&order_id='.$_GET['order_id'], 'SSL')); ?>';
 
         $(document).ready(function () {

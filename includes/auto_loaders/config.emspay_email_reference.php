@@ -6,7 +6,7 @@ if (!defined('IS_ADMIN_FLAG')) {
 
 $autoLoadConfig[1][] = array(
     'autoType' => 'class',
-    'loadFile' => 'observers/class.ingpsp_email_reference.php'
+    'loadFile' => 'observers/class.emspay_email_reference.php'
 );
 
 $autoLoadConfig[1][] = array(

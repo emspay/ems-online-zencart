@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(dirname(dirname(dirname(__FILE__)))).'/includes/classes/class.ingpspGateway.php');
+require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/class.emspayGateway.php');
 
 /**
  * Class ingpsp_ideal
