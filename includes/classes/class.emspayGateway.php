@@ -5,7 +5,7 @@ require_once('vendors/ing-php/vendor/autoload.php');
 /**
  * Class emspay
  */
-class ingpspGateway extends base
+class emspayGateway extends base
 {
     /**
      * Module version.
@@ -33,15 +33,15 @@ class ingpspGateway extends base
      *
      * @var \GingerPayments\Payment\Client
      */
-    public $ingpsp;
+    public $emspay;
 
     /**
      * Default language.
      */
-    const INGPSP_DEFAULT_LANGUAGE = 'english';
+    const emspay_DEFAULT_LANGUAGE = 'english';
 
     /**
-     * ingpspGateway constructor.
+     * emspayGateway constructor.
      */
     function __construct()
     {
@@ -61,12 +61,12 @@ class ingpspGateway extends base
 
         if ($this->enabled === true) {
             try {
-                $this->ingpsp = static::getClient($this->code);
+                $this->emspay = static::getClient($this->code);
             } catch (Exception $exception) {
                 $this->title .= '<span class="alert">'.$exception->getMessage().'</span>';
             }
-            if ($this->ingpsp === null) {
-                $this->title .= '<span class="alert">'.MODULE_PAYMENT_INGPSP_ERROR_API_KEY.'</span>';
+            if ($this->emspay === null) {
+                $this->title .= '<span class="alert">'.MODULE_PAYMENT_emspay_ERROR_API_KEY.'</span>';
             }
         }
     }
@@ -78,7 +78,7 @@ class ingpspGateway extends base
      */
     public static function loadLanguageFile($code)
     {
-        $language = $_SESSION['language']?:static::INGPSP_DEFAULT_LANGUAGE;
+        $language = $_SESSION['language']?:static::emspay_DEFAULT_LANGUAGE;
 
         require_once(zen_get_file_directory(
             DIR_FS_CATALOG.DIR_WS_LANGUAGES.$language.'/modules/payment/',
@@ -95,28 +95,28 @@ class ingpspGateway extends base
      */
     public static function getClient($code = 'emspay')
     {
-        $ingpsp = null;
+        $emspay = null;
 
-        if (strlen(MODULE_PAYMENT_INGPSP_KLARNA_TEST_API_KEY) === 32 && $code == 'ingpsp_klarna') {
-            $apiKey = MODULE_PAYMENT_INGPSP_KLARNA_TEST_API_KEY;
-        } elseif (strlen(MODULE_PAYMENT_INGPSP_AFTERPAY_TEST_API_KEY) === 32 && $code == 'ingpsp_afterpay') {
-            $apiKey = MODULE_PAYMENT_INGPSP_AFTERPAY_TEST_API_KEY;
+        if (strlen(MODULE_PAYMENT_emspay_KLARNA_TEST_API_KEY) === 32 && $code == 'emspay_klarna') {
+            $apiKey = MODULE_PAYMENT_emspay_KLARNA_TEST_API_KEY;
+        } elseif (strlen(MODULE_PAYMENT_emspay_AFTERPAY_TEST_API_KEY) === 32 && $code == 'emspay_afterpay') {
+            $apiKey = MODULE_PAYMENT_emspay_AFTERPAY_TEST_API_KEY;
         } else {
-            $apiKey = MODULE_PAYMENT_INGPSP_API_KEY;
+            $apiKey = MODULE_PAYMENT_emspay_API_KEY;
         }
 
         if (strlen($apiKey) == 32) {
-            $ingpsp = \GingerPayments\Payment\Ginger::createClient(
+            $emspay = \GingerPayments\Payment\Ginger::createClient(
                 $apiKey,
-                MODULE_PAYMENT_INGPSP_PRODUCT
+                MODULE_PAYMENT_emspay_PRODUCT
             );
 
-            if (MODULE_PAYMENT_INGPSP_BUNDLE_CA == 'True') {
-                $ingpsp->useBundledCA();
+            if (MODULE_PAYMENT_emspay_BUNDLE_CA == 'True') {
+                $emspay->useBundledCA();
             }
         }
 
-        return $ingpsp;
+        return $emspay;
     }
 
     /**
@@ -223,7 +223,7 @@ class ingpspGateway extends base
      */
     public function getOrderDescription()
     {
-        return sprintf(MODULE_PAYMENT_INGPSP_ORDER_DESCRIPTION, $this->getOrderId(), TITLE);
+        return sprintf(MODULE_PAYMENT_emspay_ORDER_DESCRIPTION, $this->getOrderId(), TITLE);
     }
 
     /**
@@ -248,8 +248,8 @@ class ingpspGateway extends base
             'user_agent' => $_SERVER['HTTP_USER_AGENT'],
             'ip_address' => $_SESSION['customers_ip_address'],
             'locale' => $_SESSION['languages_code'],
-            'gender' => $this->getCustomPaymentField('ingpsp_klarna_gender'),
-            'birthdate' => $this->getCustomPaymentField('ingpsp_klarna_dob')
+            'gender' => $this->getCustomPaymentField('emspay_klarna_gender'),
+            'birthdate' => $this->getCustomPaymentField('emspay_klarna_dob')
         ]);
     }
 
@@ -285,13 +285,13 @@ class ingpspGateway extends base
      */
     public function getWebhookUrl()
     {
-        if (MODULE_PAYMENT_INGPSP_WEBHOOK == 'True') {
+        if (MODULE_PAYMENT_emspay_WEBHOOK == 'True') {
             if (ENABLE_SSL == 'true') {
                 $url = HTTPS_SERVER;
             } else {
                 $url = HTTP_SERVER;
             }
-            return $url.'/ingpsp_webhook.php';
+            return $url.'/emspay_webhook.php';
         }
 
         return null;
@@ -393,32 +393,32 @@ class ingpspGateway extends base
     public static function getZenStatusId($ingOrder)
     {
         if ($ingOrder->status()->isCompleted()) {
-            return MODULE_PAYMENT_INGPSP_ORDER_STATUS_COMPLETED;
+            return MODULE_PAYMENT_emspay_ORDER_STATUS_COMPLETED;
         }
         if ($ingOrder->status()->isError()) {
-            return MODULE_PAYMENT_INGPSP_ORDER_STATUS_ERROR;
+            return MODULE_PAYMENT_emspay_ORDER_STATUS_ERROR;
         }
         if ($ingOrder->status()->isProcessing()) {
-            return MODULE_PAYMENT_INGPSP_ORDER_STATUS_PROCESSING;
+            return MODULE_PAYMENT_emspay_ORDER_STATUS_PROCESSING;
         }
         if ($ingOrder->status()->isCancelled()) {
-            return MODULE_PAYMENT_INGPSP_ORDER_STATUS_CANCELLED;
+            return MODULE_PAYMENT_emspay_ORDER_STATUS_CANCELLED;
         }
 
-        return MODULE_PAYMENT_INGPSP_ORDER_STATUS_PENDING;
+        return MODULE_PAYMENT_emspay_ORDER_STATUS_PENDING;
     }
 
     /**
      * Depending on order status user is getting redirected and order status is updated.
      *
-     * @param string $ingpspOrderId
+     * @param string $emspayOrderId
      */
-    public function statusRedirect($ingpspOrderId)
+    public function statusRedirect($emspayOrderId)
     {
         global $messageStack;
 
         try {
-            $ingOrder = $this->ingpsp->getOrder($ingpspOrderId);
+            $ingOrder = $this->emspay->getOrder($emspayOrderId);
 
             static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($ingOrder));
             static::addOrderHistory($this->getOrderId(), static::getZenStatusId($ingOrder), $ingOrder->getId());
@@ -427,13 +427,13 @@ class ingpspGateway extends base
                 $this->emptyCart();
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_SUCCESS, '', 'SSL'));
             } elseif ($ingOrder->status()->isProcessing()) {
-                zen_redirect(zen_href_link(FILENAME_INGPSP_PENDING, '', 'SSL'));
+                zen_redirect(zen_href_link(FILENAME_emspay_PENDING, '', 'SSL'));
             } elseif ($ingOrder->status()->isCancelled()
                 || $ingOrder->status()->isError()
                 || $ingOrder->status()->isExpired()
             ) {
                 static::loadLanguageFile('emspay');
-                $reason = $ingOrder->transactions()->current()->getReason()?:MODULE_PAYMENT_INGPSP_ERROR_TRANSACTION;
+                $reason = $ingOrder->transactions()->current()->getReason()?:MODULE_PAYMENT_emspay_ERROR_TRANSACTION;
                 $messageStack->add_session('checkout_payment', $reason, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
             }
@@ -564,11 +564,11 @@ class ingpspGateway extends base
     
     protected function isKlarna()
     {
-        return $this->code == 'ingpsp_klarna';
+        return $this->code == 'emspay_klarna';
     }
     
     protected function isAfterPay()
     {
-        return $this->code == 'ingpsp_afterpay';
+        return $this->code == 'emspay_afterpay';
     }
 }

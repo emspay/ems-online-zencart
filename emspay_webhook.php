@@ -1,7 +1,7 @@
 <?php
 
 require_once('includes/application_top.php');
-require_once('includes/classes/class.ingpspGateway.php');
+require_once('includes/classes/class.emspayGateway.php');
 
 try {
     $data = json_decode(file_get_contents("php://input"), true);
@@ -10,18 +10,18 @@ try {
         throw new Exception('Invalid JSON!');
     }
 
-    $ingpsp = ingpspGateway::getClient();
+    $emspay = emspayGateway::getClient();
 
     if ($data['event'] == 'status_changed') {
-        $ingOrder = $ingpsp->getOrder($data['order_id']);
+        $ingOrder = $emspay->getOrder($data['order_id']);
         if ($ingOrder) {
-            ingpspGateway::updateOrderStatus(
+            emspayGateway::updateOrderStatus(
                 $ingOrder->getMerchantOrderId(),
-                ingpspGateway::getZenStatusId($ingOrder)
+                emspayGateway::getZenStatusId($ingOrder)
             );
-            ingpspGateway::addOrderHistory(
+            emspayGateway::addOrderHistory(
                 $ingOrder->getMerchantOrderId(),
-                ingpspGateway::getZenStatusId($ingOrder),
+                emspayGateway::getZenStatusId($ingOrder),
                 "Status Changed by ING PSP webhook call"
             );
         }

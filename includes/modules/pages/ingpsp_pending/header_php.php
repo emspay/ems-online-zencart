@@ -5,7 +5,7 @@ if (!defined('IS_ADMIN_FLAG')) {
 }
 
 require_once(DIR_WS_MODULES.zen_get_module_directory('require_languages.php'));
-require_once(DIR_WS_INCLUDES.'classes/class.ingpspGateway.php');
+require_once(DIR_WS_INCLUDES.'classes/class.emspayGateway.php');
 
 $breadcrumb->add(NAVBAR_TITLE);
 
