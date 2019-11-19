@@ -29,7 +29,7 @@ class emspayGateway extends base
     public $enabled, $title, $description, $sort_order, $order_status, $email_footer;
 
     /**
-     * ING PSP PHP library.
+     * EMS PAY PHP library.
      *
      * @var \GingerPayments\Payment\Client
      */
@@ -52,10 +52,10 @@ class emspayGateway extends base
         if (is_object($order)) {
             $this->update_status();
             if ($this->isKlarna()) {
-                $this->enabled = $this->ingKlarnaIpFiltering();
+                $this->enabled = $this->emsKlarnaIpFiltering();
             }
             if ($this->isAfterPay()) {
-                $this->enabled = $this->ingAfterPayIpFiltering();
+                $this->enabled = $this->emsAfterPayIpFiltering();
             }
         }
 
@@ -66,7 +66,7 @@ class emspayGateway extends base
                 $this->title .= '<span class="alert">'.$exception->getMessage().'</span>';
             }
             if ($this->emspay === null) {
-                $this->title .= '<span class="alert">'.MODULE_PAYMENT_emspay_ERROR_API_KEY.'</span>';
+                $this->title .= '<span class="alert">'.MODULE_PAYMENT_EMSPAY_ERROR_API_KEY.'</span>';
             }
         }
     }
@@ -88,7 +88,7 @@ class emspayGateway extends base
     }
 
     /**
-     * Initiate ING PSP API client.
+     * Initiate EMS PAY API client.
      *
      * @param string $code
      * @return \GingerPayments\Payment\Client
@@ -97,21 +97,21 @@ class emspayGateway extends base
     {
         $emspay = null;
 
-        if (strlen(MODULE_PAYMENT_emspay_KLARNA_TEST_API_KEY) === 32 && $code == 'emspay_klarna') {
-            $apiKey = MODULE_PAYMENT_emspay_KLARNA_TEST_API_KEY;
-        } elseif (strlen(MODULE_PAYMENT_emspay_AFTERPAY_TEST_API_KEY) === 32 && $code == 'emspay_afterpay') {
-            $apiKey = MODULE_PAYMENT_emspay_AFTERPAY_TEST_API_KEY;
+        if (strlen(MODULE_PAYMENT_EMSPAY_KLARNA_TEST_API_KEY) === 32 && $code == 'emspay_klarna') {
+            $apiKey = MODULE_PAYMENT_EMSPAY_KLARNA_TEST_API_KEY;
+        } elseif (strlen(MODULE_PAYMENT_EMSPAY_AFTERPAY_TEST_API_KEY) === 32 && $code == 'emspay_afterpay') {
+            $apiKey = MODULE_PAYMENT_EMSPAY_AFTERPAY_TEST_API_KEY;
         } else {
-            $apiKey = MODULE_PAYMENT_emspay_API_KEY;
+            $apiKey = MODULE_PAYMENT_EMSPAY_API_KEY;
         }
 
         if (strlen($apiKey) == 32) {
             $emspay = \GingerPayments\Payment\Ginger::createClient(
                 $apiKey,
-                MODULE_PAYMENT_emspay_PRODUCT
+                MODULE_PAYMENT_EMSPAY_PRODUCT
             );
 
-            if (MODULE_PAYMENT_emspay_BUNDLE_CA == 'True') {
+            if (MODULE_PAYMENT_EMSPAY_BUNDLE_CA == 'True') {
                 $emspay->useBundledCA();
             }
         }
@@ -223,7 +223,7 @@ class emspayGateway extends base
      */
     public function getOrderDescription()
     {
-        return sprintf(MODULE_PAYMENT_emspay_ORDER_DESCRIPTION, $this->getOrderId(), TITLE);
+        return sprintf(MODULE_PAYMENT_EMSPAY_ORDER_DESCRIPTION, $this->getOrderId(), TITLE);
     }
 
     /**
@@ -285,7 +285,7 @@ class emspayGateway extends base
      */
     public function getWebhookUrl()
     {
-        if (MODULE_PAYMENT_emspay_WEBHOOK == 'True') {
+        if (MODULE_PAYMENT_EMSPAY_WEBHOOK == 'True') {
             if (ENABLE_SSL == 'true') {
                 $url = HTTPS_SERVER;
             } else {
@@ -385,27 +385,27 @@ class emspayGateway extends base
     }
 
     /**
-     * Map ING PSP statuses to ZenCart.
+     * Map EMS PAY statuses to ZenCart.
      *
-     * @param $ingOrder
+     * @param $emsOrder
      * @return null
      */
-    public static function getZenStatusId($ingOrder)
+    public static function getZenStatusId($emsOrder)
     {
-        if ($ingOrder->status()->isCompleted()) {
-            return MODULE_PAYMENT_emspay_ORDER_STATUS_COMPLETED;
+        if ($emsOrder->status()->isCompleted()) {
+            return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_COMPLETED;
         }
-        if ($ingOrder->status()->isError()) {
-            return MODULE_PAYMENT_emspay_ORDER_STATUS_ERROR;
+        if ($emsOrder->status()->isError()) {
+            return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_ERROR;
         }
-        if ($ingOrder->status()->isProcessing()) {
-            return MODULE_PAYMENT_emspay_ORDER_STATUS_PROCESSING;
+        if ($emsOrder->status()->isProcessing()) {
+            return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_PROCESSING;
         }
-        if ($ingOrder->status()->isCancelled()) {
-            return MODULE_PAYMENT_emspay_ORDER_STATUS_CANCELLED;
+        if ($emsOrder->status()->isCancelled()) {
+            return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_CANCELLED;
         }
 
-        return MODULE_PAYMENT_emspay_ORDER_STATUS_PENDING;
+        return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_PENDING;
     }
 
     /**
@@ -418,22 +418,22 @@ class emspayGateway extends base
         global $messageStack;
 
         try {
-            $ingOrder = $this->emspay->getOrder($emspayOrderId);
+            $emsOrder = $this->emspay->getOrder($emspayOrderId);
 
-            static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($ingOrder));
-            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($ingOrder), $ingOrder->getId());
+            static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($emsOrder));
+            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder->getId());
 
-            if ($ingOrder->status()->isCompleted()) {
+            if ($emsOrder->status()->isCompleted()) {
                 $this->emptyCart();
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_SUCCESS, '', 'SSL'));
-            } elseif ($ingOrder->status()->isProcessing()) {
-                zen_redirect(zen_href_link(FILENAME_emspay_PENDING, '', 'SSL'));
-            } elseif ($ingOrder->status()->isCancelled()
-                || $ingOrder->status()->isError()
-                || $ingOrder->status()->isExpired()
+            } elseif ($emsOrder->status()->isProcessing()) {
+                zen_redirect(zen_href_link(FILENAME_EMSPAY_PENDING, '', 'SSL'));
+            } elseif ($emsOrder->status()->isCancelled()
+                || $emsOrder->status()->isError()
+                || $emsOrder->status()->isExpired()
             ) {
                 static::loadLanguageFile('emspay');
-                $reason = $ingOrder->transactions()->current()->getReason()?:MODULE_PAYMENT_emspay_ERROR_TRANSACTION;
+                $reason = $emsOrder->transactions()->current()->getReason()?:MODULE_PAYMENT_EMSPAY_ERROR_TRANSACTION;
                 $messageStack->add_session('checkout_payment', $reason, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
             }

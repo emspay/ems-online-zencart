@@ -3,21 +3,21 @@
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/class.emspayGateway.php');
 
 /**
- * Class ingpsp_ideal
+ * Class emspay_ideal
  */
-class ingpsp_ideal extends ingpspGateway
+class emspay_ideal extends emspayGateway
 {
-    public $code = 'ingpsp_ideal';
+    public $code = 'emspay_ideal';
 
     /**
-     * ingpsp_ideal constructor.
+     * emspay_ideal constructor.
      */
     function __construct()
     {
-        $this->title = MODULE_PAYMENT_INGPSP_IDEAL_TEXT_TITLE;
-        $this->description = MODULE_PAYMENT_INGPSP_IDEAL_TEXT_DESCRIPTION;
-        $this->sort_order = MODULE_PAYMENT_INGPSP_IDEAL_SORT_ORDER;
-        $this->enabled = ((MODULE_PAYMENT_INGPSP_IDEAL_STATUS == 'True')?true:false);
+        $this->title = MODULE_PAYMENT_EMSPAY_IDEAL_TEXT_TITLE;
+        $this->description = MODULE_PAYMENT_EMSPAY_IDEAL_TEXT_DESCRIPTION;
+        $this->sort_order = MODULE_PAYMENT_EMSPAY_IDEAL_SORT_ORDER;
+        $this->enabled = ((MODULE_PAYMENT_EMSPAY_IDEAL_STATUS == 'True')?true:false);
 
         parent::__construct();
     }
@@ -31,16 +31,16 @@ class ingpsp_ideal extends ingpspGateway
     {
         global $messageStack;
 
-        if (defined('MODULE_PAYMENT_INGPSP_IDEAL_STATUS')) {
-            $messageStack->add_session(MODULE_PAYMENT_INGPSP_IDEAL_ERROR_ALREADY_INSTALLED, 'error');
+        if (defined('MODULE_PAYMENT_EMSPAY_IDEAL_STATUS')) {
+            $messageStack->add_session(MODULE_PAYMENT_EMSPAY_IDEAL_ERROR_ALREADY_INSTALLED, 'error');
             zen_redirect(zen_href_link(FILENAME_MODULES, 'set=payment&module='.$this->code, 'SSL'));
             return 'failed';
         }
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_IDEAL_STATUS_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_IDEAL_STATUS_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_IDEAL_STATUS',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_IDEAL_STATUS_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_IDEAL_STATUS_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_IDEAL_STATUS',
             'configuration_value' => 'True',
             'configuration_group_id' => 6,
             'sort_order' => 0,
@@ -48,27 +48,27 @@ class ingpsp_ideal extends ingpspGateway
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_IDEAL_DISPLAY_TITLE_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_IDEAL_DISPLAY_TITLE_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_IDEAL_DISPLAY_TITLE',
-            'configuration_value' => MODULE_PAYMENT_INGPSP_IDEAL_TEXT_TITLE,
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_IDEAL_DISPLAY_TITLE_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_IDEAL_DISPLAY_TITLE_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_IDEAL_DISPLAY_TITLE',
+            'configuration_value' => MODULE_PAYMENT_EMSPAY_IDEAL_TEXT_TITLE,
             'configuration_group_id' => 6,
             'sort_order' => 1
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_IDEAL_SORT_ORDER_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_IDEAL_SORT_ORDER_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_IDEAL_SORT_ORDER',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_IDEAL_SORT_ORDER_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_IDEAL_SORT_ORDER_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_IDEAL_SORT_ORDER',
             'configuration_value' => 0,
             'configuration_group_id' => 6,
             'sort_order' => 2
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_IDEAL_ZONE_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_IDEAL_ZONE_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_IDEAL_ZONE',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_IDEAL_ZONE_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_IDEAL_ZONE_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_IDEAL_ZONE',
             'configuration_value' => 0,
             'configuration_group_id' => 6,
             'sort_order' => 3,
@@ -87,10 +87,10 @@ class ingpsp_ideal extends ingpspGateway
     public function keys()
     {
         return array(
-            'MODULE_PAYMENT_INGPSP_IDEAL_DISPLAY_TITLE',
-            'MODULE_PAYMENT_INGPSP_IDEAL_STATUS',
-            'MODULE_PAYMENT_INGPSP_IDEAL_SORT_ORDER',
-            'MODULE_PAYMENT_INGPSP_IDEAL_ZONE'
+            'MODULE_PAYMENT_EMSPAY_IDEAL_DISPLAY_TITLE',
+            'MODULE_PAYMENT_EMSPAY_IDEAL_STATUS',
+            'MODULE_PAYMENT_EMSPAY_IDEAL_SORT_ORDER',
+            'MODULE_PAYMENT_EMSPAY_IDEAL_ZONE'
         );
     }
 
@@ -102,14 +102,14 @@ class ingpsp_ideal extends ingpspGateway
         global $messageStack;
 
         try {
-            $ingIssuers = $this->ingpsp->getIdealIssuers()->toArray();
+            $emsIssuers = $this->emspay->getIdealIssuers()->toArray();
         } catch (Exception $exception) {
             $messageStack->add_session('checkout_payment', $exception->getMessage(), 'error');
             return null;
         }
 
         $issuers = [[]];
-        foreach ($ingIssuers as $issuer) {
+        foreach ($emsIssuers as $issuer) {
             $issuers[] = [
                 'id' => $issuer['id'],
                 'text' => $issuer['name']
@@ -117,7 +117,7 @@ class ingpsp_ideal extends ingpspGateway
         }
 
         $fields[] = [
-            'title' => MODULE_PAYMENT_INGPSP_IDEAL_ISSUER_SELECT,
+            'title' => MODULE_PAYMENT_EMSPAY_IDEAL_ISSUER_SELECT,
             'field' => zen_draw_pull_down_menu('issuer_id', $issuers)
         ];
 
@@ -137,7 +137,7 @@ class ingpsp_ideal extends ingpspGateway
             'if (payment_value == "'.$this->code.'") {'."\n".
             '   var issuer_id = document.checkout_payment.issuer_id.value;'."\n".
             '   if (issuer_id == "") {'."\n".
-            '       error_message = error_message + "'.MODULE_PAYMENT_INGPSP_IDEAL_ERROR_ISSUER.'";'."\n".
+            '       error_message = error_message + "'.MODULE_PAYMENT_EMSPAY_IDEAL_ERROR_ISSUER.'";'."\n".
             '       error = 1;'."\n".
             '   }'."\n".
             '}'."\n";
@@ -166,7 +166,7 @@ class ingpsp_ideal extends ingpspGateway
         }
 
         if (empty($this->getIssuerId())) {
-            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_INGPSP_IDEAL_ERROR_ISSUER, 'error');
+            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_IDEAL_ERROR_ISSUER, 'error');
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
         }
     }
@@ -179,7 +179,7 @@ class ingpsp_ideal extends ingpspGateway
         global $order, $messageStack;
 
         try {
-            $ingOrder = $this->ingpsp->createIdealOrder(
+            $emsOrder = $this->emspay->createIdealOrder(
                 $this->gerOrderTotalInCents($order), // amount in cents
                 $this->getCurrency($order),          // currency
                 $this->getIssuerId(),                // ideal_issuer_id
@@ -192,10 +192,10 @@ class ingpsp_ideal extends ingpspGateway
                 $this->getWebhookUrl()               // webhook_url
             );
 
-            zen_redirect($ingOrder->firstTransactionPaymentUrl()->toString());
+            zen_redirect($emsOrder->firstTransactionPaymentUrl()->toString());
 
-            if ($ingOrder->status()->isError()) {
-                $messageStack->add_session('checkout_payment', MODULE_PAYMENT_INGPSP_IDEAL_ERROR_TRANSACTION, 'error');
+            if ($emsOrder->status()->isError()) {
+                $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_IDEAL_ERROR_TRANSACTION, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
             }
         } catch (Exception $exception) {
@@ -219,6 +219,6 @@ class ingpsp_ideal extends ingpspGateway
      */
     public function update_status()
     {
-        return $this->updateModuleVisibility(MODULE_PAYMENT_INGPSP_IDEAL_ZONE);
+        return $this->updateModuleVisibility(MODULE_PAYMENT_EMSPAY_IDEAL_ZONE);
     }
 }
