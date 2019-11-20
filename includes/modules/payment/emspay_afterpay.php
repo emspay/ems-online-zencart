@@ -3,9 +3,9 @@
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/class.emspayGateway.php');
 
 /**
- * Class ingpsp_afterpay
+ * Class emspay_afterpay
  */
-class ingpsp_afterpay extends ingpspGateway
+class emspay_afterpay extends emspayGateway
 {
     const TERMS_CONDITION_URL_NL = 'https://www.afterpay.nl/nl/algemeen/betalen-met-afterpay/betalingsvoorwaarden';
     const TERMS_CONDITION_URL_BE = 'https://www.afterpay.be/be/footer/betalen-met-afterpay/betalingsvoorwaarden';
@@ -13,17 +13,17 @@ class ingpsp_afterpay extends ingpspGateway
     
     protected static $allowedLocales = ['NL', 'BE'];
     
-    public $code = 'ingpsp_afterpay';
+    public $code = 'emspay_afterpay';
 
     /**
-     * ingpsp_afterpay constructor.
+     * emspay_afterpay constructor.
      */
     public function __construct()
     {
-        $this->title = MODULE_PAYMENT_INGPSP_AFTERPAY_TEXT_TITLE;
-        $this->description = MODULE_PAYMENT_INGPSP_AFTERPAY_TEXT_DESCRIPTION;
-        $this->sort_order = MODULE_PAYMENT_INGPSP_AFTERPAY_SORT_ORDER;
-        $this->enabled = ((MODULE_PAYMENT_INGPSP_AFTERPAY_STATUS == 'True')?true:false);
+        $this->title = MODULE_PAYMENT_EMSPAY_AFTERPAY_TEXT_TITLE;
+        $this->description = MODULE_PAYMENT_EMSPAY_AFTERPAY_TEXT_DESCRIPTION;
+        $this->sort_order = MODULE_PAYMENT_EMSPAY_AFTERPAY_SORT_ORDER;
+        $this->enabled = ((MODULE_PAYMENT_EMSPAY_AFTERPAY_STATUS == 'True')?true:false);
 
         parent::__construct();
     }
@@ -37,16 +37,16 @@ class ingpsp_afterpay extends ingpspGateway
     {
         global $messageStack;
 
-        if (defined('MODULE_PAYMENT_INGPSP_AFTERPAY_STATUS')) {
-            $messageStack->add_session(MODULE_PAYMENT_INGPSP_AFTERPAY_ERROR_ALREADY_INSTALLED, 'error');
+        if (defined('MODULE_PAYMENT_EMSPAY_AFTERPAY_STATUS')) {
+            $messageStack->add_session(MODULE_PAYMENT_EMSPAY_AFTERPAY_ERROR_ALREADY_INSTALLED, 'error');
             zen_redirect(zen_href_link(FILENAME_MODULES, 'set=payment&module='.$this->code, 'SSL'));
             return 'failed';
         }
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_AFTERPAY_STATUS_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_AFTERPAY_STATUS_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_AFTERPAY_STATUS',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_AFTERPAY_STATUS_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_AFTERPAY_STATUS_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_AFTERPAY_STATUS',
             'configuration_value' => 'True',
             'configuration_group_id' => 6,
             'sort_order' => 1,
@@ -54,45 +54,45 @@ class ingpsp_afterpay extends ingpspGateway
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_AFTERPAY_DISPLAY_TITLE_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_AFTERPAY_DISPLAY_TITLE_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_AFTERPAY_DISPLAY_TITLE',
-            'configuration_value' => MODULE_PAYMENT_INGPSP_AFTERPAY_TEXT_TITLE,
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_AFTERPAY_DISPLAY_TITLE_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_AFTERPAY_DISPLAY_TITLE_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_AFTERPAY_DISPLAY_TITLE',
+            'configuration_value' => MODULE_PAYMENT_EMSPAY_AFTERPAY_TEXT_TITLE,
             'configuration_group_id' => 6,
             'sort_order' => 2
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_AFTERPAY_TEST_API_KEY_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_AFTERPAY_TEST_API_KEY_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_AFTERPAY_TEST_API_KEY',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_AFTERPAY_TEST_API_KEY_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_AFTERPAY_TEST_API_KEY_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_AFTERPAY_TEST_API_KEY',
             'configuration_value' => '',
             'configuration_group_id' => 6,
             'sort_order' => 3
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_AFTERPAY_IP_FILTERING_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_AFTERPAY_IP_FILTERING_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_AFTERPAY_IP_FILTERING',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_AFTERPAY_IP_FILTERING_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_AFTERPAY_IP_FILTERING_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_AFTERPAY_IP_FILTERING',
             'configuration_value' => '',
             'configuration_group_id' => 6,
             'sort_order' => 4
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_AFTERPAY_SORT_ORDER_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_AFTERPAY_SORT_ORDER_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_AFTERPAY_SORT_ORDER',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_AFTERPAY_SORT_ORDER_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_AFTERPAY_SORT_ORDER_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_AFTERPAY_SORT_ORDER',
             'configuration_value' => 0,
             'configuration_group_id' => 6,
             'sort_order' => 5
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_AFTERPAY_ZONE_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_AFTERPAY_ZONE_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_AFTERPAY_ZONE',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_AFTERPAY_ZONE_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_AFTERPAY_ZONE_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_AFTERPAY_ZONE',
             'configuration_value' => 0,
             'configuration_group_id' => 6,
             'sort_order' => 6,
@@ -111,12 +111,12 @@ class ingpsp_afterpay extends ingpspGateway
     public function keys()
     {
         return array(
-            'MODULE_PAYMENT_INGPSP_AFTERPAY_DISPLAY_TITLE',
-            'MODULE_PAYMENT_INGPSP_AFTERPAY_TEST_API_KEY',
-            'MODULE_PAYMENT_INGPSP_AFTERPAY_IP_FILTERING',
-            'MODULE_PAYMENT_INGPSP_AFTERPAY_STATUS',
-            'MODULE_PAYMENT_INGPSP_AFTERPAY_SORT_ORDER',
-            'MODULE_PAYMENT_INGPSP_AFTERPAY_ZONE'
+            'MODULE_PAYMENT_EMSPAY_AFTERPAY_DISPLAY_TITLE',
+            'MODULE_PAYMENT_EMSPAY_AFTERPAY_TEST_API_KEY',
+            'MODULE_PAYMENT_EMSPAY_AFTERPAY_IP_FILTERING',
+            'MODULE_PAYMENT_EMSPAY_AFTERPAY_STATUS',
+            'MODULE_PAYMENT_EMSPAY_AFTERPAY_SORT_ORDER',
+            'MODULE_PAYMENT_EMSPAY_AFTERPAY_ZONE'
         );
     }
 
@@ -132,22 +132,22 @@ class ingpsp_afterpay extends ingpspGateway
         if (isset($order->billing['country']['iso_code_2']) && $this->isValidCountry($order->billing['country']['iso_code_2'])) {
             $fields = [
                          [
-                             'title' => MODULE_PAYMENT_INGPSP_AFTERPAY_DOB,
-                             'field' => zen_draw_input_field('ingpsp_afterpay_dob')
+                             'title' => MODULE_PAYMENT_EMSPAY_AFTERPAY_DOB,
+                             'field' => zen_draw_input_field('emspay_afterpay_dob')
                          ], [
-                             'title' => MODULE_PAYMENT_INGPSP_AFTERPAY_GENDER,
+                             'title' => MODULE_PAYMENT_EMSPAY_AFTERPAY_GENDER,
                              'field' => zen_draw_pull_down_menu(
-                                 'ingpsp_afterpay_gender',
+                                 'emspay_afterpay_gender',
                                  [
                                      ['id' => '', 'text' => ''],
-                                     ['id' => 'male', 'text' => MODULE_PAYMENT_INGPSP_AFTERPAY_MALE],
-                                     ['id' => 'female', 'text' => MODULE_PAYMENT_INGPSP_AFTERPAY_FEMALE]
+                                     ['id' => 'male', 'text' => MODULE_PAYMENT_EMSPAY_AFTERPAY_MALE],
+                                     ['id' => 'female', 'text' => MODULE_PAYMENT_EMSPAY_AFTERPAY_FEMALE]
                                  ]
                              )
                          ],
                          [
-                             'title' => sprintf('%s <a href="%s">%s</a>', MODULE_PAYMENT_INGPSP_AFTERPAY_I_ACCEPT, $this->getTermsAndConditionUrlByCountryIso2Code($order->billing['country']['iso_code_2']), MODULE_PAYMENT_INGPSP_AFTERPAY_TERMS_AND_CONDITIONS),
-                             'field' => zen_draw_checkbox_field('ingpsp_afterpay_terms_and_conditions')
+                             'title' => sprintf('%s <a href="%s">%s</a>', MODULE_PAYMENT_EMSPAY_AFTERPAY_I_ACCEPT, $this->getTermsAndConditionUrlByCountryIso2Code($order->billing['country']['iso_code_2']), MODULE_PAYMENT_EMSPAY_AFTERPAY_TERMS_AND_CONDITIONS),
+                             'field' => zen_draw_checkbox_field('emspay_afterpay_terms_and_conditions')
                          ]
                      ];
         }
@@ -189,9 +189,9 @@ class ingpsp_afterpay extends ingpspGateway
      */
     public function process_button()
     {
-        $processButton = zen_draw_hidden_field('ingpsp_afterpay_dob', $_POST['ingpsp_afterpay_dob']);
-        $processButton .= zen_draw_hidden_field('ingpsp_afterpay_gender', $_POST['ingpsp_afterpay_gender']);
-        $processButton .= zen_draw_hidden_field('ingpsp_afterpay_terms_and_conditions', $_POST['ingpsp_afterpay_terms_and_conditions']);
+        $processButton = zen_draw_hidden_field('emspay_afterpay_dob', $_POST['emspay_afterpay_dob']);
+        $processButton .= zen_draw_hidden_field('emspay_afterpay_gender', $_POST['emspay_afterpay_gender']);
+        $processButton .= zen_draw_hidden_field('emspay_afterpay_terms_and_conditions', $_POST['emspay_afterpay_terms_and_conditions']);
         $processButton .= zen_draw_hidden_field(zen_session_name(), zen_session_id());
 
         return $processButton;
@@ -207,26 +207,26 @@ class ingpsp_afterpay extends ingpspGateway
         if (!isset($order->billing['country']['iso_code_2']) || !$this->isValidCountry($order->billing['country']['iso_code_2'])) {
             return
                 'if (payment_value == "'.$this->code.'") {'."\n".
-                '   error_message = error_message + "'.MODULE_PAYMENT_INGPSP_AFTERPAY_ERROR_COUNTRY_IS_NOT_VALID.'";'."\n".
+                '   error_message = error_message + "'.MODULE_PAYMENT_EMSPAY_AFTERPAY_ERROR_COUNTRY_IS_NOT_VALID.'";'."\n".
                 '   error = 1;'."\n".
                 '}'."\n";
         }
         
         return
             'if (payment_value == "'.$this->code.'") {'."\n".
-            '   var ingpsp_afterpay_terms_and_conditions = document.checkout_payment.ingpsp_afterpay_terms_and_conditions.checked;'."\n".
-            '   var ingpsp_afterpay_gender = document.checkout_payment.ingpsp_afterpay_gender.value;'."\n".
-            '   var ingpsp_afterpay_dob = document.checkout_payment.ingpsp_afterpay_dob.value;'."\n".
-            '   if (ingpsp_afterpay_gender == "") {'."\n".
-            '       error_message = error_message + "'.MODULE_PAYMENT_INGPSP_AFTERPAY_ERROR_GENDER.'";'."\n".
+            '   var emspay_afterpay_terms_and_conditions = document.checkout_payment.emspay_afterpay_terms_and_conditions.checked;'."\n".
+            '   var emspay_afterpay_gender = document.checkout_payment.emspay_afterpay_gender.value;'."\n".
+            '   var emspay_afterpay_dob = document.checkout_payment.emspay_afterpay_dob.value;'."\n".
+            '   if (emspay_afterpay_gender == "") {'."\n".
+            '       error_message = error_message + "'.MODULE_PAYMENT_EMSPAY_AFTERPAY_ERROR_GENDER.'";'."\n".
             '       error = 1;'."\n".
             '   }'."\n".
-            '   if (ingpsp_afterpay_dob == "") {'."\n".
-            '       error_message = error_message + "'.MODULE_PAYMENT_INGPSP_AFTERPAY_ERROR_DOB.'";'."\n".
+            '   if (emspay_afterpay_dob == "") {'."\n".
+            '       error_message = error_message + "'.MODULE_PAYMENT_EMSPAY_AFTERPAY_ERROR_DOB.'";'."\n".
             '       error = 1;'."\n".
             '   }'."\n".
-            '   if (ingpsp_afterpay_terms_and_conditions == false) {'."\n".
-            '       error_message = error_message + "'.MODULE_PAYMENT_INGPSP_AFTERPAY_ERROR_TERMS_AND_CONDITIONS.'";'."\n".
+            '   if (emspay_afterpay_terms_and_conditions == false) {'."\n".
+            '       error_message = error_message + "'.MODULE_PAYMENT_EMSPAY_AFTERPAY_ERROR_TERMS_AND_CONDITIONS.'";'."\n".
             '       error = 1;'."\n".
             '   }'."\n".
             '}'."\n";
@@ -239,18 +239,18 @@ class ingpsp_afterpay extends ingpspGateway
     {
         global $messageStack;
 
-        if (empty($_POST['ingpsp_afterpay_gender'])) {
-            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_INGPSP_AFTERPAY_ERROR_GENDER, 'error');
+        if (empty($_POST['emspay_afterpay_gender'])) {
+            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_AFTERPAY_ERROR_GENDER, 'error');
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
         }
 
-        if (empty($_POST['ingpsp_afterpay_dob'])) {
-            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_INGPSP_AFTERPAY_ERROR_DOB, 'error');
+        if (empty($_POST['emspay_afterpay_dob'])) {
+            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_AFTERPAY_ERROR_DOB, 'error');
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
         }
 
-        if (empty($_POST['ingpsp_afterpay_terms_and_conditions'])) {
-            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_INGPSP_AFTERPAY_ERROR_TERMS_AND_CONDITIONS, 'error');
+        if (empty($_POST['emspay_afterpay_terms_and_conditions'])) {
+            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_AFTERPAY_ERROR_TERMS_AND_CONDITIONS, 'error');
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
         }
     }
@@ -263,7 +263,7 @@ class ingpsp_afterpay extends ingpspGateway
         global $order, $messageStack;
 
         try {
-            $ingOrder = $this->ingpsp->createAfterPayOrder(
+            $emsOrder = $this->emspay->createAfterPayOrder(
                 $this->gerOrderTotalInCents($order), // amount in cents
                 $this->getCurrency($order),          // currency
                 $this->getOrderDescription(),        // order description
@@ -276,20 +276,20 @@ class ingpsp_afterpay extends ingpspGateway
                 $this->getOrderLines($order)         // order lines
             );
 
-            static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($ingOrder));
-            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($ingOrder), $ingOrder->getId());
+            static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($emsOrder));
+            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder->getId());
 
-            if ($ingOrder->status()->isError()) {
+            if ($emsOrder->status()->isError()) {
                 $messageStack->add_session(
                     'checkout_payment',
-                    $ingOrder->transactions()->current()->reason()->toString(),
+                    $emsOrder->transactions()->current()->reason()->toString(),
                     'error'
                 );
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
-            } elseif ($ingOrder->status()->isCancelled()) {
+            } elseif ($emsOrder->status()->isCancelled()) {
                 $messageStack->add_session(
                     'checkout_payment',
-                    MODULE_PAYMENT_INGPSP_AFTERPAY_ERROR_TRANSACTION_IS_CANCELLED,
+                    MODULE_PAYMENT_EMSPAY_AFTERPAY_ERROR_TRANSACTION_IS_CANCELLED,
                     'error'
                 );
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
@@ -364,7 +364,7 @@ class ingpsp_afterpay extends ingpspGateway
      */
     public function update_status()
     {
-        return $this->updateModuleVisibility(MODULE_PAYMENT_INGPSP_AFTERPAY_ZONE);
+        return $this->updateModuleVisibility(MODULE_PAYMENT_EMSPAY_AFTERPAY_ZONE);
     }
 
     /**
@@ -374,10 +374,10 @@ class ingpsp_afterpay extends ingpspGateway
      */
     public function ingAfterPayIpFiltering()
     {
-        $ingAfterPayIpList = MODULE_PAYMENT_INGPSP_AFTERPAY_IP_FILTERING;
+        $emsAfterPayIpList = MODULE_PAYMENT_EMSPAY_AFTERPAY_IP_FILTERING;
 
-        if (strlen($ingAfterPayIpList) > 0) {
-            $ip_whitelist = array_map('trim', explode(",", $ingAfterPayIpList));
+        if (strlen($emsAfterPayIpList) > 0) {
+            $ip_whitelist = array_map('trim', explode(",", $emsAfterPayIpList));
             if (!in_array($_SESSION['customers_ip_address'], $ip_whitelist)) {
                 return false;
             }
@@ -387,14 +387,14 @@ class ingpsp_afterpay extends ingpspGateway
     }
 
     /**
-     * Set AfterPay order as 'Shipped' in ING PSP.
+     * Set AfterPay order as 'Shipped' in EMS Online.
      *
-     * @param string $ingOrderId
+     * @param string $emsOrderId
      */
-    public function captureAfterPayOrder($ingOrderId)
+    public function captureAfterPayOrder($emsOrderId)
     {
-        $this->ingpsp->setOrderCapturedStatus(
-            $this->ingpsp->getOrder($ingOrderId)
+        $this->emspay->setOrderCapturedStatus(
+            $this->emspay->getOrder($emsOrderId)
         );
     }
 
@@ -407,17 +407,17 @@ class ingpsp_afterpay extends ingpspGateway
      */
     public function _doStatusUpdate($orderId, $status, $comments, $customerNotified, $orderStatus)
     {
-        if ($status == (int) MODULE_PAYMENT_INGPSP_ORDER_STATUS_SHIPPED) {
+        if ($status == (int) MODULE_PAYMENT_EMSPAY_ORDER_STATUS_SHIPPED) {
             $orderHistory = $this->getOrderHistory($orderId);
-            $ingOrderId = $this->searchHistoryForOrderKey($orderHistory);
-            if ($ingOrderId) {
-                $this->captureAfterPayOrder($ingOrderId);
+            $emsOrderId = $this->searchHistoryForOrderKey($orderHistory);
+            if ($emsOrderId) {
+                $this->captureAfterPayOrder($emsOrderId);
             }
         }
     }
 
     /**
-     * Obtain ING PSP order id from order history.
+     * Obtain EMS Online order id from order history.
      *
      * @param array $orderHistory
      * @return string|null
@@ -455,8 +455,8 @@ class ingpsp_afterpay extends ingpspGateway
             'user_agent' => $_SERVER['HTTP_USER_AGENT'],
             'ip_address' => $_SESSION['customers_ip_address'],
             'locale' => $_SESSION['languages_code'],
-            'gender' => $this->getCustomPaymentField('ingpsp_afterpay_gender'),
-            'birthdate' => $this->getCustomPaymentField('ingpsp_afterpay_dob')
+            'gender' => $this->getCustomPaymentField('emspay_afterpay_gender'),
+            'birthdate' => $this->getCustomPaymentField('emspay_afterpay_dob')
         ]);
     }
 }

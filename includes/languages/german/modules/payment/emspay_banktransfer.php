@@ -3,7 +3,7 @@
 define('MODULE_PAYMENT_EMSPAY_ORDER_DESCRIPTION', "Ihre Bestellung %s bei %s");
 
 define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_TEXT_TITLE', "Banküberweisung");
-define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_TEXT_DESCRIPTION', "Zahlungsmethode von EMS PAY");
+define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_TEXT_DESCRIPTION', "Zahlungsmethode von EMS Online");
 
 define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_STATUS_TEXT', "Aktivieren Banküberweisung");
 define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_STATUS_DESCRIPTION', "Wollen Sie Banküberweisung aktivieren?");
@@ -24,13 +24,13 @@ define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_INFORMATION', 'Bitte verwenden Sie di
 <br/> Referenz: <b>{{reference}}</ b>
 <br/> IBAN: <b>NL13INGB0005300060 </ b>
 <br/> BIC: <b>INGBNL2A</ b>
-<br/> Kontoinhaber: <b>ING Bank N.V. PSP</ b>
+<br/> Kontoinhaber: <b>EMS Bank N.V. PSP</ b>
 <br/> Stadt: <b>Amsterdam</ b>
 <br/> <br/>');
 
 define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_INFORMATION_EMAIL', 'Bitte verwenden Sie die folgenden Informationen während der Banküberweisung:
 Referenz: {{reference}}
-IBAN: NL13INGB0005300060
+IBAN: NL79ABNA0842577610
 BIC: INGBNL2A
-Kontoinhaber: ING Bank NV PSP
+Kontoinhaber: EMS Bank NV PSP
 Stadt: Amsterdam');

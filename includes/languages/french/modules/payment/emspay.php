@@ -1,22 +1,22 @@
 <?php
 
-define('MODULE_PAYMENT_EMSPAY_TEXT_TITLE', "EMS PAY");
-define('MODULE_PAYMENT_EMSPAY_TEXT_DESCRIPTION', "Le plug-in officiel ZenCart du EMS PAY");
+define('MODULE_PAYMENT_EMSPAY_TEXT_TITLE', "EMS Online");
+define('MODULE_PAYMENT_EMSPAY_TEXT_DESCRIPTION', "Le plug-in officiel ZenCart du EMS Online");
 
-define('MODULE_PAYMENT_EMSPAY_STATUS_TEXT', "Activer le module EMS PAY");
-define('MODULE_PAYMENT_EMSPAY_STATUS_DESCRIPTION', "Voulez-vous activer le EMS PAY ZenCart Module?");
+define('MODULE_PAYMENT_EMSPAY_STATUS_TEXT', "Activer le module EMS Online");
+define('MODULE_PAYMENT_EMSPAY_STATUS_DESCRIPTION', "Voulez-vous activer le EMS Online ZenCart Module?");
 
 define('MODULE_PAYMENT_EMSPAY_API_KEY_TEXT', "Clé API");
-define('MODULE_PAYMENT_EMSPAY_API_KEY_DESCRIPTION', "Obtenez votre EMS PAY clé API du portail marchand.");
+define('MODULE_PAYMENT_EMSPAY_API_KEY_DESCRIPTION', "Obtenez votre EMS Online clé API du portail marchand.");
 
-define('MODULE_PAYMENT_EMSPAY_PRODUCT_TEXT', "EMS PAY Produit");
-define('MODULE_PAYMENT_EMSPAY_PRODUCT_DESCRIPTION', "Sélectionnez le produit EMS PAY que vous utilisez.");
+define('MODULE_PAYMENT_EMSPAY_PRODUCT_TEXT', "EMS Online Produit");
+define('MODULE_PAYMENT_EMSPAY_PRODUCT_DESCRIPTION', "Sélectionnez le produit EMS Online que vous utilisez.");
 
 define('MODULE_PAYMENT_EMSPAY_BUNDLE_CA_TEXT', "Utilisez bundle cURL CA");
 define('MODULE_PAYMENT_EMSPAY_BUNDLE_CA_DESCRIPTION', "Si activé, résout le problème lorsque le curl.cacert path n\'est pas défini dans PHP.ini .");
 
 define('MODULE_PAYMENT_EMSPAY_WEBHOOK_TEXT', "Générer webhook URL");
-define('MODULE_PAYMENT_EMSPAY_WEBHOOK_DESCRIPTION', "Fournir automatiquement l'URL Webhook avec la commande à l'API du EMS PAY.");
+define('MODULE_PAYMENT_EMSPAY_WEBHOOK_DESCRIPTION', "Fournir automatiquement l'URL Webhook avec la commande à l'API du EMS Online.");
 
 define('MODULE_PAYMENT_EMSPAY_ORDER_STATUS_COMPLETED_TEXT', "Statut pour une commande réalisé");
 define('MODULE_PAYMENT_EMSPAY_ORDER_STATUS_COMPLETED_DESCRIPTION', "Sélectionnez le statut de la liste que vous souhaitez mapper aux commandes réalisées.");

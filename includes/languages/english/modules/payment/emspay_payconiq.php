@@ -3,7 +3,7 @@
 define('MODULE_PAYMENT_EMSPAY_ORDER_DESCRIPTION', "Your order %s at %s");
 
 define('MODULE_PAYMENT_EMSPAY_PAYCONIQ_TEXT_TITLE', "Payconiq");
-define('MODULE_PAYMENT_EMSPAY_PAYCONIQ_TEXT_DESCRIPTION', "Payment method is provided by EMS PAY.");
+define('MODULE_PAYMENT_EMSPAY_PAYCONIQ_TEXT_DESCRIPTION', "Payment method is provided by EMS Online.");
 
 define('MODULE_PAYMENT_EMSPAY_PAYCONIQ_DISPLAY_TITLE_TEXT', "Payment method display name");
 define('MODULE_PAYMENT_EMSPAY_PAYCONIQ_DISPLAY_TITLE_DESCRIPTION', "Payment method name that will be displayed to the customer.");

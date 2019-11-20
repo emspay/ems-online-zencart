@@ -13,16 +13,16 @@ try {
     $emspay = emspayGateway::getClient();
 
     if ($data['event'] == 'status_changed') {
-        $ingOrder = $emspay->getOrder($data['order_id']);
-        if ($ingOrder) {
+        $emsOrder = $emspay->getOrder($data['order_id']);
+        if ($emsOrder) {
             emspayGateway::updateOrderStatus(
-                $ingOrder->getMerchantOrderId(),
-                emspayGateway::getZenStatusId($ingOrder)
+                $emsOrder->getMerchantOrderId(),
+                emspayGateway::getZenStatusId($emsOrder)
             );
             emspayGateway::addOrderHistory(
-                $ingOrder->getMerchantOrderId(),
-                emspayGateway::getZenStatusId($ingOrder),
-                "Status Changed by ING PSP webhook call"
+                $emsOrder->getMerchantOrderId(),
+                emspayGateway::getZenStatusId($emsOrder),
+                "Status Changed by EMS Online webhook call"
             );
         }
     } else {

@@ -3,7 +3,7 @@
 define('MODULE_PAYMENT_EMSPAY_ORDER_DESCRIPTION', "Ihre Bestellung %s bei %s");
 
 define('MODULE_PAYMENT_EMSPAY_PAYCONIQ_TEXT_TITLE', "Payconiq");
-define('MODULE_PAYMENT_EMSPAY_PAYCONIQ_TEXT_DESCRIPTION', "Zahlungsmethode von EMS PAY");
+define('MODULE_PAYMENT_EMSPAY_PAYCONIQ_TEXT_DESCRIPTION', "Zahlungsmethode von EMS Online");
 
 define('MODULE_PAYMENT_EMSPAY_PAYCONIQ_DISPLAY_TITLE_TEXT', "Zahlungsmethode Anzeigename");
 define('MODULE_PAYMENT_EMSPAY_PAYCONIQ_DISPLAY_TITLE_DESCRIPTION', "Name der Zahlungsmethode, die dem Kunden angezeigt wird.");

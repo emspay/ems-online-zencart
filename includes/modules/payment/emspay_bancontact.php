@@ -3,21 +3,21 @@
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/class.emspayGateway.php');
 
 /**
- * Class ingpsp_sofort
+ * Class emspay_bancontact
  */
-class ingpsp_sofort extends ingpspGateway
+class emspay_bancontact extends emspayGateway
 {
-    public $code = 'ingpsp_sofort';
+    public $code = 'emspay_bancontact';
 
     /**
-     * ingpsp_sofort constructor.
+     * emspay_bancontact constructor.
      */
     function __construct()
     {
-        $this->title = MODULE_PAYMENT_INGPSP_SOFORT_TEXT_TITLE;
-        $this->description = MODULE_PAYMENT_INGPSP_SOFORT_TEXT_DESCRIPTION;
-        $this->sort_order = MODULE_PAYMENT_INGPSP_SOFORT_SORT_ORDER;
-        $this->enabled = ((MODULE_PAYMENT_INGPSP_SOFORT_STATUS == 'True')?true:false);
+        $this->title = MODULE_PAYMENT_EMSPAY_BANCONTACT_TEXT_TITLE;
+        $this->description = MODULE_PAYMENT_EMSPAY_BANCONTACT_TEXT_DESCRIPTION;
+        $this->sort_order = MODULE_PAYMENT_EMSPAY_BANCONTACT_SORT_ORDER;
+        $this->enabled = ((MODULE_PAYMENT_EMSPAY_BANCONTACT_STATUS == 'True') ? true : false);
 
         parent::__construct();
     }
@@ -31,16 +31,16 @@ class ingpsp_sofort extends ingpspGateway
     {
         global $messageStack;
 
-        if (defined('MODULE_PAYMENT_INGPSP_SOFORT_STATUS')) {
-            $messageStack->add_session(MODULE_PAYMENT_INGPSP_SOFORT_ERROR_ALREADY_INSTALLED, 'error');
+        if (defined('MODULE_PAYMENT_EMSPAY_BANCONTACT_STATUS')) {
+            $messageStack->add_session(MODULE_PAYMENT_EMSPAY_BANCONTACT_ERROR_ALREADY_INSTALLED, 'error');
             zen_redirect(zen_href_link(FILENAME_MODULES, 'set=payment&module='.$this->code, 'SSL'));
             return 'failed';
         }
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_SOFORT_STATUS_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_SOFORT_STATUS_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_SOFORT_STATUS',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_BANCONTACT_STATUS_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_BANCONTACT_STATUS_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_BANCONTACT_STATUS',
             'configuration_value' => 'True',
             'configuration_group_id' => 6,
             'sort_order' => 0,
@@ -48,27 +48,27 @@ class ingpsp_sofort extends ingpspGateway
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_SOFORT_DISPLAY_TITLE_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_SOFORT_DISPLAY_TITLE_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_SOFORT_DISPLAY_TITLE',
-            'configuration_value' => MODULE_PAYMENT_INGPSP_SOFORT_TEXT_TITLE,
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_BANCONTACT_DISPLAY_TITLE_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_BANCONTACT_DISPLAY_TITLE_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_BANCONTACT_DISPLAY_TITLE',
+            'configuration_value' => MODULE_PAYMENT_EMSPAY_BANCONTACT_TEXT_TITLE,
             'configuration_group_id' => 6,
             'sort_order' => 1
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_SOFORT_SORT_ORDER_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_SOFORT_SORT_ORDER_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_SOFORT_SORT_ORDER',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_BANCONTACT_SORT_ORDER_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_BANCONTACT_SORT_ORDER_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_BANCONTACT_SORT_ORDER',
             'configuration_value' => 0,
             'configuration_group_id' => 6,
             'sort_order' => 2
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_SOFORT_ZONE_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_SOFORT_ZONE_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_SOFORT_ZONE',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_BANCONTACT_ZONE_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_BANCONTACT_ZONE_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_BANCONTACT_ZONE',
             'configuration_value' => 0,
             'configuration_group_id' => 6,
             'sort_order' => 3,
@@ -87,10 +87,10 @@ class ingpsp_sofort extends ingpspGateway
     public function keys()
     {
         return array(
-            'MODULE_PAYMENT_INGPSP_SOFORT_DISPLAY_TITLE',
-            'MODULE_PAYMENT_INGPSP_SOFORT_STATUS',
-            'MODULE_PAYMENT_INGPSP_SOFORT_SORT_ORDER',
-            'MODULE_PAYMENT_INGPSP_SOFORT_ZONE'
+            'MODULE_PAYMENT_EMSPAY_BANCONTACT_DISPLAY_TITLE',
+            'MODULE_PAYMENT_EMSPAY_BANCONTACT_STATUS',
+            'MODULE_PAYMENT_EMSPAY_BANCONTACT_SORT_ORDER',
+            'MODULE_PAYMENT_EMSPAY_BANCONTACT_ZONE'
         );
     }
 
@@ -101,7 +101,7 @@ class ingpsp_sofort extends ingpspGateway
     {
         return array(
             'id' => $this->code,
-            'module' => "<img src='".DIR_WS_IMAGES."emspay/".$this->code.".png' /> ".$this->title
+            'module' =>  "<img src='".DIR_WS_IMAGES."emspay/". $this->code . ".png' /> " . $this->title
         );
     }
 
@@ -123,10 +123,9 @@ class ingpsp_sofort extends ingpspGateway
         global $order, $messageStack;
 
         try {
-            $ingOrder = $this->ingpsp->createSofortOrder(
+            $emsOrder = $this->emspay->createBancontactOrder(
                 $this->gerOrderTotalInCents($order), // amount in cents
                 $this->getCurrency($order),          // currency
-                [],                                  // payment method details
                 $this->getOrderDescription(),        // order description
                 $this->getOrderId(),                 // merchantOrderId
                 $this->getReturnUrl(),               // returnUrl
@@ -136,12 +135,12 @@ class ingpsp_sofort extends ingpspGateway
                 $this->getWebhookUrl()               // webhook_url
             );
 
-            if ($ingOrder->status()->isError()) {
-                $messageStack->add_session('checkout_payment', MODULE_PAYMENT_INGPSP_SOFORT_ERROR_TRANSACTION, 'error');
+            if ($emsOrder->status()->isError()) {
+                $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_BANCONTACT_ERROR_TRANSACTION, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
             }
 
-            zen_redirect($ingOrder->firstTransactionPaymentUrl()->toString());
+            zen_redirect($emsOrder->firstTransactionPaymentUrl()->toString());
         } catch (Exception $exception) {
             $messageStack->add_session('checkout_payment', $exception->getMessage(), 'error');
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
@@ -155,6 +154,6 @@ class ingpsp_sofort extends ingpspGateway
      */
     public function update_status()
     {
-        return $this->updateModuleVisibility(MODULE_PAYMENT_INGPSP_SOFORT_ZONE);
+        return $this->updateModuleVisibility(MODULE_PAYMENT_EMSPAY_BANCONTACT_ZONE);
     }
 }

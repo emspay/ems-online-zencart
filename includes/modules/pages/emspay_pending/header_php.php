@@ -11,7 +11,7 @@ $breadcrumb->add(NAVBAR_TITLE);
 
 if ($_POST['processing']) {
     $emsOrderId = filter_input(INPUT_GET, 'order_id', FILTER_SANITIZE_STRING);
-    $emspayOrder = ingpspGateway::getClient()->getOrder($emsOrderId);
+    $emspayOrder = emspayGateway::getClient()->getOrder($emsOrderId);
 
     die(json_encode([
         'redirect' => $emspayOrder->status()->isProcessing()

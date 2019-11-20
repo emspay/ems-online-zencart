@@ -3,7 +3,7 @@
 define('MODULE_PAYMENT_EMSPAY_ORDER_DESCRIPTION', "Votre commande %s à %s");
 
 define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_TEXT_TITLE', "Virement Bancaire");
-define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_TEXT_DESCRIPTION', "Méthode de paiement fournie par EMS PAY.");
+define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_TEXT_DESCRIPTION', "Méthode de paiement fournie par EMS Online.");
 
 define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_STATUS_TEXT', "Activer Virement Bancaire");
 define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_STATUS_DESCRIPTION', "Voulez-vous activer Virement Bancaire?");
@@ -24,13 +24,13 @@ define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_INFORMATION', 'Veuillez utiliser les 
 <br/> Référence: <b>{{reference}}</ b>
 <br/> IBAN: <b>NL13INGB0005300060</ b>
 <br/> BIC: <b>INGBNL2A</ b>
-<br/> Titulaire du compte: <b>ING Bank N.V. PSP</ b>
+<br/> Titulaire du compte: <b>EMS Bank N.V. PSP</ b>
 <br/> Ville: <b>Amsterdam</ b>
 <br/> <br/>');
 
 define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_INFORMATION_EMAIL', 'Veuillez utiliser les informations suivantes lors du virement bancaire:
 Référence: {{reference}}
-IBAN: NL13INGB0005300060
+IBAN: NL79ABNA0842577610
 BIC: INGBNL2A
-Titulaire du compte: ING Bank N.V. PSP
+Titulaire du compte: EMS Bank N.V. PSP
 Ville: Amsterdam');

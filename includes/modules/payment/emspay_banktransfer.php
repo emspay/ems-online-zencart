@@ -3,22 +3,22 @@
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/class.emspayGateway.php');
 
 /**
- * Class ingpsp_banktransfer
+ * Class emspay_banktransfer
  */
-class ingpsp_banktransfer extends ingpspGateway
+class emspay_banktransfer extends emspayGateway
 {
-    public $code = 'ingpsp_banktransfer';
+    public $code = 'emspay_banktransfer';
 
     /**
-     * ingpsp_banktransfer constructor.
+     * emspay_banktransfer constructor.
      */
     function __construct()
     {
-        $this->title = MODULE_PAYMENT_INGPSP_BANKTRANSFER_TEXT_TITLE;
-        $this->description = MODULE_PAYMENT_INGPSP_BANKTRANSFER_TEXT_DESCRIPTION;
-        $this->sort_order = MODULE_PAYMENT_INGPSP_BANKTRANSFER_SORT_ORDER;
-        $this->enabled = ((MODULE_PAYMENT_INGPSP_BANKTRANSFER_STATUS == 'True')?true:false);
-        $this->email_footer = MODULE_PAYMENT_INGPSP_BANKTRANSFER_INFORMATION_EMAIL;
+        $this->title = MODULE_PAYMENT_EMSPAY_BANKTRANSFER_TEXT_TITLE;
+        $this->description = MODULE_PAYMENT_EMSPAY_BANKTRANSFER_TEXT_DESCRIPTION;
+        $this->sort_order = MODULE_PAYMENT_EMSPAY_BANKTRANSFER_SORT_ORDER;
+        $this->enabled = ((MODULE_PAYMENT_EMSPAY_BANKTRANSFER_STATUS == 'True')?true:false);
+        $this->email_footer = MODULE_PAYMENT_EMSPAY_BANKTRANSFER_INFORMATION_EMAIL;
 
         parent::__construct();
     }
@@ -32,16 +32,16 @@ class ingpsp_banktransfer extends ingpspGateway
     {
         global $messageStack;
 
-        if (defined('MODULE_PAYMENT_INGPSP_BANKTRANSFER_STATUS')) {
-            $messageStack->add_session(MODULE_PAYMENT_INGPSP_BANKTRANSFER_ERROR_ALREADY_INSTALLED, 'error');
+        if (defined('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_STATUS')) {
+            $messageStack->add_session(MODULE_PAYMENT_EMSPAY_BANKTRANSFER_ERROR_ALREADY_INSTALLED, 'error');
             zen_redirect(zen_href_link(FILENAME_MODULES, 'set=payment&module='.$this->code, 'SSL'));
             return 'failed';
         }
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_BANKTRANSFER_STATUS_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_BANKTRANSFER_STATUS_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_BANKTRANSFER_STATUS',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_BANKTRANSFER_STATUS_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_BANKTRANSFER_STATUS_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_BANKTRANSFER_STATUS',
             'configuration_value' => 'True',
             'configuration_group_id' => 6,
             'sort_order' => 0,
@@ -49,27 +49,27 @@ class ingpsp_banktransfer extends ingpspGateway
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_BANKTRANSFER_DISPLAY_TITLE_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_BANKTRANSFER_DISPLAY_TITLE_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_BANKTRANSFER_DISPLAY_TITLE',
-            'configuration_value' => MODULE_PAYMENT_INGPSP_BANKTRANSFER_TEXT_TITLE,
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_BANKTRANSFER_DISPLAY_TITLE_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_BANKTRANSFER_DISPLAY_TITLE_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_BANKTRANSFER_DISPLAY_TITLE',
+            'configuration_value' => MODULE_PAYMENT_EMSPAY_BANKTRANSFER_TEXT_TITLE,
             'configuration_group_id' => 6,
             'sort_order' => 1
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_BANKTRANSFER_SORT_ORDER_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_BANKTRANSFER_SORT_ORDER_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_BANKTRANSFER_SORT_ORDER',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_BANKTRANSFER_SORT_ORDER_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_BANKTRANSFER_SORT_ORDER_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_BANKTRANSFER_SORT_ORDER',
             'configuration_value' => 0,
             'configuration_group_id' => 6,
             'sort_order' => 2
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_BANKTRANSFER_ZONE_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_BANKTRANSFER_ZONE_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_BANKTRANSFER_ZONE',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_BANKTRANSFER_ZONE_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_BANKTRANSFER_ZONE_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_BANKTRANSFER_ZONE',
             'configuration_value' => 0,
             'configuration_group_id' => 6,
             'sort_order' => 3,
@@ -88,10 +88,10 @@ class ingpsp_banktransfer extends ingpspGateway
     public function keys()
     {
         return array(
-            'MODULE_PAYMENT_INGPSP_BANKTRANSFER_DISPLAY_TITLE',
-            'MODULE_PAYMENT_INGPSP_BANKTRANSFER_STATUS',
-            'MODULE_PAYMENT_INGPSP_BANKTRANSFER_SORT_ORDER',
-            'MODULE_PAYMENT_INGPSP_BANKTRANSFER_ZONE'
+            'MODULE_PAYMENT_EMSPAY_BANKTRANSFER_DISPLAY_TITLE',
+            'MODULE_PAYMENT_EMSPAY_BANKTRANSFER_STATUS',
+            'MODULE_PAYMENT_EMSPAY_BANKTRANSFER_SORT_ORDER',
+            'MODULE_PAYMENT_EMSPAY_BANKTRANSFER_ZONE'
         );
     }
 
@@ -114,7 +114,7 @@ class ingpsp_banktransfer extends ingpspGateway
         global $order, $messageStack;
 
         try {
-            $ingOrder = $this->ingpsp->createSepaOrder(
+            $emsOrder = $this->emspay->createSepaOrder(
                 $this->gerOrderTotalInCents($order), // amount in cents
                 $this->getCurrency($order),          // currency
                 [],                                  // payment method details
@@ -127,19 +127,19 @@ class ingpsp_banktransfer extends ingpspGateway
                 $this->getWebhookUrl()               // webhook_url
             );
 
-            if ($ingOrder->status()->isError()) {
-                $messageStack->add_session('checkout_payment', MODULE_PAYMENT_INGPSP_BANKTRANSFER_ERROR_TRANSACTION, 'error');
+            if ($emsOrder->status()->isError()) {
+                $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_BANKTRANSFER_ERROR_TRANSACTION, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
             }
 
-            $bankReference = $ingOrder->Transactions()->current()->paymentMethodDetails()->reference()->toString();
+            $bankReference = $emsOrder->Transactions()->current()->paymentMethodDetails()->reference()->toString();
 
-            $_SESSION['ingpsp_banktransfer_reference'] = $bankReference;
-            $_SESSION['ingpsp_banktransfer_order_id'] = $ingOrder->getId();
+            $_SESSION['emspay_banktransfer_reference'] = $bankReference;
+            $_SESSION['emspay_banktransfer_order_id'] = $emsOrder->getId();
             $_SESSION['payment_method_messages'] = str_replace(
                 '{{reference}}',
                 $bankReference,
-                MODULE_PAYMENT_INGPSP_BANKTRANSFER_INFORMATION
+                MODULE_PAYMENT_EMSPAY_BANKTRANSFER_INFORMATION
             );
         } catch (Exception $exception) {
             $messageStack->add_session('checkout_payment', $exception->getMessage(), 'error');
@@ -152,13 +152,13 @@ class ingpsp_banktransfer extends ingpspGateway
      */
     public function after_process()
     {
-        $orderData = $this->ingpsp->getOrder($_SESSION['ingpsp_banktransfer_order_id']);
+        $orderData = $this->emspay->getOrder($_SESSION['emspay_banktransfer_order_id']);
         $orderData->merchantOrderId($this->getOrderId());
         $orderData->description($this->getOrderDescription());
-        $this->ingpsp->updateOrder($orderData);
+        $this->emspay->updateOrder($orderData);
 
         static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($orderData));
-        static::addOrderHistory($this->getOrderId(), static::getZenStatusId($orderData), $_SESSION['ingpsp_banktransfer_reference']);
+        static::addOrderHistory($this->getOrderId(), static::getZenStatusId($orderData), $_SESSION['emspay_banktransfer_reference']);
         static::addOrderHistory($this->getOrderId(), static::getZenStatusId($orderData), $orderData->getId());
     }
 
@@ -169,6 +169,6 @@ class ingpsp_banktransfer extends ingpspGateway
      */
     public function update_status()
     {
-        return $this->updateModuleVisibility(MODULE_PAYMENT_INGPSP_BANKTRANSFER_ZONE);
+        return $this->updateModuleVisibility(MODULE_PAYMENT_EMSPAY_BANKTRANSFER_ZONE);
     }
 }

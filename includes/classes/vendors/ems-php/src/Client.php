@@ -58,23 +58,6 @@ final class Client
             );
         }
     }
-
-    /**
-     * Get allowed payment methods.
-     *
-     * @return array
-     */
-    public function getAllowedProducts()
-    {
-        try {
-            return $this->processProducts(
-                $this->httpClient->get('merchants/self/projects/self/')->json()
-            );
-        } catch (RequestException $exception) {
-            return [];
-        }
-    }
-
     /**
      * Process the API response with allowed payment methods.
      *

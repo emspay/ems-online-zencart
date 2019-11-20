@@ -3,7 +3,7 @@
 define('MODULE_PAYMENT_EMSPAY_ORDER_DESCRIPTION', "Your order %s at %s");
 
 define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_TEXT_TITLE', "Bank Transfer");
-define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_TEXT_DESCRIPTION', "Payment method is provided by EMS PAY");
+define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_TEXT_DESCRIPTION', "Payment method is provided by EMS Online");
 
 define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_STATUS_TEXT', "Enable Bank Transfer");
 define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_STATUS_DESCRIPTION', "Do you want to enable Bank Transfer?");
@@ -24,13 +24,13 @@ define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_INFORMATION', 'Please use the followi
 <br/> Reference: <b>{{reference}}</b>
 <br/> IBAN:  <b>NL13INGB0005300060</b>
 <br/> BIC:  <b>INGBNL2A</b>
-<br/> Account holder:  <b>ING Bank N.V. PSP</b>
+<br/> Account holder:  <b>EMS Bank N.V. PSP</b>
 <br/> City:  <b>Amsterdam</b>
 <br/><br/>');
 
 define('MODULE_PAYMENT_EMSPAY_BANKTRANSFER_INFORMATION_EMAIL', 'Please use the following information for the bank transfer:
 Reference: {{reference}}
-IBAN: NL13INGB0005300060
+IBAN: NL79ABNA0842577610
 BIC: INGBNL2A
-Account holder: ING Bank N.V. PSP
+Account holder: EMS Bank N.V. PSP
 City: Amsterdam');

@@ -3,7 +3,7 @@
 define('MODULE_PAYMENT_EMSPAY_ORDER_DESCRIPTION', "Votre commande %s à %s");
 
 define('MODULE_PAYMENT_EMSPAY_BANCONTACT_TEXT_TITLE', "Bancontact");
-define('MODULE_PAYMENT_EMSPAY_BANCONTACT_TEXT_DESCRIPTION', "Méthode de paiement fournie par EMS PAY.");
+define('MODULE_PAYMENT_EMSPAY_BANCONTACT_TEXT_DESCRIPTION', "Méthode de paiement fournie par EMS Online.");
 
 define('MODULE_PAYMENT_EMSPAY_BANCONTACT_DISPLAY_TITLE_TEXT', "Nom d'affichage de la méthode de paiement");
 define('MODULE_PAYMENT_EMSPAY_BANCONTACT_DISPLAY_TITLE_DESCRIPTION', "Nom de la méthode de paiement qui sera affichée au client.");

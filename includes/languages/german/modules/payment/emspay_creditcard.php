@@ -3,7 +3,7 @@
 define('MODULE_PAYMENT_EMSPAY_ORDER_DESCRIPTION', "Ihre Bestellung %s bei %s");
 
 define('MODULE_PAYMENT_EMSPAY_CREDITCARD_TEXT_TITLE', "Kreditkarte");
-define('MODULE_PAYMENT_EMSPAY_CREDITCARD_TEXT_DESCRIPTION', "Die Zahlungsmethode wird bereitgestellt von EMS PAY.");
+define('MODULE_PAYMENT_EMSPAY_CREDITCARD_TEXT_DESCRIPTION', "Die Zahlungsmethode wird bereitgestellt von EMS Online.");
 
 define('MODULE_PAYMENT_EMSPAY_CREDITCARD_DISPLAY_TITLE_TEXT', "Zahlungsmethode Anzeigename");
 define('MODULE_PAYMENT_EMSPAY_CREDITCARD_DISPLAY_TITLE_DESCRIPTION', "Name der Zahlungsmethode, die dem Kunden angezeigt wird.");

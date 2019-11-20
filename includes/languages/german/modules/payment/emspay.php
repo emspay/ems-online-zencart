@@ -1,22 +1,22 @@
 <?php
 
-define('MODULE_PAYMENT_EMSPAY_TEXT_TITLE', "EMS PAY");
-define('MODULE_PAYMENT_EMSPAY_TEXT_DESCRIPTION', "Offizielle EMS PAY ZenCart-Plugin");
+define('MODULE_PAYMENT_EMSPAY_TEXT_TITLE', "EMS Online");
+define('MODULE_PAYMENT_EMSPAY_TEXT_DESCRIPTION', "Offizielle EMS Online ZenCart-Plugin");
 
-define('MODULE_PAYMENT_EMSPAY_STATUS_TEXT', "Aktivieren EMS PAY-Modul");
-define('MODULE_PAYMENT_EMSPAY_STATUS_DESCRIPTION', "Wollen Sie EMS PAY ZenCart Modul aktivieren?");
+define('MODULE_PAYMENT_EMSPAY_STATUS_TEXT', "Aktivieren EMS Online-Modul");
+define('MODULE_PAYMENT_EMSPAY_STATUS_DESCRIPTION', "Wollen Sie EMS Online ZenCart Modul aktivieren?");
 
 define('MODULE_PAYMENT_EMSPAY_API_KEY_TEXT', "API Schlüssel");
-define('MODULE_PAYMENT_EMSPAY_API_KEY_DESCRIPTION', "Duplizieren Sie Ihre EMS PAY API Schlüssel von Merchant Portal.");
+define('MODULE_PAYMENT_EMSPAY_API_KEY_DESCRIPTION', "Duplizieren Sie Ihre EMS Online API Schlüssel von Merchant Portal.");
 
-define('MODULE_PAYMENT_EMSPAY_PRODUCT_TEXT', "EMS PAY Produkt");
-define('MODULE_PAYMENT_EMSPAY_PRODUCT_DESCRIPTION', "Wählen Sie Ihres EMS PAY Produkt.");
+define('MODULE_PAYMENT_EMSPAY_PRODUCT_TEXT', "EMS Online Produkt");
+define('MODULE_PAYMENT_EMSPAY_PRODUCT_DESCRIPTION', "Wählen Sie Ihres EMS Online Produkt.");
 
 define('MODULE_PAYMENT_EMSPAY_BUNDLE_CA_TEXT', "cURL CA bündel benutzen");
 define('MODULE_PAYMENT_EMSPAY_BUNDLE_CA_DESCRIPTION', "Löst Probleme, wenn curl.cacert Pfad nicht in PHP.ini eingestellt wird.");
 
 define('MODULE_PAYMENT_EMSPAY_WEBHOOK_TEXT', "Webhook URL generieren");
-define('MODULE_PAYMENT_EMSPAY_WEBHOOK_DESCRIPTION', "Verwende automatisch der Webhook URL mit jeder Bestellung zum EMS PAY API.");
+define('MODULE_PAYMENT_EMSPAY_WEBHOOK_DESCRIPTION', "Verwende automatisch der Webhook URL mit jeder Bestellung zum EMS Online API.");
 
 define('MODULE_PAYMENT_EMSPAY_ORDER_STATUS_COMPLETED_TEXT', "Status für eine abgeschlossene Bestellung");
 define('MODULE_PAYMENT_EMSPAY_ORDER_STATUS_COMPLETED_DESCRIPTION', "Wählen Sie den Status aus der Liste der Sie anwenden möchten für abgeschlossene Bestellungen.");

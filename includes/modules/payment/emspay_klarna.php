@@ -3,21 +3,21 @@
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/class.emspayGateway.php');
 
 /**
- * Class ingpsp_klarna
+ * Class emspay_klarna
  */
-class ingpsp_klarna extends ingpspGateway
+class emspay_klarna extends emspayGateway
 {
-    public $code = 'ingpsp_klarna';
+    public $code = 'emspay_klarna';
 
     /**
-     * ingpsp_klarna constructor.
+     * emspay_klarna constructor.
      */
     function __construct()
     {
-        $this->title = MODULE_PAYMENT_INGPSP_KLARNA_TEXT_TITLE;
-        $this->description = MODULE_PAYMENT_INGPSP_KLARNA_TEXT_DESCRIPTION;
-        $this->sort_order = MODULE_PAYMENT_INGPSP_KLARNA_SORT_ORDER;
-        $this->enabled = ((MODULE_PAYMENT_INGPSP_KLARNA_STATUS == 'True')?true:false);
+        $this->title = MODULE_PAYMENT_EMSPAY_KLARNA_TEXT_TITLE;
+        $this->description = MODULE_PAYMENT_EMSPAY_KLARNA_TEXT_DESCRIPTION;
+        $this->sort_order = MODULE_PAYMENT_EMSPAY_KLARNA_SORT_ORDER;
+        $this->enabled = ((MODULE_PAYMENT_EMSPAY_KLARNA_STATUS == 'True')?true:false);
 
         parent::__construct();
     }
@@ -31,16 +31,16 @@ class ingpsp_klarna extends ingpspGateway
     {
         global $messageStack;
 
-        if (defined('MODULE_PAYMENT_INGPSP_KLARNA_STATUS')) {
-            $messageStack->add_session(MODULE_PAYMENT_INGPSP_KLARNA_ERROR_ALREADY_INSTALLED, 'error');
+        if (defined('MODULE_PAYMENT_EMSPAY_KLARNA_STATUS')) {
+            $messageStack->add_session(MODULE_PAYMENT_EMSPAY_KLARNA_ERROR_ALREADY_INSTALLED, 'error');
             zen_redirect(zen_href_link(FILENAME_MODULES, 'set=payment&module='.$this->code, 'SSL'));
             return 'failed';
         }
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_KLARNA_STATUS_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_KLARNA_STATUS_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_KLARNA_STATUS',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNA_STATUS_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNA_STATUS_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNA_STATUS',
             'configuration_value' => 'True',
             'configuration_group_id' => 6,
             'sort_order' => 1,
@@ -48,45 +48,45 @@ class ingpsp_klarna extends ingpspGateway
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_KLARNA_DISPLAY_TITLE_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_KLARNA_DISPLAY_TITLE_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_KLARNA_DISPLAY_TITLE',
-            'configuration_value' => MODULE_PAYMENT_INGPSP_KLARNA_TEXT_TITLE,
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNA_DISPLAY_TITLE_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNA_DISPLAY_TITLE_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNA_DISPLAY_TITLE',
+            'configuration_value' => MODULE_PAYMENT_EMSPAY_KLARNA_TEXT_TITLE,
             'configuration_group_id' => 6,
             'sort_order' => 2
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_KLARNA_TEST_API_KEY_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_KLARNA_TEST_API_KEY_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_KLARNA_TEST_API_KEY',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNA_TEST_API_KEY_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNA_TEST_API_KEY_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNA_TEST_API_KEY',
             'configuration_value' => '',
             'configuration_group_id' => 6,
             'sort_order' => 3
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_KLARNA_IP_FILTERING_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_KLARNA_IP_FILTERING_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_KLARNA_IP_FILTERING',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNA_IP_FILTERING_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNA_IP_FILTERING_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNA_IP_FILTERING',
             'configuration_value' => '',
             'configuration_group_id' => 6,
             'sort_order' => 4
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_KLARNA_SORT_ORDER_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_KLARNA_SORT_ORDER_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_KLARNA_SORT_ORDER',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNA_SORT_ORDER_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNA_SORT_ORDER_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNA_SORT_ORDER',
             'configuration_value' => 0,
             'configuration_group_id' => 6,
             'sort_order' => 5
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_INGPSP_KLARNA_ZONE_TEXT,
-            'configuration_description' => MODULE_PAYMENT_INGPSP_KLARNA_ZONE_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_INGPSP_KLARNA_ZONE',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNA_ZONE_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNA_ZONE_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNA_ZONE',
             'configuration_value' => 0,
             'configuration_group_id' => 6,
             'sort_order' => 6,
@@ -105,12 +105,12 @@ class ingpsp_klarna extends ingpspGateway
     public function keys()
     {
         return array(
-            'MODULE_PAYMENT_INGPSP_KLARNA_DISPLAY_TITLE',
-            'MODULE_PAYMENT_INGPSP_KLARNA_TEST_API_KEY',
-            'MODULE_PAYMENT_INGPSP_KLARNA_IP_FILTERING',
-            'MODULE_PAYMENT_INGPSP_KLARNA_STATUS',
-            'MODULE_PAYMENT_INGPSP_KLARNA_SORT_ORDER',
-            'MODULE_PAYMENT_INGPSP_KLARNA_ZONE'
+            'MODULE_PAYMENT_EMSPAY_KLARNA_DISPLAY_TITLE',
+            'MODULE_PAYMENT_EMSPAY_KLARNA_TEST_API_KEY',
+            'MODULE_PAYMENT_EMSPAY_KLARNA_IP_FILTERING',
+            'MODULE_PAYMENT_EMSPAY_KLARNA_STATUS',
+            'MODULE_PAYMENT_EMSPAY_KLARNA_SORT_ORDER',
+            'MODULE_PAYMENT_EMSPAY_KLARNA_ZONE'
         );
     }
 
@@ -121,17 +121,17 @@ class ingpsp_klarna extends ingpspGateway
     {
         $fields = [
             [
-                'title' => MODULE_PAYMENT_INGPSP_KLARNA_DOB,
-                'field' => zen_draw_input_field('ingpsp_klarna_dob')
+                'title' => MODULE_PAYMENT_EMSPAY_KLARNA_DOB,
+                'field' => zen_draw_input_field('emspay_klarna_dob')
             ],
             [
-                'title' => MODULE_PAYMENT_INGPSP_KLARNA_GENDER,
+                'title' => MODULE_PAYMENT_EMSPAY_KLARNA_GENDER,
                 'field' => zen_draw_pull_down_menu(
-                    'ingpsp_klarna_gender',
+                    'emspay_klarna_gender',
                     [
                         ['id' => '', 'text' => ''],
-                        ['id' => 'male', 'text' => MODULE_PAYMENT_INGPSP_KLARNA_MALE],
-                        ['id' => 'female', 'text' => MODULE_PAYMENT_INGPSP_KLARNA_FEMALE]
+                        ['id' => 'male', 'text' => MODULE_PAYMENT_EMSPAY_KLARNA_MALE],
+                        ['id' => 'female', 'text' => MODULE_PAYMENT_EMSPAY_KLARNA_FEMALE]
                     ]
                 )
             ]
@@ -149,8 +149,8 @@ class ingpsp_klarna extends ingpspGateway
      */
     public function process_button()
     {
-        $processButton = zen_draw_hidden_field('ingpsp_klarna_dob', $_POST['ingpsp_klarna_dob']);
-        $processButton .= zen_draw_hidden_field('ingpsp_klarna_gender', $_POST['ingpsp_klarna_gender']);
+        $processButton = zen_draw_hidden_field('emspay_klarna_dob', $_POST['emspay_klarna_dob']);
+        $processButton .= zen_draw_hidden_field('emspay_klarna_gender', $_POST['emspay_klarna_gender']);
         $processButton .= zen_draw_hidden_field(zen_session_name(), zen_session_id());
 
         return $processButton;
@@ -163,14 +163,14 @@ class ingpsp_klarna extends ingpspGateway
     {
         return
             'if (payment_value == "'.$this->code.'") {'."\n".
-            '   var ingpsp_klarna_gender = document.checkout_payment.ingpsp_klarna_gender.value;'."\n".
-            '   var ingpsp_klarna_dob = document.checkout_payment.ingpsp_klarna_dob.value;'."\n".
-            '   if (ingpsp_klarna_gender == "") {'."\n".
-            '       error_message = error_message + "'.MODULE_PAYMENT_INGPSP_KLARNA_ERROR_GENDER.'";'."\n".
+            '   var emspay_klarna_gender = document.checkout_payment.emspay_klarna_gender.value;'."\n".
+            '   var emspay_klarna_dob = document.checkout_payment.emspay_klarna_dob.value;'."\n".
+            '   if (emspay_klarna_gender == "") {'."\n".
+            '       error_message = error_message + "'.MODULE_PAYMENT_EMSPAY_KLARNA_ERROR_GENDER.'";'."\n".
             '       error = 1;'."\n".
             '   }'."\n".
-            '   if (ingpsp_klarna_dob == "") {'."\n".
-            '       error_message = error_message + "'.MODULE_PAYMENT_INGPSP_KLARNA_ERROR_DOB.'";'."\n".
+            '   if (emspay_klarna_dob == "") {'."\n".
+            '       error_message = error_message + "'.MODULE_PAYMENT_EMSPAY_KLARNA_ERROR_DOB.'";'."\n".
             '       error = 1;'."\n".
             '   }'."\n".
             '}'."\n";
@@ -183,13 +183,13 @@ class ingpsp_klarna extends ingpspGateway
     {
         global $messageStack;
 
-        if (empty($_POST['ingpsp_klarna_gender'])) {
-            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_INGPSP_KLARNA_ERROR_GENDER, 'error');
+        if (empty($_POST['emspay_klarna_gender'])) {
+            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_KLARNA_ERROR_GENDER, 'error');
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
         }
 
-        if (empty($_POST['ingpsp_klarna_dob'])) {
-            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_INGPSP_KLARNA_ERROR_DOB, 'error');
+        if (empty($_POST['emspay_klarna_dob'])) {
+            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_KLARNA_ERROR_DOB, 'error');
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
         }
     }
@@ -202,7 +202,7 @@ class ingpsp_klarna extends ingpspGateway
         global $order, $messageStack;
 
         try {
-            $ingOrder = $this->ingpsp->createKlarnaOrder(
+            $emsOrder = $this->emspay->createKlarnaOrder(
                 $this->gerOrderTotalInCents($order), // amount in cents
                 $this->getCurrency($order),          // currency
                 $this->getOrderDescription(),        // order description
@@ -215,20 +215,20 @@ class ingpsp_klarna extends ingpspGateway
                 $this->getOrderLines($order)         // order lines
             );
 
-            static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($ingOrder));
-            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($ingOrder), $ingOrder->getId());
+            static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($emsOrder));
+            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder->getId());
 
-            if ($ingOrder->status()->isError()) {
+            if ($emsOrder->status()->isError()) {
                 $messageStack->add_session(
                     'checkout_payment',
-                    $ingOrder->transactions()->current()->reason()->toString(),
+                    $emsOrder->transactions()->current()->reason()->toString(),
                     'error'
                 );
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
-            } elseif ($ingOrder->status()->isCancelled()) {
+            } elseif ($emsOrder->status()->isCancelled()) {
                 $messageStack->add_session(
                     'checkout_payment',
-                    MODULE_PAYMENT_INGPSP_KLARNA_ERROR_TRANSACTION_IS_CANCELLED,
+                    MODULE_PAYMENT_EMSPAY_KLARNA_ERROR_TRANSACTION_IS_CANCELLED,
                     'error'
                 );
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
@@ -303,7 +303,7 @@ class ingpsp_klarna extends ingpspGateway
      */
     public function update_status()
     {
-        return $this->updateModuleVisibility(MODULE_PAYMENT_INGPSP_KLARNA_ZONE);
+        return $this->updateModuleVisibility(MODULE_PAYMENT_EMSPAY_KLARNA_ZONE);
     }
 
     /**
@@ -313,10 +313,10 @@ class ingpsp_klarna extends ingpspGateway
      */
     function ingKlarnaIpFiltering()
     {
-        $ingKlarnaIpList = MODULE_PAYMENT_INGPSP_KLARNA_IP_FILTERING;
+        $emsKlarnaIpList = MODULE_PAYMENT_EMSPAY_KLARNA_IP_FILTERING;
 
-        if (strlen($ingKlarnaIpList) > 0) {
-            $ip_whitelist = array_map('trim', explode(",", $ingKlarnaIpList));
+        if (strlen($emsKlarnaIpList) > 0) {
+            $ip_whitelist = array_map('trim', explode(",", $emsKlarnaIpList));
             if (!in_array($_SESSION['customers_ip_address'], $ip_whitelist)) {
                 return false;
             }
@@ -326,14 +326,14 @@ class ingpsp_klarna extends ingpspGateway
     }
 
     /**
-     * Set Klarna order as 'Shipped' in ING PSP.
+     * Set Klarna order as 'Shipped' in EMS Online.
      *
-     * @param string $ingOrderId
+     * @param string $emsOrderId
      */
-    public function captureKlarnaOrder($ingOrderId)
+    public function captureKlarnaOrder($emsOrderId)
     {
-        $this->ingpsp->setOrderCapturedStatus(
-            $this->ingpsp->getOrder($ingOrderId)
+        $this->emspay->setOrderCapturedStatus(
+            $this->emspay->getOrder($emsOrderId)
         );
     }
 
@@ -346,17 +346,17 @@ class ingpsp_klarna extends ingpspGateway
      */
     public function _doStatusUpdate($orderId, $status, $comments, $customerNotified, $orderStatus)
     {
-        if ($status == (int) MODULE_PAYMENT_INGPSP_ORDER_STATUS_SHIPPED) {
+        if ($status == (int) MODULE_PAYMENT_EMSPAY_ORDER_STATUS_SHIPPED) {
             $orderHistory = $this->getOrderHistory($orderId);
-            $ingOrderId = $this->searchHistoryForOrderKey($orderHistory);
-            if ($ingOrderId) {
-                $this->captureKlarnaOrder($ingOrderId);
+            $emsOrderId = $this->searchHistoryForOrderKey($orderHistory);
+            if ($emsOrderId) {
+                $this->captureKlarnaOrder($emsOrderId);
             }
         }
     }
 
     /**
-     * Obtain ING PSP order id from order history.
+     * Obtain EMS Online order id from order history.
      *
      * @param array $orderHistory
      * @return string|null

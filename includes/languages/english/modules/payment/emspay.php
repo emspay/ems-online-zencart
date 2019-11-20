@@ -1,22 +1,22 @@
 <?php
 
-define('MODULE_PAYMENT_EMSPAY_TEXT_TITLE', "EMS PAY");
-define('MODULE_PAYMENT_EMSPAY_TEXT_DESCRIPTION', "The official EMS PAY ZenCart plugin.");
+define('MODULE_PAYMENT_EMSPAY_TEXT_TITLE', "EMS Online");
+define('MODULE_PAYMENT_EMSPAY_TEXT_DESCRIPTION', "The official EMS Online ZenCart plugin.");
 
-define('MODULE_PAYMENT_EMSPAY_STATUS_TEXT', "Enable EMS PAY module.");
-define('MODULE_PAYMENT_EMSPAY_STATUS_DESCRIPTION', "Do you want to enable EMS PAY ZenCart Module?");
+define('MODULE_PAYMENT_EMSPAY_STATUS_TEXT', "Enable EMS Online module.");
+define('MODULE_PAYMENT_EMSPAY_STATUS_DESCRIPTION', "Do you want to enable EMS Online ZenCart Module?");
 
-define('MODULE_PAYMENT_EMSPAY_API_KEY_TEXT', "EMS PAY API Key");
-define('MODULE_PAYMENT_EMSPAY_API_KEY_DESCRIPTION', "Please enter your EMS PAY API key from merchant portal.");
+define('MODULE_PAYMENT_EMSPAY_API_KEY_TEXT', "EMS Online API Key");
+define('MODULE_PAYMENT_EMSPAY_API_KEY_DESCRIPTION', "Please enter your EMS Online API key from merchant portal.");
 
-define('MODULE_PAYMENT_EMSPAY_PRODUCT_TEXT', "EMS PAY Product");
-define('MODULE_PAYMENT_EMSPAY_PRODUCT_DESCRIPTION', "Select your EMS PAY product");
+define('MODULE_PAYMENT_EMSPAY_PRODUCT_TEXT', "EMS Online Product");
+define('MODULE_PAYMENT_EMSPAY_PRODUCT_DESCRIPTION', "Select your EMS Online product");
 
 define('MODULE_PAYMENT_EMSPAY_BUNDLE_CA_TEXT', "Use cURL CA bundle");
 define('MODULE_PAYMENT_EMSPAY_BUNDLE_CA_DESCRIPTION', "Resolves issue when curl.cacert path is not set in PHP.ini");
 
 define('MODULE_PAYMENT_EMSPAY_WEBHOOK_TEXT', "Generate Webhook URL");
-define('MODULE_PAYMENT_EMSPAY_WEBHOOK_DESCRIPTION', "Automatically provide webhook URL with each generated order to the EMS PAY API.");
+define('MODULE_PAYMENT_EMSPAY_WEBHOOK_DESCRIPTION', "Automatically provide webhook URL with each generated order to the EMS Online API.");
 
 define('MODULE_PAYMENT_EMSPAY_ORDER_STATUS_COMPLETED_TEXT', "Status for a completed order");
 define('MODULE_PAYMENT_EMSPAY_ORDER_STATUS_COMPLETED_DESCRIPTION', "Select the status from the list that you wish to map to the completed orders.");

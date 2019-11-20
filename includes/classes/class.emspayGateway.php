@@ -29,7 +29,7 @@ class emspayGateway extends base
     public $enabled, $title, $description, $sort_order, $order_status, $email_footer;
 
     /**
-     * EMS PAY PHP library.
+     * EMS Online PHP library.
      *
      * @var \GingerPayments\Payment\Client
      */
@@ -88,7 +88,7 @@ class emspayGateway extends base
     }
 
     /**
-     * Initiate EMS PAY API client.
+     * Initiate EMS Online API client.
      *
      * @param string $code
      * @return \GingerPayments\Payment\Client
@@ -385,7 +385,7 @@ class emspayGateway extends base
     }
 
     /**
-     * Map EMS PAY statuses to ZenCart.
+     * Map EMS Online statuses to ZenCart.
      *
      * @param $emsOrder
      * @return null
