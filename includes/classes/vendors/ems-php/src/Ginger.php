@@ -69,7 +69,7 @@ final class Ginger
      */
     public static function getEndpoint()
     {
-                return (new Client\EndpointResolver())->getEndpointEms();
+        return (new Client\EndpointResolver())->getEndpointEms();
     }
 
     /**

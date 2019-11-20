@@ -11,7 +11,6 @@ class EndpointResolverTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnDefaultEndpoints()
     {
         $resolver = new EndpointResolver();
-        
 
         $this->assertEquals(
             $resolver->getEndpointEms(),
