@@ -50,6 +50,7 @@ final class Client
             return Issuers::fromArray(
                 $this->httpClient->get('ideal/issuers/')->json()
             );
+
         } catch (RequestException $exception) {
             throw new ClientException(
                 'An error occurred while processing the request: '.$exception->getMessage(),

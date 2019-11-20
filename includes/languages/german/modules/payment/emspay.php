@@ -9,8 +9,8 @@ define('MODULE_PAYMENT_EMSPAY_STATUS_DESCRIPTION', "Wollen Sie EMS Online ZenCar
 define('MODULE_PAYMENT_EMSPAY_API_KEY_TEXT', "API Schlüssel");
 define('MODULE_PAYMENT_EMSPAY_API_KEY_DESCRIPTION', "Duplizieren Sie Ihre EMS Online API Schlüssel von Merchant Portal.");
 
-define('MODULE_PAYMENT_EMSPAY_PRODUCT_TEXT', "EMS Online Produkt");
-define('MODULE_PAYMENT_EMSPAY_PRODUCT_DESCRIPTION', "Wählen Sie Ihres EMS Online Produkt.");
+define('MODULE_PAYMENT_DUCT_TEXT', "EMS Online Produkt");
+define('MODULE_PAYMENT_DUCT_DESCRIPTION', "Wählen Sie Ihres EMS Online Produkt.");
 
 define('MODULE_PAYMENT_EMSPAY_BUNDLE_CA_TEXT', "cURL CA bündel benutzen");
 define('MODULE_PAYMENT_EMSPAY_BUNDLE_CA_DESCRIPTION', "Löst Probleme, wenn curl.cacert Pfad nicht in PHP.ini eingestellt wird.");

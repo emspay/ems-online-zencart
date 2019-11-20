@@ -12,7 +12,7 @@ class emspayGateway extends base
      *
      * @var string
      */
-    public $moduleVersion = '1.1.0';
+    public $moduleVersion = '1.1.1';
 
     /**
      * Payment method code.
@@ -38,7 +38,7 @@ class emspayGateway extends base
     /**
      * Default language.
      */
-    const emspay_DEFAULT_LANGUAGE = 'english';
+    const EMSPAY_DEFAULT_LANGUAGE = 'english';
 
     /**
      * emspayGateway constructor.
@@ -78,7 +78,7 @@ class emspayGateway extends base
      */
     public static function loadLanguageFile($code)
     {
-        $language = $_SESSION['language']?:static::emspay_DEFAULT_LANGUAGE;
+        $language = $_SESSION['language']?:static::EMSPAY_DEFAULT_LANGUAGE;
 
         require_once(zen_get_file_directory(
             DIR_FS_CATALOG.DIR_WS_LANGUAGES.$language.'/modules/payment/',
@@ -107,8 +107,7 @@ class emspayGateway extends base
 
         if (strlen($apiKey) == 32) {
             $emspay = \GingerPayments\Payment\Ginger::createClient(
-                $apiKey,
-                MODULE_PAYMENT_EMSPAY_PRODUCT
+                $apiKey
             );
 
             if (MODULE_PAYMENT_EMSPAY_BUNDLE_CA == 'True') {

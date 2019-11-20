@@ -9,8 +9,8 @@ define('MODULE_PAYMENT_EMSPAY_STATUS_DESCRIPTION', "Wilt u EMS Online ZenCart-mo
 define('MODULE_PAYMENT_EMSPAY_API_KEY_TEXT', "API Key");
 define('MODULE_PAYMENT_EMSPAY_API_KEY_DESCRIPTION', "Kopieer uw EMS Online API key van uw merchant portal.");
 
-define('MODULE_PAYMENT_EMSPAY_PRODUCT_TEXT', "EMS Online Product");
-define('MODULE_PAYMENT_EMSPAY_PRODUCT_DESCRIPTION', "Selecteer uw EMS Online product.");
+define('MODULE_PAYMENT_DUCT_TEXT', "EMS Online Product");
+define('MODULE_PAYMENT_DUCT_DESCRIPTION', "Selecteer uw EMS Online product.");
 
 define('MODULE_PAYMENT_EMSPAY_BUNDLE_CA_TEXT', "Gebruik cURL CA bundel");
 define('MODULE_PAYMENT_EMSPAY_BUNDLE_CA_DESCRIPTION', "Voorkomt probleem indien curl.cacert niet ingesteld is in PHP.ini .");

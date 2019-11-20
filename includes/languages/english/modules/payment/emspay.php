@@ -9,8 +9,8 @@ define('MODULE_PAYMENT_EMSPAY_STATUS_DESCRIPTION', "Do you want to enable EMS On
 define('MODULE_PAYMENT_EMSPAY_API_KEY_TEXT', "EMS Online API Key");
 define('MODULE_PAYMENT_EMSPAY_API_KEY_DESCRIPTION', "Please enter your EMS Online API key from merchant portal.");
 
-define('MODULE_PAYMENT_EMSPAY_PRODUCT_TEXT', "EMS Online Product");
-define('MODULE_PAYMENT_EMSPAY_PRODUCT_DESCRIPTION', "Select your EMS Online product");
+define('MODULE_PAYMENT_DUCT_TEXT', "EMS Online Product");
+define('MODULE_PAYMENT_DUCT_DESCRIPTION', "Select your EMS Online product");
 
 define('MODULE_PAYMENT_EMSPAY_BUNDLE_CA_TEXT', "Use cURL CA bundle");
 define('MODULE_PAYMENT_EMSPAY_BUNDLE_CA_DESCRIPTION', "Resolves issue when curl.cacert path is not set in PHP.ini");

@@ -55,15 +55,7 @@ class emspay extends emspayGateway
             'sort_order' => 3
         ]);
 
-        $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_EMSPAY_PRODUCT_TEXT,
-            'configuration_description' => MODULE_PAYMENT_EMSPAY_PRODUCT_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_PRODUCT',
-            'configuration_value' => '',
-            'configuration_group_id' => 6,
-            'sort_order' => 4,
-            'set_function' => "zen_cfg_select_option(array('kassacompleet', 'ingcheckout', 'epay'), ",
-        ]);
+
 
         $this->setConfigurationField([
             'configuration_title' => MODULE_PAYMENT_EMSPAY_BUNDLE_CA_TEXT,
@@ -164,7 +156,6 @@ class emspay extends emspayGateway
         return array(
             'MODULE_PAYMENT_EMSPAY_STATUS',
             'MODULE_PAYMENT_EMSPAY_API_KEY',
-            'MODULE_PAYMENT_EMSPAY_PRODUCT',
             'MODULE_PAYMENT_EMSPAY_WEBHOOK',
             'MODULE_PAYMENT_EMSPAY_BUNDLE_CA',
             'MODULE_PAYMENT_EMSPAY_SORT_ORDER',
