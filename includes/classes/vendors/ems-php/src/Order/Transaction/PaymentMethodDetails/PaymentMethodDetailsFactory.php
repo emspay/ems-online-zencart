@@ -28,10 +28,6 @@ final class PaymentMethodDetailsFactory
             return BancontactPaymentMethodDetails::fromArray($paymentMethodDetails);
         }
 
-        if ($paymentMethod->isCashOnDelivery()) {
-            return CashOnDeliveryPaymentMethodDetails::fromArray($paymentMethodDetails);
-        }
-
         if ($paymentMethod->isKlarna()) {
             return KlarnaPaymentMethodDetails::fromArray($paymentMethodDetails);
         }
@@ -40,9 +36,6 @@ final class PaymentMethodDetailsFactory
             return PayPalPaymentMethodDetails::fromArray($paymentMethodDetails);
         }
 
-        if ($paymentMethod->isHomePay()) {
-            return HomePayPaymentMethodDetails::fromArray($paymentMethodDetails);
-        }
         
         if ($paymentMethod->isPayconiq()) { 
             return PayconiqPaymentMethodDetails::fromArray($paymentMethodDetails);
@@ -51,7 +44,9 @@ final class PaymentMethodDetailsFactory
         if ($paymentMethod->isAfterPay()) { 
             return AfterPayPaymentMethodDetails::fromArray($paymentMethodDetails);
         }
-
+        if ($paymentMethod->isApplePay()) {
+            return ApplePayPaymentMethodDetails::fromArray($paymentMethodDetails);
+        }
         throw new \InvalidArgumentException('Provided payment method not supported.');
     }
 }

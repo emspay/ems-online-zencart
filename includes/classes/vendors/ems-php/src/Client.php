@@ -77,14 +77,13 @@ final class Client
             'ideal' => 'ideal',
             'bank-transfer' => 'banktransfer',
             'bancontact' => 'bancontact',
-            'cash-on-delivery' => 'cashondelivery',
             'credit-card' => 'creditcard',
             'paypal' => 'paypal',
-            'homepay' => 'homepay',
             'klarna' => 'klarna',
             'sofort' => 'sofort',
             'payconiq' => 'payconiq',
-            'afterpay' => 'afterpay'
+            'afterpay' => 'afterpay',
+            'apple-pay' => 'applepay',
         );
 
         foreach ($products_to_check as $permission_id => $id) {
@@ -176,7 +175,31 @@ final class Client
             )
         );
     }
-
+    public function createApplePayOrder(
+        $amount,
+        $currency,
+        $description = null,
+        $merchantOrderId = null,
+        $returnUrl = null,
+        $expirationPeriod = null,
+        $customer = null,
+        $extra = null,
+        $webhookUrl = null
+    ) {
+        return $this->postOrder(
+            Order::createWithApplePay(
+                $amount,
+                $currency,
+                $description,
+                $merchantOrderId,
+                $returnUrl,
+                $expirationPeriod,
+                $customer,
+                $extra,
+                $webhookUrl
+            )
+        );
+    }
     /**
      * Create a new SEPA order.
      *
