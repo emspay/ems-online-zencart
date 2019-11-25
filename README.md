@@ -13,9 +13,6 @@ Version 1.0.0
 * MySQL v5.4 and above
 
 ## Installation
-
-###EMS Online installation manual for ZenCart
-    
  Download the plugin from the merchant portal. This plugin is located on the Service page under Open Source Plugins. Click on the ZIP link near ZenCart.
 
  Upload all of the folders in the ZIP file into your ZenCart public path (no files are transferred). You can use an sFTP or SCP program, for example, to upload the files. There are various sFTP clients that you can download free of charge from the internet, such as WinSCP or Filezilla.
@@ -31,7 +28,7 @@ Install the EMS Online module Go to your ZenCart admin environment 'Modules' > '
 
 Configure the EMS Online module by using the following settings:
 
-- Enable ING PSP module : 'True'
+- Enable EMS Online module : 'True'
 
 - EMS Online API Key : enter your EMS Online API key
 
