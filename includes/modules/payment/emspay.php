@@ -56,7 +56,6 @@ class emspay extends emspayGateway
         ]);
 
 
-
         $this->setConfigurationField([
             'configuration_title' => MODULE_PAYMENT_EMSPAY_BUNDLE_CA_TEXT,
             'configuration_description' => MODULE_PAYMENT_EMSPAY_BUNDLE_CA_DESCRIPTION,

@@ -123,7 +123,6 @@ class Client implements ClientInterface
     public function get($url = null, $options = [])
     {
         return $this->send($this->createRequest('GET', $url, $options));
-
     }
 
     public function head($url = null, array $options = [])

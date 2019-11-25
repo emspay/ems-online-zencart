@@ -15,7 +15,6 @@ class EndpointResolver {
             $dotenv = new Dotenv(__DIR__.'/../..');
             $dotenv->load();
         } catch (\Exception $e) {
-            
         }
     }
    /**

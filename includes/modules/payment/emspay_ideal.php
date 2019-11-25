@@ -99,11 +99,9 @@ class emspay_ideal extends emspayGateway
      */
     public function selection()
     {
-
         global $messageStack;
 
         try {
-
             $emsIssuers = $this->emspay->getIdealIssuers()->toArray();
         } catch (Exception $exception) {
             $messageStack->add_session('checkout_payment', $exception->getMessage(), 'error');
