@@ -23,8 +23,8 @@ final class IbanTest extends \PHPUnit_Framework_TestCase
     public function itShouldInstantiateFromAEmptyString()
     {
         $this->assertInstanceOf(
-            	    'GingerPayments\Payment\Iban',
-            	    Iban::fromString('')
-            	    );
+            'GingerPayments\Payment\Iban',
+            Iban::fromString('')
+        );
     }
 }
