@@ -38,7 +38,7 @@ Version 1.0.0
     - Use cUrl CA bundle: 'True'
     Enable this option to fix a cURL SSL Certificate issue that appears in some web-hosting environments where you do not have access to the PHP.ini file and therefore are not able to update server certificates.
 
-    Configure the order statuses and click 'Update'
+    - Configure the order statuses and click 'Update'
 
      Status for a completed order: 'Completed'
 
@@ -63,7 +63,6 @@ For the payment method Klarna there are several specific settings:
     Test API key
 Copy the API Key of your test webshop in the Test API key field.
 When your Klarna application was approved an extra test webshop was created for you to use in your test with Klarna. The name of this webshop starts with ‘TEST Klarna’.
-To copy the API key go to your merchant portal. Go to ‘Settings’ > ‘Webshops’ and select the webshop that starts with ‘TEST Klarna’. The detail screen contains the API Key.
 
     IP Filtering
 You can choose to offer Klarna only to a limited set of whitelisted IP addresses. You can use this for instance when you are in the testing phase and want to make sure that Klarna is not available yet for your customers.
