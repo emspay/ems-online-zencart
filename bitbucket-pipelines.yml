@@ -12,6 +12,6 @@ pipelines:
             - ssh ubuntu@webshop.dev.gingerpayments.com mkdir /home/ubuntu/zencart
             - scp -r ./* ubuntu@webshop.dev.gingerpayments.com:/home/ubuntu/zencart
             - ssh ubuntu@webshop.dev.gingerpayments.com sudo rsync -aP /home/ubuntu/zencart/* /var/www/html/zencart/
-            - ssh ubuntu@webshop.dev.gingerpayments.com sudo cp /home/ubuntu/.env /var/www/html/zencart/includes/classes/vendors/ing-php/
+            - ssh ubuntu@webshop.dev.gingerpayments.com sudo cp /home/ubuntu/.env /var/www/html/zencart/includes/classes/vendors/ems-php/
             - ssh ubuntu@webshop.dev.gingerpayments.com sudo rm -rf /home/ubuntu/zencart
             - ssh ubuntu@webshop.dev.gingerpayments.com sudo chown -R www-data:www-data /var/www/html/zencart/
