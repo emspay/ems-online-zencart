@@ -33,8 +33,6 @@ Version 1.0.0
 
     - EMS Online API Key : enter your EMS Online API key
 
-    Go to the merchant portal to copy the API key. Go to ‘Settings’ > ‘Webshops’ and select the relevant webshop. The detail screen contains the API Key.
-
     - Generate Webhook URL: 'True'
 
     - Use cUrl CA bundle: 'True'
