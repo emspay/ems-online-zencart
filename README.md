@@ -38,17 +38,17 @@ Version 1.0.0
 
     - Configure the order statuses and click 'Update'
 
-     Status for a completed order: 'Completed'
+        - Status for a completed order: 'Completed'
 
-    Status for a pending order: 'Pending'
+        - Status for a pending order: 'Pending'
 
-    Status for an error order: 'Error'
+        - Status for an error order: 'Error'
 
-    Status for an order being processed: 'Processing'
+        - Status for an order being processed: 'Processing'
 
-    Status for a cancelled order: 'Cancelled'
+        - Status for a cancelled order: 'Cancelled'
 
-    Status for a shipped order: 'Shipped'
+        - Status for a shipped order: 'Shipped'
 
 4. After configuring  EMS Online module, install the payment method you want to add to your payment page and click 'Install'.
 For every payment method you have to enable he payment module by setting the value to 'True' and click 'Update'.
