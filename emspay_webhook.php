@@ -5,7 +5,6 @@ require_once('includes/classes/class.emspayGateway.php');
 
 try {
     $data = json_decode(file_get_contents("php://input"), true);
-
     if (!is_array($data)) {
         throw new Exception('Invalid JSON!');
     }

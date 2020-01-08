@@ -14,6 +14,6 @@ if ($_POST['processing']) {
     $emspayOrder = emspayGateway::getClient()->getOrder($emsOrderId);
 
     die(json_encode([
-        'redirect' => $emspayOrder->status()->isProcessing()
+        'redirect' => $emspayOrder['status'] == 'processing'
     ]));
 }

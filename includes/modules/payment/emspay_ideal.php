@@ -102,7 +102,7 @@ class emspay_ideal extends emspayGateway
         global $messageStack;
 
         try {
-            $emsIssuers = $this->emspay->getIdealIssuers()->toArray();
+            $emsIssuers = $this->emspay->getIdealIssuers();
         } catch (Exception $exception) {
             $messageStack->add_session('checkout_payment', $exception->getMessage(), 'error');
             return null;
@@ -179,22 +179,25 @@ class emspay_ideal extends emspayGateway
         global $order, $messageStack;
 
         try {
-            $emsOrder = $this->emspay->createIdealOrder(
-                $this->gerOrderTotalInCents($order), // amount in cents
-                $this->getCurrency($order),          // currency
-                $this->getIssuerId(),                // ideal_issuer_id
-                $this->getOrderDescription(),        // order description
-                $this->getOrderId(),                 // merchantOrderId
-                $this->getReturnUrl(),               // returnUrl
-                null,                                // expiration
-                $this->getCustomerInfo($order),      // customer
-                $this->getPluginVersion(),           // extra information
-                $this->getWebhookUrl()               // webhook_url
-            );
+            $emsOrder = $this->emspay->createOrder([
+                'amount' => $this->gerOrderTotalInCents($order),              // amount in cents
+                'currency' => $this->getCurrency($order),              // currency
+                'description' => $this->getOrderDescription(),         // order description
+                'merchant_order_id' => (string) $this->getOrderId(),            // merchantOrderId
+                'return_url' => $this->getReturnUrl(),                 // returnUrl
+                'customer' => $this->getCustomerInfo($order),          // customer
+                'extra' => $this->getPluginVersion(),                  // extra information
+                'webhook_url' => $this->getWebhookUrl(),               // webhook_url
+                'transactions' => [
+                    [
+                        'payment_method' => 'ideal',
+                        'payment_method_details' => ['issuer_id' => (string) $this->getIssuerId()]
+                    ]
+                ]
+                ]);
+            zen_redirect($emsOrder['transactions'][0]['payment_url']);
 
-            zen_redirect($emsOrder->firstTransactionPaymentUrl()->toString());
-
-            if ($emsOrder->status()->isError()) {
+            if ($emsOrder['status'] == 'error') {
                 $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_IDEAL_ERROR_TRANSACTION, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
             }

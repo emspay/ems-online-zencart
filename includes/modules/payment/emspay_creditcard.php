@@ -3,7 +3,7 @@
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/class.emspayGateway.php');
 
 /**
- * Class emspay_creditcard
+ * Class emspay_credit-card
  */
 class emspay_creditcard extends emspayGateway
 {
@@ -18,7 +18,6 @@ class emspay_creditcard extends emspayGateway
         $this->description = MODULE_PAYMENT_EMSPAY_CREDITCARD_TEXT_DESCRIPTION;
         $this->sort_order = MODULE_PAYMENT_EMSPAY_CREDITCARD_SORT_ORDER;
         $this->enabled = ((MODULE_PAYMENT_EMSPAY_CREDITCARD_STATUS == 'True') ? true : false);
-
         parent::__construct();
     }
 
@@ -123,24 +122,26 @@ class emspay_creditcard extends emspayGateway
         global $order, $messageStack;
 
         try {
-            $emsOrder = $this->emspay->createCreditCardOrder(
-                $this->gerOrderTotalInCents($order), // amount in cents
-                $this->getCurrency($order),          // currency
-                $this->getOrderDescription(),        // order description
-                $this->getOrderId(),                 // merchantOrderId
-                $this->getReturnUrl(),               // returnUrl
-                null,                                // expiration
-                $this->getCustomerInfo($order),      // customer
-                $this->getPluginVersion(),           // extra information
-                $this->getWebhookUrl()               // webhook_url
-            );
-
-            if ($emsOrder->status()->isError()) {
+            $emsOrder = $this->emspay->createOrder([
+                'amount' => $this->gerOrderTotalInCents($order),              // amount in cents
+                'currency' => $this->getCurrency($order),              // currency
+                'description' => $this->getOrderDescription(),         // order description
+                'merchant_order_id' => (string) $this->getOrderId(),            // merchantOrderId
+                'return_url' => $this->getReturnUrl(),                 // returnUrl
+                'customer' => $this->getCustomerInfo($order),          // customer
+                'extra' => $this->getPluginVersion(),                  // extra information
+                'webhook_url' => $this->getWebhookUrl(),               // webhook_url
+                'transactions' => [
+                    [
+                        'payment_method' => 'credit-card',
+                    ]
+            ]
+            ]);
+            if ($emsOrder['status'] == 'error') {
                 $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_CREDITCARD_ERROR_TRANSACTION, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
             }
-
-            zen_redirect($emsOrder->firstTransactionPaymentUrl()->toString());
+            zen_redirect($emsOrder['transactions'][0]['payment_url']);
         } catch (Exception $exception) {
             $messageStack->add_session('checkout_payment', $exception->getMessage(), 'error');
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
