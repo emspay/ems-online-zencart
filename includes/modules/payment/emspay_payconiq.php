@@ -123,25 +123,28 @@ class emspay_payconiq extends emspayGateway
         global $order, $messageStack;
 
         try {
-            $emsOrder = $this->emspay->createPayconicOrder(
-                $this->gerOrderTotalInCents($order), // amount in cents
-                $this->getCurrency($order),          // currency
-                [],                                  // payment method details
-                $this->getOrderDescription(),        // order description
-                $this->getOrderId(),                 // merchantOrderId
-                $this->getReturnUrl(),               // returnUrl
-                null,                                // expiration
-                $this->getCustomerInfo($order),      // customer
-                $this->getPluginVersion(),           // extra information
-                $this->getWebhookUrl()               // webhook_url
-            );
+            $emsOrder = $this->emspay->createOrder([
+                'amount' => $this->gerOrderTotalInCents($order),       // amount in cents
+                'currency' => $this->getCurrency($order),              // currency
+                'description' => $this->getOrderDescription(),         // order description
+                'merchant_order_id' => (string) $this->getOrderId(),   // merchantOrderId
+                'return_url' => $this->getReturnUrl(),                 // returnUrl
+                'customer' => $this->getCustomerInfo($order),          // customer
+                'extra' => $this->getPluginVersion(),                  // extra information
+                'webhook_url' => $this->getWebhookUrl(),               // webhook_url
+                'transactions' => [
+                    [
+                        'payment_method' => 'payconiq',
+                    ]
+                ]
+            ]);
 
-            if ($emsOrder->status()->isError()) {
+            if ($emsOrder['status'] == 'error') {
                 $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_PAYCONIQ_ERROR_TRANSACTION, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
             }
 
-            zen_redirect($emsOrder->firstTransactionPaymentUrl()->toString());
+            zen_redirect($emsOrder['transactions'][0]['payment_url']);
         } catch (Exception $exception) {
             $messageStack->add_session('checkout_payment', $exception->getMessage(), 'error');
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
