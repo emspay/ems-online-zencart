@@ -272,7 +272,7 @@ class emspay_afterpay extends emspayGateway
                 'customer' => $this->getCustomerInfo($order),          // customer
                 'extra' => $this->getPluginVersion(),                  // extra information
                 'webhook_url' => $this->getWebhookUrl(),               // webhook_url
-                'order_line' => $this->getOrderLines($order),                // orderlines
+                'order_linesui' => $this->getOrderLines($order),                // orderlines
                 'transactions' => [
                     [
                         'payment_method' => 'afterpay'
