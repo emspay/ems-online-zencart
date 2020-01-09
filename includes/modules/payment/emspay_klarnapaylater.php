@@ -3,21 +3,21 @@
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/class.emspayGateway.php');
 
 /**
- * Class emspay_klarna
+ * Class emspay_klarnapaylater
  */
-class emspay_klarna extends emspayGateway
+class emspay_klarnapaylater extends emspayGateway
 {
-    public $code = 'emspay_klarna';
+    public $code = 'emspay_klarnapaylater';
 
     /**
-     * emspay_klarna constructor.
+     * emspay_klarnapaylater constructor.
      */
     function __construct()
     {
-        $this->title = MODULE_PAYMENT_EMSPAY_KLARNA_TEXT_TITLE;
-        $this->description = MODULE_PAYMENT_EMSPAY_KLARNA_TEXT_DESCRIPTION;
-        $this->sort_order = MODULE_PAYMENT_EMSPAY_KLARNA_SORT_ORDER;
-        $this->enabled = ((MODULE_PAYMENT_EMSPAY_KLARNA_STATUS == 'True')?true:false);
+        $this->title = MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_TEXT_TITLE;
+        $this->description = MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_TEXT_DESCRIPTION;
+        $this->sort_order = MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_SORT_ORDER;
+        $this->enabled = ((MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_STATUS == 'True')?true:false);
 
         parent::__construct();
     }
@@ -31,16 +31,16 @@ class emspay_klarna extends emspayGateway
     {
         global $messageStack;
 
-        if (defined('MODULE_PAYMENT_EMSPAY_KLARNA_STATUS')) {
-            $messageStack->add_session(MODULE_PAYMENT_EMSPAY_KLARNA_ERROR_ALREADY_INSTALLED, 'error');
+        if (defined('MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_STATUS')) {
+            $messageStack->add_session(MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_ERROR_ALREADY_INSTALLED, 'error');
             zen_redirect(zen_href_link(FILENAME_MODULES, 'set=payment&module='.$this->code, 'SSL'));
             return 'failed';
         }
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNA_STATUS_TEXT,
-            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNA_STATUS_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNA_STATUS',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_STATUS_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_STATUS_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_STATUS',
             'configuration_value' => 'True',
             'configuration_group_id' => 6,
             'sort_order' => 1,
@@ -48,45 +48,45 @@ class emspay_klarna extends emspayGateway
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNA_DISPLAY_TITLE_TEXT,
-            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNA_DISPLAY_TITLE_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNA_DISPLAY_TITLE',
-            'configuration_value' => MODULE_PAYMENT_EMSPAY_KLARNA_TEXT_TITLE,
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_DISPLAY_TITLE_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_DISPLAY_TITLE_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_DISPLAY_TITLE',
+            'configuration_value' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_TEXT_TITLE,
             'configuration_group_id' => 6,
             'sort_order' => 2
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNA_TEST_API_KEY_TEXT,
-            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNA_TEST_API_KEY_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNA_TEST_API_KEY',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_TEST_API_KEY_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_TEST_API_KEY_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_TEST_API_KEY',
             'configuration_value' => '',
             'configuration_group_id' => 6,
             'sort_order' => 3
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNA_IP_FILTERING_TEXT,
-            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNA_IP_FILTERING_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNA_IP_FILTERING',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_IP_FILTERING_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_IP_FILTERING_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_IP_FILTERING',
             'configuration_value' => '',
             'configuration_group_id' => 6,
             'sort_order' => 4
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNA_SORT_ORDER_TEXT,
-            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNA_SORT_ORDER_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNA_SORT_ORDER',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_SORT_ORDER_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_SORT_ORDER_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_SORT_ORDER',
             'configuration_value' => 0,
             'configuration_group_id' => 6,
             'sort_order' => 5
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNA_ZONE_TEXT,
-            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNA_ZONE_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNA_ZONE',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_ZONE_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_ZONE_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_ZONE',
             'configuration_value' => 0,
             'configuration_group_id' => 6,
             'sort_order' => 6,
@@ -105,12 +105,12 @@ class emspay_klarna extends emspayGateway
     public function keys()
     {
         return array(
-            'MODULE_PAYMENT_EMSPAY_KLARNA_DISPLAY_TITLE',
-            'MODULE_PAYMENT_EMSPAY_KLARNA_TEST_API_KEY',
-            'MODULE_PAYMENT_EMSPAY_KLARNA_IP_FILTERING',
-            'MODULE_PAYMENT_EMSPAY_KLARNA_STATUS',
-            'MODULE_PAYMENT_EMSPAY_KLARNA_SORT_ORDER',
-            'MODULE_PAYMENT_EMSPAY_KLARNA_ZONE'
+            'MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_DISPLAY_TITLE',
+            'MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_TEST_API_KEY',
+            'MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_IP_FILTERING',
+            'MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_STATUS',
+            'MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_SORT_ORDER',
+            'MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_ZONE'
         );
     }
 
@@ -121,17 +121,17 @@ class emspay_klarna extends emspayGateway
     {
         $fields = [
             [
-                'title' => MODULE_PAYMENT_EMSPAY_KLARNA_DOB,
+                'title' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_DOB,
                 'field' => zen_draw_input_field('emspay_klarna_dob')
             ],
             [
-                'title' => MODULE_PAYMENT_EMSPAY_KLARNA_GENDER,
+                'title' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_GENDER,
                 'field' => zen_draw_pull_down_menu(
                     'emspay_klarna_gender',
                     [
                         ['id' => '', 'text' => ''],
-                        ['id' => 'male', 'text' => MODULE_PAYMENT_EMSPAY_KLARNA_MALE],
-                        ['id' => 'female', 'text' => MODULE_PAYMENT_EMSPAY_KLARNA_FEMALE]
+                        ['id' => 'male', 'text' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_MALE],
+                        ['id' => 'female', 'text' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_FEMALE]
                     ]
                 )
             ]
@@ -166,11 +166,11 @@ class emspay_klarna extends emspayGateway
             '   var emspay_klarna_gender = document.checkout_payment.emspay_klarna_gender.value;'."\n".
             '   var emspay_klarna_dob = document.checkout_payment.emspay_klarna_dob.value;'."\n".
             '   if (emspay_klarna_gender == "") {'."\n".
-            '       error_message = error_message + "'.MODULE_PAYMENT_EMSPAY_KLARNA_ERROR_GENDER.'";'."\n".
+            '       error_message = error_message + "'.MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_ERROR_GENDER.'";'."\n".
             '       error = 1;'."\n".
             '   }'."\n".
             '   if (emspay_klarna_dob == "") {'."\n".
-            '       error_message = error_message + "'.MODULE_PAYMENT_EMSPAY_KLARNA_ERROR_DOB.'";'."\n".
+            '       error_message = error_message + "'.MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_ERROR_DOB.'";'."\n".
             '       error = 1;'."\n".
             '   }'."\n".
             '}'."\n";
@@ -184,12 +184,12 @@ class emspay_klarna extends emspayGateway
         global $messageStack;
 
         if (empty($_POST['emspay_klarna_gender'])) {
-            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_KLARNA_ERROR_GENDER, 'error');
+            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_ERROR_GENDER, 'error');
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
         }
 
         if (empty($_POST['emspay_klarna_dob'])) {
-            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_KLARNA_ERROR_DOB, 'error');
+            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_ERROR_DOB, 'error');
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
         }
     }
@@ -202,33 +202,37 @@ class emspay_klarna extends emspayGateway
         global $order, $messageStack;
 
         try {
-            $emsOrder = $this->emspay->createKlarnaOrder(
-                $this->gerOrderTotalInCents($order), // amount in cents
-                $this->getCurrency($order),          // currency
-                $this->getOrderDescription(),        // order description
-                $this->getOrderId(),                 // merchantOrderId
-                $this->getReturnUrl(),               // returnUrl
-                null,                                // expiration
-                $this->getCustomerInfo($order),      // customer
-                $this->getPluginVersion(),           // extra information
-                $this->getWebhookUrl(),              // webhook_url
-                $this->getOrderLines($order)         // order lines
-            );
+            $emsOrder = $this->emspay->createOrder([
+                'amount' => $this->gerOrderTotalInCents($order),              // amount in cents
+                'currency' => $this->getCurrency($order),              // currency
+                'description' => $this->getOrderDescription(),         // order description
+                'merchant_order_id' => (string) $this->getOrderId(),            // merchantOrderId
+                'return_url' => $this->getReturnUrl(),                 // returnUrl
+                'customer' => $this->getCustomerInfo($order),          // customer
+                'extra' => $this->getPluginVersion(),                  // extra information
+                'webhook_url' => $this->getWebhookUrl(),               // webhook_url
+                'order_linesui' => $this->getOrderLines($order),                // orderlines
+                'transactions' => [
+                    [
+                        'payment_method' => 'klarna-pay-later'
+                    ]
+                ]
+            ]);
 
             static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($emsOrder));
             static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder->getId());
 
-            if ($emsOrder->status()->isError()) {
+            if ($emsOrder['status'] == 'error') {
                 $messageStack->add_session(
                     'checkout_payment',
-                    $emsOrder->transactions()->current()->reason()->toString(),
+                    $emsOrder['transactions'][0]['reason'],
                     'error'
                 );
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
-            } elseif ($emsOrder->status()->isCancelled()) {
+            } elseif ($emsOrder['status'] == 'canceled') {
                 $messageStack->add_session(
                     'checkout_payment',
-                    MODULE_PAYMENT_EMSPAY_KLARNA_ERROR_TRANSACTION_IS_CANCELLED,
+                    MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_ERROR_TRANSACTION_IS_CANCELLED,
                     'error'
                 );
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
@@ -250,9 +254,9 @@ class emspay_klarna extends emspayGateway
         $orderLines = [];
         foreach ($order->products as $product) {
             $orderLines[] = [
-                'name' => $product['name'],
-                'currency' => \GingerPayments\Payment\Currency::EUR,
-                'type' => \GingerPayments\Payment\Order\OrderLine\Type::PHYSICAL,
+                'name' => (string) $product['name'],
+                'currency' => 'EUR',
+                'type' => 'physical',
                 'amount' => $this->getAmountInCents(
                     $product['final_price'] + zen_calculate_tax($product['final_price'], $product['tax'])
                 ),
@@ -280,8 +284,8 @@ class emspay_klarna extends emspayGateway
             'quantity' => 1,
             'amount' => $this->getAmountInCents($order->info['shipping_cost'] + $order->info['shipping_tax']),
             'name' => $order->info['shipping_method'],
-            'type' => \GingerPayments\Payment\Order\OrderLine\Type::SHIPPING_FEE,
-            'currency' => \GingerPayments\Payment\Currency::EUR,
+            'type' => 'shipping_fee',
+            'currency' => 'EUR',
             'vat_percentage' => $this->getAmountInCents($this->calculateShippingTax($order)),
             'merchant_order_line_id' => count($order->products) + 1
         ];
@@ -303,20 +307,20 @@ class emspay_klarna extends emspayGateway
      */
     public function update_status()
     {
-        return $this->updateModuleVisibility(MODULE_PAYMENT_EMSPAY_KLARNA_ZONE);
+        return $this->updateModuleVisibility(MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_ZONE);
     }
 
     /**
-     * Check if Klarna payment method is limited to specific set of IPs.
+     * Check if Klarna Pay Later payment method is limited to specific set of IPs.
      *
      * @return mixed
      */
-    function ingKlarnaIpFiltering()
+    function emsKlarnaPayLaterIpFiltering()
     {
-        $emsKlarnaIpList = MODULE_PAYMENT_EMSPAY_KLARNA_IP_FILTERING;
+        $emsKlarnaPayLaterIpList = MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_IP_FILTERING;
 
-        if (strlen($emsKlarnaIpList) > 0) {
-            $ip_whitelist = array_map('trim', explode(",", $emsKlarnaIpList));
+        if (strlen($emsKlarnaPayLaterIpList) > 0) {
+            $ip_whitelist = array_map('trim', explode(",", $emsKlarnaPayLaterIpList));
             if (!in_array($_SESSION['customers_ip_address'], $ip_whitelist)) {
                 return false;
             }
@@ -326,11 +330,11 @@ class emspay_klarna extends emspayGateway
     }
 
     /**
-     * Set Klarna order as 'Shipped' in EMS Online.
+     * Set Klarna Pay Later order as 'Shipped' in EMS Online.
      *
      * @param string $emsOrderId
      */
-    public function captureKlarnaOrder($emsOrderId)
+    public function captureKlarnaPayLaterOrder($emsOrderId)
     {
         $this->emspay->setOrderCapturedStatus(
             $this->emspay->getOrder($emsOrderId)
@@ -350,7 +354,7 @@ class emspay_klarna extends emspayGateway
             $orderHistory = $this->getOrderHistory($orderId);
             $emsOrderId = $this->searchHistoryForOrderKey($orderHistory);
             if ($emsOrderId) {
-                $this->captureKlarnaOrder($emsOrderId);
+                $this->captureKlarnaPayLaterOrder($emsOrderId);
             }
         }
     }

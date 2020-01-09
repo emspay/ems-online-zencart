@@ -65,8 +65,8 @@ class emspayGateway extends base
 
         if (is_object($order)) {
             $this->update_status();
-            if ($this->isKlarna()) {
-                $this->enabled = $this->emsKlarnaIpFiltering();
+            if ($this->isKlarnaPayLater()) {
+                $this->enabled = $this->emsKlarnaPayLaterIpFiltering();
             }
             if ($this->isAfterPay()) {
                 $this->enabled = $this->emsAfterPayIpFiltering();
@@ -112,7 +112,7 @@ class emspayGateway extends base
         $emspay = null;
         $cacert_path = emspayGateway::getCaCertPath();
 
-        if (strlen(MODULE_PAYMENT_EMSPAY_KLARNA_TEST_API_KEY) === 32 && $code == 'emspay_klarna') {
+        if (strlen(MODULE_PAYMENT_EMSPAY_KLARNA_TEST_API_KEY) === 32 && $code == 'emspay_klarnapaylater') {
             $apiKey = MODULE_PAYMENT_EMSPAY_KLARNA_TEST_API_KEY;
         } elseif (strlen(MODULE_PAYMENT_EMSPAY_AFTERPAY_TEST_API_KEY) === 32 && $code == 'emspay_afterpay') {
             $apiKey = MODULE_PAYMENT_EMSPAY_AFTERPAY_TEST_API_KEY;
@@ -575,9 +575,9 @@ class emspayGateway extends base
         return null;
     }
     
-    protected function isKlarna()
+    protected function isKlarnaPayLater()
     {
-        return $this->code == 'emspay_klarna';
+        return $this->code == 'emspay_klarnapaylater';
     }
     
     protected function isAfterPay()
