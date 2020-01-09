@@ -435,8 +435,7 @@ class emspayGateway extends base
             $emsOrder = $this->emspay->getOrder($emspayOrderId);
 
             static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($emsOrder));
-            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder->getId());
-
+            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder['transactions'][0]['order_id']);
             if ($emsOrder['status'] == 'completed') {
                 $this->emptyCart();
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_SUCCESS, '', 'SSL'));
@@ -447,10 +446,10 @@ class emspayGateway extends base
                 || $emsOrder['status'] == 'expired'
             ) {
                 static::loadLanguageFile('emspay');
-                $reason = $emsOrder->transactions()->current()->getReason()?:MODULE_PAYMENT_EMSPAY_ERROR_TRANSACTION;
+                $reason = $emsOrder['transactions'][0]['reason']?:MODULE_PAYMENT_EMSPAY_ERROR_TRANSACTION;
                 $messageStack->add_session('checkout_payment', $reason, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
-            }
+            } elseif ($emsOrder['status'] == 'new') {$this->emptyCart();}
         } catch (Exception $exception) {
             $messageStack->add_session('checkout_payment', $exception->getMessage(), 'error');
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));

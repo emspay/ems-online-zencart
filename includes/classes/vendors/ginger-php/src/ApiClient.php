@@ -124,7 +124,6 @@ final class ApiClient
         } catch (\Exception $exception) {
             throw HttpRequestFailure::because($exception);
         }
-
         return $this->interpretResponse($response);
     }
 
@@ -139,7 +138,6 @@ final class ApiClient
         if ($response === null) {
             return null;
         }
-
         $result = $this->decodeJson($response);
         if (array_key_exists('error', $result)) {
             throw ServerError::fromResult($result);
