@@ -438,7 +438,7 @@ class emspayGateway extends base
             if ($emsOrder['status'] == 'completed') {
                 $this->emptyCart();
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_SUCCESS, '', 'SSL'));
-            } elseif ($emsOrder['status'] == 'processing') {
+            } elseif ($emsOrder['status'] == 'processing' || $emsOrder['status'] == 'new') {
                 zen_redirect(zen_href_link(FILENAME_EMSPAY_PENDING, '', 'SSL'));
             } elseif ($emsOrder['status'] == 'cancelled'
                 || $emsOrder['status'] == 'error'
@@ -448,9 +448,6 @@ class emspayGateway extends base
                 $reason = $emsOrder['transactions'][0]['reason']?:MODULE_PAYMENT_EMSPAY_ERROR_TRANSACTION;
                 $messageStack->add_session('checkout_payment', $reason, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
-            } elseif ($emsOrder['status'] == 'new') {
-                $this->emptyCart();
-                zen_redirect($emsOrder['return_url']);
             }
         } catch (Exception $exception) {
             $messageStack->add_session('checkout_payment', $exception->getMessage(), 'error');
