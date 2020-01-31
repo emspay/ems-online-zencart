@@ -3,21 +3,22 @@
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/class.emspayGateway.php');
 
 /**
- * Class emspay_credit-card
+ * Class emspay_amex
  */
-class emspay_creditcard extends emspayGateway
+class emspay_amex extends emspayGateway
 {
-    public $code = 'emspay_creditcard';
+    public $code = 'emspay_amex';
 
     /**
-     * emspay_creditcard constructor.
+     * emspay_amex constructor.
      */
     function __construct()
     {
-        $this->title = MODULE_PAYMENT_EMSPAY_CREDITCARD_TEXT_TITLE;
-        $this->description = MODULE_PAYMENT_EMSPAY_CREDITCARD_TEXT_DESCRIPTION;
-        $this->sort_order = MODULE_PAYMENT_EMSPAY_CREDITCARD_SORT_ORDER;
-        $this->enabled = ((MODULE_PAYMENT_EMSPAY_CREDITCARD_STATUS == 'True') ? true : false);
+        $this->title = MODULE_PAYMENT_EMSPAY_AMEX_TEXT_TITLE;
+        $this->description = MODULE_PAYMENT_EMSPAY_AMEX_TEXT_DESCRIPTION;
+        $this->sort_order = MODULE_PAYMENT_EMSPAY_AMEX_SORT_ORDER;
+        $this->enabled = ((MODULE_PAYMENT_EMSPAY_AMEX_STATUS == 'True') ? true : false);
+
         parent::__construct();
     }
 
@@ -30,16 +31,16 @@ class emspay_creditcard extends emspayGateway
     {
         global $messageStack;
 
-        if (defined('MODULE_PAYMENT_EMSPAY_CREDITCARD_STATUS')) {
-            $messageStack->add_session(MODULE_PAYMENT_EMSPAY_CREDITCARD_ERROR_ALREADY_INSTALLED, 'error');
+        if (defined('MODULE_PAYMENT_EMSPAY_AMEX_STATUS')) {
+            $messageStack->add_session(MODULE_PAYMENT_EMSPAY_AMEX_ERROR_ALREADY_INSTALLED, 'error');
             zen_redirect(zen_href_link(FILENAME_MODULES, 'set=payment&module='.$this->code, 'SSL'));
             return 'failed';
         }
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_EMSPAY_CREDITCARD_STATUS_TEXT,
-            'configuration_description' => MODULE_PAYMENT_EMSPAY_CREDITCARD_STATUS_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_CREDITCARD_STATUS',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_AMEX_STATUS_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_AMEX_STATUS_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_AMEX_STATUS',
             'configuration_value' => 'True',
             'configuration_group_id' => 6,
             'sort_order' => 0,
@@ -47,27 +48,27 @@ class emspay_creditcard extends emspayGateway
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_EMSPAY_CREDITCARD_DISPLAY_TITLE_TEXT,
-            'configuration_description' => MODULE_PAYMENT_EMSPAY_CREDITCARD_DISPLAY_TITLE_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_CREDITCARD_DISPLAY_TITLE',
-            'configuration_value' => MODULE_PAYMENT_EMSPAY_CREDITCARD_TEXT_TITLE,
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_AMEX_DISPLAY_TITLE_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_AMEX_DISPLAY_TITLE_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_AMEX_DISPLAY_TITLE',
+            'configuration_value' => MODULE_PAYMENT_EMSPAY_AMEX_TEXT_TITLE,
             'configuration_group_id' => 6,
             'sort_order' => 1
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_EMSPAY_CREDITCARD_SORT_ORDER_TEXT,
-            'configuration_description' => MODULE_PAYMENT_EMSPAY_CREDITCARD_SORT_ORDER_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_CREDITCARD_SORT_ORDER',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_AMEX_SORT_ORDER_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_AMEX_SORT_ORDER_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_AMEX_SORT_ORDER',
             'configuration_value' => 0,
             'configuration_group_id' => 6,
             'sort_order' => 2
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_EMSPAY_CREDITCARD_ZONE_TEXT,
-            'configuration_description' => MODULE_PAYMENT_EMSPAY_CREDITCARD_ZONE_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_CREDITCARD_ZONE',
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_AMEX_ZONE_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_AMEX_ZONE_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_AMEX_ZONE',
             'configuration_value' => 0,
             'configuration_group_id' => 6,
             'sort_order' => 3,
@@ -86,10 +87,10 @@ class emspay_creditcard extends emspayGateway
     public function keys()
     {
         return array(
-            'MODULE_PAYMENT_EMSPAY_CREDITCARD_DISPLAY_TITLE',
-            'MODULE_PAYMENT_EMSPAY_CREDITCARD_STATUS',
-            'MODULE_PAYMENT_EMSPAY_CREDITCARD_SORT_ORDER',
-            'MODULE_PAYMENT_EMSPAY_CREDITCARD_ZONE'
+            'MODULE_PAYMENT_EMSPAY_AMEX_DISPLAY_TITLE',
+            'MODULE_PAYMENT_EMSPAY_AMEX_STATUS',
+            'MODULE_PAYMENT_EMSPAY_AMEX_SORT_ORDER',
+            'MODULE_PAYMENT_EMSPAY_AMEX_ZONE'
         );
     }
 
@@ -123,24 +124,26 @@ class emspay_creditcard extends emspayGateway
 
         try {
             $emsOrder = $this->emspay->createOrder([
-                'amount' => $this->gerOrderTotalInCents($order),              // amount in cents
+                'amount' => $this->gerOrderTotalInCents($order),       // amount in cents
                 'currency' => $this->getCurrency($order),              // currency
                 'description' => $this->getOrderDescription(),         // order description
-                'merchant_order_id' => (string) $this->getOrderId(),            // merchantOrderId
+                'merchant_order_id' => (string) $this->getOrderId(),   // merchantOrderId
                 'return_url' => $this->getReturnUrl(),                 // returnUrl
                 'customer' => $this->getCustomerInfo($order),          // customer
                 'extra' => $this->getPluginVersion(),                  // extra information
                 'webhook_url' => $this->getWebhookUrl(),               // webhook_url
                 'transactions' => [
                     [
-                        'payment_method' => 'credit-card',
+                        'payment_method' => 'amex',
                     ]
-            ]
+                ]
             ]);
+
             if ($emsOrder['status'] == 'error') {
-                $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_CREDITCARD_ERROR_TRANSACTION, 'error');
+                $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_AMEX_ERROR_TRANSACTION, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
             }
+
             zen_redirect($emsOrder['transactions'][0]['payment_url']);
         } catch (Exception $exception) {
             $messageStack->add_session('checkout_payment', $exception->getMessage(), 'error');
@@ -155,6 +158,6 @@ class emspay_creditcard extends emspayGateway
      */
     public function update_status()
     {
-        return $this->updateModuleVisibility(MODULE_PAYMENT_EMSPAY_CREDITCARD_ZONE);
+        return $this->updateModuleVisibility(MODULE_PAYMENT_EMSPAY_AMEX_ZONE);
     }
 }

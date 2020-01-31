@@ -126,7 +126,7 @@ class emspay_afterpay extends emspayGateway
     public function selection()
     {
         global $order;
-        
+
         $fields = [];
          
         if (isset($order->billing['country']['iso_code_2']) && $this->isValidCountry($order->billing['country']['iso_code_2'])) {
@@ -263,30 +263,33 @@ class emspay_afterpay extends emspayGateway
         global $order, $messageStack;
 
         try {
-            $emsOrder = $this->emspay->createAfterPayOrder(
-                $this->gerOrderTotalInCents($order), // amount in cents
-                $this->getCurrency($order),          // currency
-                $this->getOrderDescription(),        // order description
-                $this->getOrderId(),                 // merchantOrderId
-                $this->getReturnUrl(),               // returnUrl
-                null,                                // expiration
-                $this->getCustomerInfo($order),      // customer
-                $this->getPluginVersion(),           // extra information
-                $this->getWebhookUrl(),              // webhook_url
-                $this->getOrderLines($order)         // order lines
-            );
-
+            $emsOrder = $this->emspay->createOrder([
+                'amount' => $this->gerOrderTotalInCents($order),              // amount in cents
+                'currency' => $this->getCurrency($order),              // currency
+                'description' => $this->getOrderDescription(),         // order description
+                'merchant_order_id' => (string) $this->getOrderId(),            // merchantOrderId
+                'return_url' => $this->getReturnUrl(),                 // returnUrl
+                'customer' => $this->getCustomerInfo($order),          // customer
+                'extra' => $this->getPluginVersion(),                  // extra information
+                'webhook_url' => $this->getWebhookUrl(),               // webhook_url
+                'order_linesui' => $this->getOrderLines($order),                // orderlines
+                'transactions' => [
+                    [
+                        'payment_method' => 'afterpay'
+                    ]
+                ]
+            ]);
             static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($emsOrder));
-            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder->getId());
+            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder['transactions'][0]['order_id']);
 
-            if ($emsOrder->status()->isError()) {
+            if ($emsOrder['status'] == 'error') {
                 $messageStack->add_session(
                     'checkout_payment',
-                    $emsOrder->transactions()->current()->reason()->toString(),
+                    $emsOrder['transactions'][0]['reason'],
                     'error'
                 );
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
-            } elseif ($emsOrder->status()->isCancelled()) {
+            } elseif ($emsOrder['status'] == 'canceled') {
                 $messageStack->add_session(
                     'checkout_payment',
                     MODULE_PAYMENT_EMSPAY_AFTERPAY_ERROR_TRANSACTION_IS_CANCELLED,
@@ -311,15 +314,15 @@ class emspay_afterpay extends emspayGateway
         $orderLines = [];
         foreach ($order->products as $product) {
             $orderLines[] = [
-                'name' => $product['name'],
-                'currency' => \GingerPayments\Payment\Currency::EUR,
-                'type' => \GingerPayments\Payment\Order\OrderLine\Type::PHYSICAL,
+                'name' => (string) $product['name'],
+                'currency' => 'EUR',
+                'type' => 'physical',
                 'amount' => $this->getAmountInCents(
                     $product['final_price'] + zen_calculate_tax($product['final_price'], $product['tax'])
                 ),
                 'vat_percentage' => $this->getAmountInCents($product['tax']),
                 'quantity' => (int) $product['qty'],
-                'merchant_order_line_id' => $product['id'],
+                'merchant_order_line_id' => (string) $product['id'],
                 'url' => zen_href_link(FILENAME_PRODUCT_INFO, 'products_id='.$product['id'])
             ];
         }
@@ -341,8 +344,8 @@ class emspay_afterpay extends emspayGateway
             'quantity' => 1,
             'amount' => $this->getAmountInCents($order->info['shipping_cost'] + $order->info['shipping_tax']),
             'name' => $order->info['shipping_method'],
-            'type' => \GingerPayments\Payment\Order\OrderLine\Type::SHIPPING_FEE,
-            'currency' => \GingerPayments\Payment\Currency::EUR,
+            'type' => 'shipping_fee',
+            'currency' => 'EUR',
             'vat_percentage' => $this->getAmountInCents($this->calculateShippingTax($order)),
             'merchant_order_line_id' => count($order->products) + 1
         ];
@@ -372,17 +375,8 @@ class emspay_afterpay extends emspayGateway
      *
      * @return mixed
      */
-    public function ingAfterPayIpFiltering()
+    public function emsAfterPayIpFiltering()
     {
-        $emsAfterPayIpList = MODULE_PAYMENT_EMSPAY_AFTERPAY_IP_FILTERING;
-
-        if (strlen($emsAfterPayIpList) > 0) {
-            $ip_whitelist = array_map('trim', explode(",", $emsAfterPayIpList));
-            if (!in_array($_SESSION['customers_ip_address'], $ip_whitelist)) {
-                return false;
-            }
-        }
-
         return true;
     }
 
@@ -439,7 +433,7 @@ class emspay_afterpay extends emspayGateway
      */
     public function getCustomerInfo($order)
     {
-        return \GingerPayments\Payment\Common\ArrayFunctions::withoutNullValues([
+        return array_filter([
             'address_type' => 'billing',
             'merchant_customer_id' => $_SESSION['customer_id'],
             'email_address' => $order->customer['email_address'], //'rejected@afterpay.com'

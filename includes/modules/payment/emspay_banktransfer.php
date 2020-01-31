@@ -114,28 +114,28 @@ class emspay_banktransfer extends emspayGateway
         global $order, $messageStack;
 
         try {
-            $emsOrder = $this->emspay->createSepaOrder(
-                $this->gerOrderTotalInCents($order), // amount in cents
-                $this->getCurrency($order),          // currency
-                [],                                  // payment method details
-                $this->getOrderDescription(),        // order description
-                $this->getOrderId(),                 // merchantOrderId
-                $this->getReturnUrl(),               // returnUrl
-                null,                                // expiration
-                $this->getCustomerInfo($order),      // customer
-                $this->getPluginVersion(),           // extra information
-                $this->getWebhookUrl()               // webhook_url
-            );
-
-            if ($emsOrder->status()->isError()) {
+            $emsOrder = $this->emspay->createOrder([
+                'amount' => $this->gerOrderTotalInCents($order),              // amount in cents
+                'currency' => $this->getCurrency($order),              // currency
+                'description' => $this->getOrderDescription(),         // order description
+                'merchant_order_id' => (string) $this->getOrderId(),            // merchantOrderId
+                'return_url' => $this->getReturnUrl(),                 // returnUrl
+                'customer' => $this->getCustomerInfo($order),          // customer
+                'extra' => $this->getPluginVersion(),                  // extra information
+                'webhook_url' => $this->getWebhookUrl(),               // webhook_url
+                'transactions' => [
+                    [
+                        'payment_method' => 'bank-transfer',
+                    ]
+                ]
+            ]);
+            if ($emsOrder['status'] == 'error') {
                 $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_BANKTRANSFER_ERROR_TRANSACTION, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
             }
-
-            $bankReference = $emsOrder->Transactions()->current()->paymentMethodDetails()->reference()->toString();
-
+            $bankReference = $emsOrder['transactions'][0]['payment_method_details']['reference'];
             $_SESSION['emspay_banktransfer_reference'] = $bankReference;
-            $_SESSION['emspay_banktransfer_order_id'] = $emsOrder->getId();
+            $_SESSION['emspay_banktransfer_order_id'] = $emsOrder['transactions'][0]['order_id'];
             $_SESSION['payment_method_messages'] = str_replace(
                 '{{reference}}',
                 $bankReference,
@@ -153,13 +153,15 @@ class emspay_banktransfer extends emspayGateway
     public function after_process()
     {
         $orderData = $this->emspay->getOrder($_SESSION['emspay_banktransfer_order_id']);
-        $orderData->merchantOrderId($this->getOrderId());
-        $orderData->description($this->getOrderDescription());
-        $this->emspay->updateOrder($orderData);
+        $orderData['merchant_order_id'] = (string) $this->getOrderId();
+        $orderData['description'] = $this->getOrderDescription();
+
+        $this->emspay->updateOrder($orderData['id'].'/',$orderData);
 
         static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($orderData));
         static::addOrderHistory($this->getOrderId(), static::getZenStatusId($orderData), $_SESSION['emspay_banktransfer_reference']);
-        static::addOrderHistory($this->getOrderId(), static::getZenStatusId($orderData), $orderData->getId());
+        static::addOrderHistory($this->getOrderId(), static::getZenStatusId($orderData), $orderData['transactions'][0]['order_id']);
+
     }
 
     /**

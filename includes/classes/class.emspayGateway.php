@@ -1,6 +1,6 @@
 <?php
 
-require_once('vendors/ems-php/vendor/autoload.php');
+require_once('vendors/ginger-php/vendor/autoload.php');
 
 /**
  * Class emspay
@@ -31,7 +31,7 @@ class emspayGateway extends base
     /**
      * EMS Online PHP library.
      *
-     * @var \GingerPayments\Payment\Client
+     * @var \Ginger\Ginger
      */
     public $emspay;
 
@@ -39,6 +39,20 @@ class emspayGateway extends base
      * Default language.
      */
     const EMSPAY_DEFAULT_LANGUAGE = 'english';
+
+    /**
+     *  Ginger Endpoint
+     */
+
+    const GINGER_ENDPOINT = 'https://api.online.emspay.eu';
+
+    /**
+     *  func get Cacert.pem path
+     */
+
+    public static function getCaCertPath(){
+        return dirname(__FILE__).'/vendors/ginger-php/assets/cacert.pem';
+    }
 
     /**
      * emspayGateway constructor.
@@ -51,8 +65,8 @@ class emspayGateway extends base
 
         if (is_object($order)) {
             $this->update_status();
-            if ($this->isKlarna()) {
-                $this->enabled = $this->emsKlarnaIpFiltering();
+            if ($this->isKlarnaPayLater()) {
+                $this->enabled = $this->emsKlarnaPayLaterIpFiltering();
             }
             if ($this->isAfterPay()) {
                 $this->enabled = $this->emsAfterPayIpFiltering();
@@ -91,13 +105,14 @@ class emspayGateway extends base
      * Initiate EMS Online API client.
      *
      * @param string $code
-     * @return \GingerPayments\Payment\Client
+     * @return \Ginger\ApiClient
      */
     public static function getClient($code = 'emspay')
     {
         $emspay = null;
+        $cacert_path = emspayGateway::getCaCertPath();
 
-        if (strlen(MODULE_PAYMENT_EMSPAY_KLARNA_TEST_API_KEY) === 32 && $code == 'emspay_klarna') {
+        if (strlen(MODULE_PAYMENT_EMSPAY_KLARNA_TEST_API_KEY) === 32 && $code == 'emspay_klarnapaylater') {
             $apiKey = MODULE_PAYMENT_EMSPAY_KLARNA_TEST_API_KEY;
         } elseif (strlen(MODULE_PAYMENT_EMSPAY_AFTERPAY_TEST_API_KEY) === 32 && $code == 'emspay_afterpay') {
             $apiKey = MODULE_PAYMENT_EMSPAY_AFTERPAY_TEST_API_KEY;
@@ -106,15 +121,15 @@ class emspayGateway extends base
         }
 
         if (strlen($apiKey) == 32) {
-            $emspay = \GingerPayments\Payment\Ginger::createClient(
-                $apiKey
+            $emspay = \Ginger\Ginger::createClient(
+                emspayGateway::GINGER_ENDPOINT,
+                $apiKey,
+            MODULE_PAYMENT_EMSPAY_BUNDLE_CA == 'True' ?
+                [
+                    CURLOPT_CAINFO => $cacert_path
+                ] : []
             );
-
-            if (MODULE_PAYMENT_EMSPAY_BUNDLE_CA == 'True') {
-                $emspay->useBundledCA();
-            }
         }
-
         return $emspay;
     }
 
@@ -231,7 +246,7 @@ class emspayGateway extends base
      */
     public function getCustomerInfo($order)
     {
-        return \GingerPayments\Payment\Common\ArrayFunctions::withoutNullValues([
+        return array_filter([
             'address_type' => 'billing',
             'merchant_customer_id' => $_SESSION['customer_id'],
             'email_address' => $order->customer['email_address'],
@@ -391,16 +406,16 @@ class emspayGateway extends base
      */
     public static function getZenStatusId($emsOrder)
     {
-        if ($emsOrder->status()->isCompleted()) {
+        if ($emsOrder['status'] == 'completed') {
             return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_COMPLETED;
         }
-        if ($emsOrder->status()->isError()) {
+        if ($emsOrder['status'] == 'error') {
             return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_ERROR;
         }
-        if ($emsOrder->status()->isProcessing()) {
+        if ($emsOrder['status'] == 'processing') {
             return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_PROCESSING;
         }
-        if ($emsOrder->status()->isCancelled()) {
+        if ($emsOrder['canceled'] == 'cancelled') {
             return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_CANCELLED;
         }
 
@@ -418,21 +433,19 @@ class emspayGateway extends base
 
         try {
             $emsOrder = $this->emspay->getOrder($emspayOrderId);
-
             static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($emsOrder));
-            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder->getId());
-
-            if ($emsOrder->status()->isCompleted()) {
+            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder['transactions'][0]['order_id']);
+            if ($emsOrder['status'] == 'completed') {
                 $this->emptyCart();
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_SUCCESS, '', 'SSL'));
-            } elseif ($emsOrder->status()->isProcessing()) {
+            } elseif ($emsOrder['status'] == 'processing' || $emsOrder['status'] == 'new') {
                 zen_redirect(zen_href_link(FILENAME_EMSPAY_PENDING, '', 'SSL'));
-            } elseif ($emsOrder->status()->isCancelled()
-                || $emsOrder->status()->isError()
-                || $emsOrder->status()->isExpired()
+            } elseif ($emsOrder['status'] == 'cancelled'
+                || $emsOrder['status'] == 'error'
+                || $emsOrder['status'] == 'expired'
             ) {
                 static::loadLanguageFile('emspay');
-                $reason = $emsOrder->transactions()->current()->getReason()?:MODULE_PAYMENT_EMSPAY_ERROR_TRANSACTION;
+                $reason = $emsOrder['transactions'][0]['reason']?:MODULE_PAYMENT_EMSPAY_ERROR_TRANSACTION;
                 $messageStack->add_session('checkout_payment', $reason, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
             }
@@ -561,9 +574,9 @@ class emspayGateway extends base
         return null;
     }
     
-    protected function isKlarna()
+    protected function isKlarnaPayLater()
     {
-        return $this->code == 'emspay_klarna';
+        return $this->code == 'emspay_klarnapaylater';
     }
     
     protected function isAfterPay()
