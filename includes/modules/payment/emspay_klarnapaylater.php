@@ -220,7 +220,7 @@ class emspay_klarnapaylater extends emspayGateway
             ]);
 
             static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($emsOrder));
-            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder->getId());
+            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder['id']);
 
             if ($emsOrder['status'] == 'error') {
                 $messageStack->add_session(
