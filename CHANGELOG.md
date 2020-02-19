@@ -4,7 +4,7 @@
 
 * Initial Release
 
-*1.0.1*
+*1.0.2*
 
 * Changed library from ems-php to ginger-php
 * Renamed Sofort to Klarna Pay Now

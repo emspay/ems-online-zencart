@@ -248,7 +248,7 @@ class emspayGateway extends base
     {
         return array_filter([
             'address_type' => 'billing',
-            'merchant_customer_id' => $_SESSION['customer_id'],
+            'merchant_customer_id' => (string) $_SESSION['customer_id'],
             'email_address' => $order->customer['email_address'],
             'first_name' => $order->customer['firstname'],
             'last_name' => $order->customer['lastname'],
