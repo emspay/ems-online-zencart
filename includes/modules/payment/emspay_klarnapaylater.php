@@ -336,9 +336,9 @@ class emspay_klarnapaylater extends emspayGateway
      */
     public function captureKlarnaPayLaterOrder($emsOrderId)
     {
-        $this->emspay->setOrderCapturedStatus(
-            $this->emspay->getOrder($emsOrderId)
-        );
+        $ems_order = $this->emspay->getOrder($emsOrderId);
+        $transaction_id = !empty(current($ems_order['transactions'])) ? current($ems_order['transactions'])['id'] : null;
+        $this->emspay->captureOrderTransaction($ems_order['id'], $transaction_id);
     }
 
     /**
