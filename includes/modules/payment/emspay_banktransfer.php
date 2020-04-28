@@ -156,8 +156,7 @@ class emspay_banktransfer extends emspayGateway
         $orderData['merchant_order_id'] = (string) $this->getOrderId();
         $orderData['description'] = $this->getOrderDescription();
 
-        $this->emspay->updateOrder($orderData['id'].'/',$orderData);
-
+        $this->emspay->updateOrder($orderData['id'],$orderData);
         static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($orderData));
         static::addOrderHistory($this->getOrderId(), static::getZenStatusId($orderData), $_SESSION['emspay_banktransfer_reference']);
         static::addOrderHistory($this->getOrderId(), static::getZenStatusId($orderData), $orderData['transactions'][0]['order_id']);
