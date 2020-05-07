@@ -177,6 +177,7 @@ class emspay_klarnapaylater extends emspayGateway
     }
 
     /**
+     * Collect and validate data before processing.
      * @return null|void
      */
     public function before_process()
@@ -195,7 +196,7 @@ class emspay_klarnapaylater extends emspayGateway
     }
 
     /**
-     * Update merchant order ID after order creation.
+     * Order processing method.
      */
     public function after_process()
     {

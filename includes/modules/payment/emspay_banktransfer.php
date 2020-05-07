@@ -107,12 +107,21 @@ class emspay_banktransfer extends emspayGateway
     }
 
     /**
-     * Order processing method.
+     * Validate order before processing.
      */
     public function before_process()
     {
-        global $order, $messageStack;
+        if (array_key_exists('order_id', $_GET)) {
+            $this->statusRedirect(filter_input(INPUT_GET, 'order_id', FILTER_SANITIZE_STRING));
+        }
+    }
 
+    /**
+     * Order processing method.
+     */
+    public function after_process() {
+
+        global $order, $messageStack;
         try {
             $emsOrder = $this->emspay->createOrder([
                 'amount' => $this->gerOrderTotalInCents($order),              // amount in cents
@@ -129,6 +138,9 @@ class emspay_banktransfer extends emspayGateway
                     ]
                 ]
             ]);
+            static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($emsOrder));
+            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder['transactions'][0]['order_id']);
+
             if ($emsOrder['status'] == 'error') {
                 $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_BANKTRANSFER_ERROR_TRANSACTION, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
@@ -141,26 +153,13 @@ class emspay_banktransfer extends emspayGateway
                 $bankReference,
                 MODULE_PAYMENT_EMSPAY_BANKTRANSFER_INFORMATION
             );
+            static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($emsOrder));
+            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $_SESSION['emspay_banktransfer_reference']);
+
         } catch (Exception $exception) {
             $messageStack->add_session('checkout_payment', $exception->getMessage(), 'error');
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
         }
-    }
-
-    /**
-     * Update merchant order ID after order creation.
-     */
-    public function after_process()
-    {
-        $orderData = $this->emspay->getOrder($_SESSION['emspay_banktransfer_order_id']);
-        $orderData['merchant_order_id'] = (string) $this->getOrderId();
-        $orderData['description'] = $this->getOrderDescription();
-
-        $this->emspay->updateOrder($orderData['id'],$orderData);
-        static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($orderData));
-        static::addOrderHistory($this->getOrderId(), static::getZenStatusId($orderData), $_SESSION['emspay_banktransfer_reference']);
-        static::addOrderHistory($this->getOrderId(), static::getZenStatusId($orderData), $orderData['transactions'][0]['order_id']);
-
     }
 
     /**
