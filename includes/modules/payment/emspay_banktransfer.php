@@ -138,8 +138,6 @@ class emspay_banktransfer extends emspayGateway
                     ]
                 ]
             ]);
-            static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($emsOrder));
-            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder['transactions'][0]['order_id']);
 
             if ($emsOrder['status'] == 'error') {
                 $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_BANKTRANSFER_ERROR_TRANSACTION, 'error');
@@ -154,6 +152,7 @@ class emspay_banktransfer extends emspayGateway
                 MODULE_PAYMENT_EMSPAY_BANKTRANSFER_INFORMATION
             );
             static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($emsOrder));
+            static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder['transactions'][0]['order_id']);
             static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $_SESSION['emspay_banktransfer_reference']);
 
         } catch (Exception $exception) {
