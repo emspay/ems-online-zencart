@@ -14,3 +14,8 @@
 ** 1.0.4 **
 
 * Fix Captured and shipped functionality
+
+** 1.0.5 **
+
+* Reworked Bank Transfer Payment Method.
+   <!--to expanding-->
