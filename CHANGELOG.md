@@ -18,4 +18,5 @@
 ** 1.0.5 **
 
 * Reworked Bank Transfer Payment Method.
-   <!--to expanding-->
+* Reworked Klarna Pay Later Payment Method
+* Add redirect to payment_url for KP Later payment

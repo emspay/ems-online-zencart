@@ -262,8 +262,6 @@ class emspayGateway extends base
             'user_agent' => $_SERVER['HTTP_USER_AGENT'],
             'ip_address' => $_SESSION['customers_ip_address'],
             'locale' => $_SESSION['languages_code'],
-            'gender' => $this->getCustomPaymentField('emspay_klarna_gender'),
-            'birthdate' => $this->getCustomPaymentField('emspay_klarna_dob')
         ]);
     }
 
