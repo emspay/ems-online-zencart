@@ -134,13 +134,13 @@ class emspay_klarnapaylater extends emspayGateway
     }
 
     /**
-     * Collect and validate data before processing.
+     * Redirect after return_url action
      * @return null|void
      */
     public function before_process()
     {
-        if (isset($_GET['order_id'])){
-            static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($this->emspay->getOrder($_GET['order_id'])));
+        if (array_key_exists('order_id', $_GET)) {
+            $this->statusRedirect(filter_input(INPUT_GET, 'order_id', FILTER_SANITIZE_STRING));
         }
     }
 
@@ -149,18 +149,17 @@ class emspay_klarnapaylater extends emspayGateway
      */
     public function after_process()
     {
-        if (isset($_GET['order_id'])) return null;
         global $order, $messageStack;
         try {
             $emsOrder = $this->emspay->createOrder([
-                'amount' => $this->gerOrderTotalInCents($order),              // amount in cents
-                'currency' => $this->getCurrency($order),              // currency
-                'description' => $this->getOrderDescription(),         // order description
-                'merchant_order_id' => (string)$this->getOrderId(),            // merchantOrderId
-                'return_url' => $this->getReturnUrl(),                 // returnUrl
-                'customer' => $this->getCustomerInfo($order),          // customer
-                'extra' => $this->getPluginVersion(),                  // extra information
-                'webhook_url' => $this->getWebhookUrl(),               // webhook_url
+                'amount' => $this->gerOrderTotalInCents($order),                // amount in cents
+                'currency' => $this->getCurrency($order),                       // currency
+                'description' => $this->getOrderDescription(),                  // order description
+                'merchant_order_id' => (string) $this->getOrderId(),            // merchantOrderId
+                'return_url' => $this->getReturnUrl(),                          // returnUrl
+                'customer' => $this->getCustomerInfo($order),                   // customer
+                'extra' => $this->getPluginVersion(),                           // extra information
+                'webhook_url' => $this->getWebhookUrl(),                        // webhook_url
                 'order_linesui' => $this->getOrderLines($order),                // orderlines
                 'transactions' => [
                     [
@@ -187,7 +186,7 @@ class emspay_klarnapaylater extends emspayGateway
                 );
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
             }
-            $emsOrder['status'] == 'new' ? zen_redirect(current($emsOrder['transactions'])['payment_url']) : null;
+           zen_redirect(current($emsOrder['transactions'])['payment_url']);
         } catch (Exception $exception) {
             $messageStack->add_session('checkout_payment', $exception->getMessage(), 'error');
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
