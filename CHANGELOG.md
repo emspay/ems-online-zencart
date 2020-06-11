@@ -14,3 +14,9 @@
 ** 1.0.4 **
 
 * Fix Captured and shipped functionality
+
+** 1.1.0 **
+
+* Reworked Bank Transfer Payment Method.
+* Reworked Klarna Pay Later Payment Method
+* Add redirect to payment_url for KP Later payment
