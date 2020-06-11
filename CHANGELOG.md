@@ -15,7 +15,7 @@
 
 * Fix Captured and shipped functionality
 
-** 1.0.5 **
+** 1.1.0 **
 
 * Reworked Bank Transfer Payment Method.
 * Reworked Klarna Pay Later Payment Method

@@ -12,7 +12,7 @@ class emspayGateway extends base
      *
      * @var string
      */
-    public $moduleVersion = '1.0.5';
+    public $moduleVersion = '1.1.0';
 
     /**
      * Payment method code.
