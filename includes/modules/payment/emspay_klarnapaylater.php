@@ -119,27 +119,8 @@ class emspay_klarnapaylater extends emspayGateway
      */
     public function selection()
     {
-        $fields = [
-            [
-                'title' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_DOB,
-                'field' => zen_draw_input_field('emspay_klarna_dob')
-            ],
-            [
-                'title' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_GENDER,
-                'field' => zen_draw_pull_down_menu(
-                    'emspay_klarna_gender',
-                    [
-                        ['id' => '', 'text' => ''],
-                        ['id' => 'male', 'text' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_MALE],
-                        ['id' => 'female', 'text' => MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_FEMALE]
-                    ]
-                )
-            ]
-        ];
-
         return [
             'id' => $this->code,
-            'fields' => $fields,
             'module' => "<img src='".DIR_WS_IMAGES."emspay/".$this->code.".png' /> ".$this->title
         ];
     }
@@ -149,49 +130,17 @@ class emspay_klarnapaylater extends emspayGateway
      */
     public function process_button()
     {
-        $processButton = zen_draw_hidden_field('emspay_klarna_dob', $_POST['emspay_klarna_dob']);
-        $processButton .= zen_draw_hidden_field('emspay_klarna_gender', $_POST['emspay_klarna_gender']);
-        $processButton .= zen_draw_hidden_field(zen_session_name(), zen_session_id());
-
-        return $processButton;
+        return zen_draw_hidden_field(zen_session_name(), zen_session_id());
     }
 
     /**
-     * @return string
-     */
-    public function javascript_validation()
-    {
-        return
-            'if (payment_value == "'.$this->code.'") {'."\n".
-            '   var emspay_klarna_gender = document.checkout_payment.emspay_klarna_gender.value;'."\n".
-            '   var emspay_klarna_dob = document.checkout_payment.emspay_klarna_dob.value;'."\n".
-            '   if (emspay_klarna_gender == "") {'."\n".
-            '       error_message = error_message + "'.MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_ERROR_GENDER.'";'."\n".
-            '       error = 1;'."\n".
-            '   }'."\n".
-            '   if (emspay_klarna_dob == "") {'."\n".
-            '       error_message = error_message + "'.MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_ERROR_DOB.'";'."\n".
-            '       error = 1;'."\n".
-            '   }'."\n".
-            '}'."\n";
-    }
-
-    /**
-     * Collect and validate data before processing.
+     * Redirect after return_url action
      * @return null|void
      */
     public function before_process()
     {
-        global $messageStack;
-
-        if (empty($_POST['emspay_klarna_gender'])) {
-            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_ERROR_GENDER, 'error');
-            zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
-        }
-
-        if (empty($_POST['emspay_klarna_dob'])) {
-            $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_KLARNAPAYLATER_ERROR_DOB, 'error');
-            zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
+        if (array_key_exists('order_id', $_GET)) {
+            $this->statusRedirect(filter_input(INPUT_GET, 'order_id', FILTER_SANITIZE_STRING));
         }
     }
 
@@ -201,17 +150,16 @@ class emspay_klarnapaylater extends emspayGateway
     public function after_process()
     {
         global $order, $messageStack;
-
         try {
             $emsOrder = $this->emspay->createOrder([
-                'amount' => $this->gerOrderTotalInCents($order),              // amount in cents
-                'currency' => $this->getCurrency($order),              // currency
-                'description' => $this->getOrderDescription(),         // order description
+                'amount' => $this->gerOrderTotalInCents($order),                // amount in cents
+                'currency' => $this->getCurrency($order),                       // currency
+                'description' => $this->getOrderDescription(),                  // order description
                 'merchant_order_id' => (string) $this->getOrderId(),            // merchantOrderId
-                'return_url' => $this->getReturnUrl(),                 // returnUrl
-                'customer' => $this->getCustomerInfo($order),          // customer
-                'extra' => $this->getPluginVersion(),                  // extra information
-                'webhook_url' => $this->getWebhookUrl(),               // webhook_url
+                'return_url' => $this->getReturnUrl(),                          // returnUrl
+                'customer' => $this->getCustomerInfo($order),                   // customer
+                'extra' => $this->getPluginVersion(),                           // extra information
+                'webhook_url' => $this->getWebhookUrl(),                        // webhook_url
                 'order_linesui' => $this->getOrderLines($order),                // orderlines
                 'transactions' => [
                     [
@@ -238,6 +186,7 @@ class emspay_klarnapaylater extends emspayGateway
                 );
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
             }
+           zen_redirect(current($emsOrder['transactions'])['payment_url']);
         } catch (Exception $exception) {
             $messageStack->add_session('checkout_payment', $exception->getMessage(), 'error');
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
