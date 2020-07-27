@@ -12,7 +12,7 @@ class emspayGateway extends base
      *
      * @var string
      */
-    public $moduleVersion = '1.1.0';
+    public $moduleVersion = '1.1.1';
 
     /**
      * Payment method code.
@@ -66,10 +66,12 @@ class emspayGateway extends base
         if (is_object($order)) {
             $this->update_status();
             if ($this->isKlarnaPayLater()) {
-                $this->enabled = $this->emsKlarnaPayLaterIpFiltering();
+                $this->IsEnable($this->emsKlarnaPayLaterIpFiltering());
             }
             if ($this->isAfterPay()) {
-                $this->enabled = $this->emsAfterPayIpFiltering();
+                $this->IsEnable($this->emsAfterPayIpFiltering());
+                $this->IsEnable($this->emsAfterPayCountriesValidation($order));
+
             }
         }
 
@@ -153,6 +155,19 @@ class emspayGateway extends base
         }
 
         return $this->_check;
+    }
+
+    /**
+     * Check to if payment module is enable
+     * By default is $this->enabled = true
+     *
+     * @return boolean
+     */
+    public function IsEnable($filter)
+    {
+        if ($this->enabled === true) {
+            return $this->enabled = $filter;
+        }
     }
 
     /**

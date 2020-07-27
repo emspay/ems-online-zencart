@@ -100,6 +100,15 @@ class emspay_afterpay extends emspayGateway
             'set_function' => 'zen_cfg_pull_down_zone_classes(',
         ]);
 
+        $this->setConfigurationField([
+            'configuration_title' => MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE_TEXT,
+            'configuration_description' => MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE_DESCRIPTION,
+            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE',
+            'configuration_value' => 'NL, BE',
+            'configuration_group_id' => 6,
+            'sort_order' => 7,
+        ]);
+
         return null;
     }
 
@@ -116,7 +125,8 @@ class emspay_afterpay extends emspayGateway
             'MODULE_PAYMENT_EMSPAY_AFTERPAY_IP_FILTERING',
             'MODULE_PAYMENT_EMSPAY_AFTERPAY_STATUS',
             'MODULE_PAYMENT_EMSPAY_AFTERPAY_SORT_ORDER',
-            'MODULE_PAYMENT_EMSPAY_AFTERPAY_ZONE'
+            'MODULE_PAYMENT_EMSPAY_AFTERPAY_ZONE',
+            'MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE'
         );
     }
 
@@ -261,7 +271,6 @@ class emspay_afterpay extends emspayGateway
     public function after_process()
     {
         global $order, $messageStack;
-
         try {
             $emsOrder = $this->emspay->createOrder([
                 'amount' => $this->gerOrderTotalInCents($order),              // amount in cents
@@ -377,7 +386,33 @@ class emspay_afterpay extends emspayGateway
      */
     public function emsAfterPayIpFiltering()
     {
+        $emsAfterPayIpList = MODULE_PAYMENT_EMSPAY_AFTERPAY_IP_FILTERING;
+
+        if (strlen($emsAfterPayIpList) > 0) {
+            $ip_whitelist = array_map('trim', explode(",", $emsAfterPayIpList));
+            if (!in_array($_SESSION['customers_ip_address'], $ip_whitelist)) {
+                return false;
+            }
+        }
+
         return true;
+    }
+
+    /**
+     * Check if AfterPay payment method is limited to specific set of IPs.
+     *
+     * @return mixed
+     */
+    public function emsAfterPayCountriesValidation($order)
+    {
+        $emsAfterPayIpList = MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE;
+        $countrylist = explode(",", str_replace(' ', '', $emsAfterPayIpList));
+        if (in_array($order->billing['country']['iso_code_2'], $countrylist)) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     /**
