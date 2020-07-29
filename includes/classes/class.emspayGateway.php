@@ -66,12 +66,10 @@ class emspayGateway extends base
         if (is_object($order)) {
             $this->update_status();
             if ($this->isKlarnaPayLater()) {
-                $this->IsEnable($this->emsKlarnaPayLaterIpFiltering());
+                $this->enabled = $this->enabled ? $this->emsKlarnaPayLaterIpFiltering() : false;
             }
-            if ($this->isAfterPay()) {
-                $this->IsEnable($this->emsAfterPayIpFiltering());
-                $this->IsEnable($this->emsAfterPayCountriesValidation($order));
-
+            if ($this->isAfterPay() && $this->enabled) {
+                $this->enabled = $this->emsAfterPayIpFiltering() && $this->emsAfterPayCountriesValidation($order);
             }
         }
 
@@ -155,19 +153,6 @@ class emspayGateway extends base
         }
 
         return $this->_check;
-    }
-
-    /**
-     * Check to if payment module is enable
-     * By default is $this->enabled = true
-     *
-     * @return boolean
-     */
-    public function IsEnable($filter)
-    {
-        if ($this->enabled === true) {
-            return $this->enabled = $filter;
-        }
     }
 
     /**
