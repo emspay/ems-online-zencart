@@ -10,9 +10,7 @@ class emspay_afterpay extends emspayGateway
     const TERMS_CONDITION_URL_NL = 'https://www.afterpay.nl/nl/algemeen/betalen-met-afterpay/betalingsvoorwaarden';
     const TERMS_CONDITION_URL_BE = 'https://www.afterpay.be/be/footer/betalen-met-afterpay/betalingsvoorwaarden';
     const BE_CT_CODE = 'BE';
-    
-    protected static $allowedLocales = ['NL', 'BE'];
-    
+
     public $code = 'emspay_afterpay';
 
     /**
@@ -135,49 +133,32 @@ class emspay_afterpay extends emspayGateway
      */
     public function selection()
     {
-        global $order;
-
-        $fields = [];
-         
-        if (isset($order->billing['country']['iso_code_2']) && $this->isValidCountry($order->billing['country']['iso_code_2'])) {
-            $fields = [
-                         [
-                             'title' => MODULE_PAYMENT_EMSPAY_AFTERPAY_DOB,
-                             'field' => zen_draw_input_field('emspay_afterpay_dob')
-                         ], [
-                             'title' => MODULE_PAYMENT_EMSPAY_AFTERPAY_GENDER,
-                             'field' => zen_draw_pull_down_menu(
-                                 'emspay_afterpay_gender',
-                                 [
-                                     ['id' => '', 'text' => ''],
-                                     ['id' => 'male', 'text' => MODULE_PAYMENT_EMSPAY_AFTERPAY_MALE],
-                                     ['id' => 'female', 'text' => MODULE_PAYMENT_EMSPAY_AFTERPAY_FEMALE]
-                                 ]
-                             )
-                         ],
-                         [
-                             'title' => sprintf('%s <a href="%s">%s</a>', MODULE_PAYMENT_EMSPAY_AFTERPAY_I_ACCEPT, $this->getTermsAndConditionUrlByCountryIso2Code($order->billing['country']['iso_code_2']), MODULE_PAYMENT_EMSPAY_AFTERPAY_TERMS_AND_CONDITIONS),
-                             'field' => zen_draw_checkbox_field('emspay_afterpay_terms_and_conditions')
-                         ]
-                     ];
-        }
+        $fields = [
+            [
+                'title' => MODULE_PAYMENT_EMSPAY_AFTERPAY_DOB,
+                'field' => zen_draw_input_field('emspay_afterpay_dob')
+            ], [
+                'title' => MODULE_PAYMENT_EMSPAY_AFTERPAY_GENDER,
+                'field' => zen_draw_pull_down_menu(
+                    'emspay_afterpay_gender',
+                    [
+                        ['id' => '', 'text' => ''],
+                        ['id' => 'male', 'text' => MODULE_PAYMENT_EMSPAY_AFTERPAY_MALE],
+                        ['id' => 'female', 'text' => MODULE_PAYMENT_EMSPAY_AFTERPAY_FEMALE]
+                    ]
+                )
+            ],
+            [
+                'title' => sprintf('%s <a href="%s">%s</a>', MODULE_PAYMENT_EMSPAY_AFTERPAY_I_ACCEPT, $this->getTermsAndConditionUrlByCountryIso2Code($order->billing['country']['iso_code_2']), MODULE_PAYMENT_EMSPAY_AFTERPAY_TERMS_AND_CONDITIONS),
+                'field' => zen_draw_checkbox_field('emspay_afterpay_terms_and_conditions')
+            ]
+        ];
 
         return [
             'id' => $this->code,
             'fields' => $fields,
             'module' => "<img src='".DIR_WS_IMAGES."emspay/".$this->code.".png' /> ".$this->title
         ];
-    }
-
-    /**
-     * Method checks is customer billing address allowed
-     * 
-     * @param string $iso2Code
-     * @return bool
-     */
-    protected function isValidCountry($iso2Code)
-    {
-        return in_array($iso2Code, self::$allowedLocales);
     }
     
     /**
@@ -212,16 +193,6 @@ class emspay_afterpay extends emspayGateway
      */
     public function javascript_validation()
     {
-        global $order;
-       
-        if (!isset($order->billing['country']['iso_code_2']) || !$this->isValidCountry($order->billing['country']['iso_code_2'])) {
-            return
-                'if (payment_value == "'.$this->code.'") {'."\n".
-                '   error_message = error_message + "'.MODULE_PAYMENT_EMSPAY_AFTERPAY_ERROR_COUNTRY_IS_NOT_VALID.'";'."\n".
-                '   error = 1;'."\n".
-                '}'."\n";
-        }
-        
         return
             'if (payment_value == "'.$this->code.'") {'."\n".
             '   var emspay_afterpay_terms_and_conditions = document.checkout_payment.emspay_afterpay_terms_and_conditions.checked;'."\n".
@@ -405,14 +376,13 @@ class emspay_afterpay extends emspayGateway
      */
     public function emsAfterPayCountriesValidation($order)
     {
-        $emsAfterPayIpList = MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE;
-        $countrylist = explode(",", str_replace(' ', '', $emsAfterPayIpList));
-        if (in_array($order->billing['country']['iso_code_2'], $countrylist)) {
+        $emsAfterPayCountriesList = MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE;
+        if (empty($emsAfterPayCountriesList)) {
             return true;
         } else {
-            return false;
+            $countrylist = array_map("trim", explode(',', $emsAfterPayCountriesList));
+            return in_array($order->billing['country']['iso_code_2'], $countrylist);
         }
-
     }
 
     /**

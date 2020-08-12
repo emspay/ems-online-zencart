@@ -41,4 +41,4 @@ define('MODULE_PAYMENT_EMSPAY_AFTERPAY_I_ACCEPT', "J'accepte AfterPay");
 define('MODULE_PAYMENT_EMSPAY_AFTERPAY_TERMS_AND_CONDITIONS', "Termes et conditions");
 
 define('MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE_TEXT', "Pays disponibles pour AfterPay");
-define('MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE_DESCRIPTION', "Pour autoriser AfterPay a etre utilise pour tout autre pays, ajoutez simplement son code de pays (dans la norme ISO 2) au champ 'Pays disponibles pour AfterPay'. Exemple: BE, NL, FR");
+define('MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE_DESCRIPTION', "Pour autoriser AfterPay a etre utilise pour tout autre pays, ajoutez simplement son code de pays (dans la norme ISO 2) au champ 'Pays disponibles pour AfterPay'.<br> Exemple: BE, NL, FR <br> Si le champ est vide, AfterPay sera disponible pour tous les pays.");

@@ -41,4 +41,4 @@ define('MODULE_PAYMENT_EMSPAY_AFTERPAY_I_ACCEPT', "Ich akzeptiere AfterPay");
 define('MODULE_PAYMENT_EMSPAY_AFTERPAY_TERMS_AND_CONDITIONS', "Nutzungsbedingungen");
 
 define('MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE_TEXT', "Fur AfterPay verfugbare Lander");
-define('MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE_DESCRIPTION', "Damit AfterPay fur jedes andere Land verwendet werden kann, fugen Sie einfach seinen Landercode (in ISO 2-Norm) in das Feld 'Fur AfterPay verfugbare Lander' ein. Beispiel: BE, NL, FR");
+define('MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE_DESCRIPTION', "Damit AfterPay fur jedes andere Land verwendet werden kann, fugen Sie einfach seinen Landercode (in ISO 2-Norm) in das Feld 'Fur AfterPay verfugbare Lander' ein.<br> Beispiel: BE, NL, FR <br> Als het veld leeg is, is AfterPay beschikbaar voor alle landen.");
