@@ -20,3 +20,8 @@
 * Reworked Bank Transfer Payment Method.
 * Reworked Klarna Pay Later Payment Method
 * Add redirect to payment_url for KP Later payment
+
+** 1.1.1 ** 
+
+* Added the ability for AfterPay to be available in the selected countries.
+* Fixed IP-filtering and Payment Method availability Zone method in AfterPay and KlarnaPayLater.

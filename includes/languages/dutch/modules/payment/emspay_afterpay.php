@@ -39,3 +39,6 @@ define('MODULE_PAYMENT_EMSPAY_AFTERPAY_ERROR_COUNTRY_IS_NOT_VALID', "Helaas kunt
 
 define('MODULE_PAYMENT_EMSPAY_AFTERPAY_I_ACCEPT', "Ik accepteer AfterPay");
 define('MODULE_PAYMENT_EMSPAY_AFTERPAY_TERMS_AND_CONDITIONS', "Gebruiksvoorwaarden");
+
+define('MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE_TEXT', "Landen beschikbaar voor AfterPay");
+define('MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE_DESCRIPTION', "Om AfterPay voor elk ander land te kunnen gebruiken, voegt u de landcode (in ISO 2-norm) toe aan het veld 'Beschikbare landen voor AfterPay';. <br> Voorbeeld: BE, NL, FR <br> Wenn das Feld leer ist, ist AfterPay fur alle Lander verfugbar.");

@@ -6,7 +6,7 @@ This is the offical EMS Online plugin.
 By integrating your webshop with EMS Online you can accept payments from your customers in an easy and trusted manner with all relevant payment methods supported. 
 
 ## Version number
-Version 1.1.0
+Version 1.1.1
 
 ## Pre-requisites to install the plug-ins 
 * PHP v5.4 and above
@@ -69,3 +69,6 @@ If you want to offer Klarna to all your customers, you can leave the field empty
 
 7. AfterPay specific configuration
 For the payment method Afterpay, refer to the specific settings for Klarna.
+
+    To allow AfterPay to be used for any other country just add its country code (in ISO 2 standard) to the "Countries available for AfterPay" field. Example: BE, NL, FR
+
