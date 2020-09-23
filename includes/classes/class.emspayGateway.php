@@ -241,6 +241,23 @@ class emspayGateway extends base
     }
 
     /**
+     * Return additional_adress
+     *
+     * @param $order
+     * @return array
+     */
+    public static function getAdditionalAddress($order)
+    {
+        return [array_filter([
+            'address_type' => 'billing',
+            'address' => trim($order->billing['street_address'])
+                .' '.trim($order->billing['suburb'])
+                .' '.trim($order->billing['postcode'])
+                .' '.trim($order->billing['city']),
+            'country' => $order->billing['country']['iso_code_2']])];
+    }
+
+    /**
      * @param $order
      * @return array
      */

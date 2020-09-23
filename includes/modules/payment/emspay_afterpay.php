@@ -455,7 +455,8 @@ class emspay_afterpay extends emspayGateway
             'ip_address' => $_SESSION['customers_ip_address'],
             'locale' => $_SESSION['languages_code'],
             'gender' => $this->getCustomPaymentField('emspay_afterpay_gender'),
-            'birthdate' => $this->getCustomPaymentField('emspay_afterpay_dob')
+            'birthdate' => $this->getCustomPaymentField('emspay_afterpay_dob'),
+            'additional_address' => self::getAdditionalAddress($order)
         ]);
     }
 }
