@@ -1,6 +1,6 @@
 <?php
 
-require_once('vendors/ginger-php/vendor/autoload.php');
+require_once('vendors/vendor/autoload.php');
 
 /**
  * Class emspay
@@ -51,7 +51,7 @@ class emspayGateway extends base
      */
 
     public static function getCaCertPath(){
-        return dirname(__FILE__).'/vendors/ginger-php/assets/cacert.pem';
+        return dirname(__FILE__).'/vendors/assets/cacert.pem';
     }
 
     /**
