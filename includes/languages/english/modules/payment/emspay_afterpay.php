@@ -39,3 +39,6 @@ define('MODULE_PAYMENT_EMSPAY_AFTERPAY_ERROR_COUNTRY_IS_NOT_VALID', "Unfortunate
 
 define('MODULE_PAYMENT_EMSPAY_AFTERPAY_I_ACCEPT', "I accept AfterPay");
 define('MODULE_PAYMENT_EMSPAY_AFTERPAY_TERMS_AND_CONDITIONS', "Terms & Conditions");
+
+define('MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE_TEXT', "Countries available for AfterPay");
+define('MODULE_PAYMENT_EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE_DESCRIPTION', "To allow AfterPay to be used for any other country just add its country code (in ISO 2 standard) to the 'Countries available for AfterPay' field. <br> Example: BE, NL, FR <br> If field is empty then AfterPay will be available for all countries.");

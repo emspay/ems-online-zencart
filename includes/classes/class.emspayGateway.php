@@ -1,6 +1,6 @@
 <?php
 
-require_once('vendors/ginger-php/vendor/autoload.php');
+require_once('vendors/vendor/autoload.php');
 
 /**
  * Class emspay
@@ -12,7 +12,7 @@ class emspayGateway extends base
      *
      * @var string
      */
-    public $moduleVersion = '1.1.0';
+    public $moduleVersion = '1.2.0';
 
     /**
      * Payment method code.
@@ -51,7 +51,7 @@ class emspayGateway extends base
      */
 
     public static function getCaCertPath(){
-        return dirname(__FILE__).'/vendors/ginger-php/assets/cacert.pem';
+        return dirname(__FILE__).'/vendors/assets/cacert.pem';
     }
 
     /**
@@ -66,10 +66,10 @@ class emspayGateway extends base
         if (is_object($order)) {
             $this->update_status();
             if ($this->isKlarnaPayLater()) {
-                $this->enabled = $this->emsKlarnaPayLaterIpFiltering();
+                $this->enabled = $this->enabled ? $this->emsKlarnaPayLaterIpFiltering() : false;
             }
-            if ($this->isAfterPay()) {
-                $this->enabled = $this->emsAfterPayIpFiltering();
+            if ($this->isAfterPay() && $this->enabled) {
+                $this->enabled = $this->emsAfterPayIpFiltering() && $this->emsAfterPayCountriesValidation($order);
             }
         }
 
@@ -238,6 +238,23 @@ class emspayGateway extends base
     public function getOrderDescription()
     {
         return sprintf(MODULE_PAYMENT_EMSPAY_ORDER_DESCRIPTION, $this->getOrderId(), TITLE);
+    }
+
+    /**
+     * Return additional_adress
+     *
+     * @param $order
+     * @return array
+     */
+    public static function getAdditionalAddress($order)
+    {
+        return [array_filter([
+            'address_type' => 'billing',
+            'address' => trim($order->billing['street_address'])
+                .' '.trim($order->billing['suburb'])
+                .' '.trim($order->billing['postcode'])
+                .' '.trim($order->billing['city']),
+            'country' => $order->billing['country']['iso_code_2']])];
     }
 
     /**
