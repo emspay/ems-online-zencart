@@ -252,7 +252,7 @@ class emspay_afterpay extends emspayGateway
                 'customer' => $this->getCustomerInfo($order),          // customer
                 'extra' => $this->getPluginVersion(),                  // extra information
                 'webhook_url' => $this->getWebhookUrl(),               // webhook_url
-                'order_linesui' => $this->getOrderLines($order),                // orderlines
+                'order_lines' => $this->getOrderLines($order),                // orderlines
                 'transactions' => [
                     [
                         'payment_method' => 'afterpay'
@@ -440,7 +440,7 @@ class emspay_afterpay extends emspayGateway
     {
         return array_filter([
             'address_type' => 'billing',
-            'merchant_customer_id' => $_SESSION['customer_id'],
+            'merchant_customer_id' => (string) $_SESSION['customer_id'],
             'email_address' => $order->customer['email_address'], //'rejected@afterpay.com'
             'first_name' => $order->customer['firstname'],
             'last_name' => $order->customer['lastname'],
