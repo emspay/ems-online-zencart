@@ -243,7 +243,7 @@ class emspay_afterpay extends emspayGateway
     {
         global $order, $messageStack;
         try {
-            $emsOrder = $this->emspay->createOrder([
+            $emsOrder = $this->emspay->createOrder(array_filter([
                 'amount' => $this->gerOrderTotalInCents($order),              // amount in cents
                 'currency' => $this->getCurrency($order),              // currency
                 'description' => $this->getOrderDescription(),         // order description
@@ -258,7 +258,7 @@ class emspay_afterpay extends emspayGateway
                         'payment_method' => 'afterpay'
                     ]
                 ]
-            ]);
+            ]));
             static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($emsOrder));
             static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder['transactions'][0]['order_id']);
 
