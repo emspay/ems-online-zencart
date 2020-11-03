@@ -31,3 +31,4 @@
 
 * Removed WebHook option from all payments.
 * Added data filter to createOrder
+* Update plugin description.
