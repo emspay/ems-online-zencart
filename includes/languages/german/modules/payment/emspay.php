@@ -15,9 +15,6 @@ define('MODULE_PAYMENT_DUCT_DESCRIPTION', "Wählen Sie Ihres EMS Online Produkt.
 define('MODULE_PAYMENT_EMSPAY_BUNDLE_CA_TEXT', "cURL CA bündel benutzen");
 define('MODULE_PAYMENT_EMSPAY_BUNDLE_CA_DESCRIPTION', "Löst Probleme, wenn curl.cacert Pfad nicht in PHP.ini eingestellt wird.");
 
-define('MODULE_PAYMENT_EMSPAY_WEBHOOK_TEXT', "Webhook URL generieren");
-define('MODULE_PAYMENT_EMSPAY_WEBHOOK_DESCRIPTION', "Verwende automatisch der Webhook URL mit jeder Bestellung zum EMS Online API.");
-
 define('MODULE_PAYMENT_EMSPAY_ORDER_STATUS_COMPLETED_TEXT', "Status für eine abgeschlossene Bestellung");
 define('MODULE_PAYMENT_EMSPAY_ORDER_STATUS_COMPLETED_DESCRIPTION', "Wählen Sie den Status aus der Liste der Sie anwenden möchten für abgeschlossene Bestellungen.");
 

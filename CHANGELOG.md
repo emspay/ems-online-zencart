@@ -26,3 +26,7 @@
 * Added the ability for AfterPay to be available in the selected countries.
 * Fixed IP-filtering and Payment Method availability Zone method in AfterPay and KlarnaPayLater.
 * Replaced locally stored ginger-php library on composer library installer.
+
+** 1.2.1 **
+
+* Removed WebHook option from all payments.

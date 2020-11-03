@@ -6,7 +6,7 @@ This is the offical EMS Online plugin.
 By integrating your webshop with EMS Online you can accept payments from your customers in an easy and trusted manner with all relevant payment methods supported. 
 
 ## Version number
-Version 1.2.0
+Version 1.2.1
 
 ## Pre-requisites to install the plug-ins 
 * PHP v5.4 and above
@@ -30,8 +30,6 @@ Version 1.2.0
     - Enable EMS Online module : 'True'
 
     - EMS Online API Key : enter your EMS Online API key
-
-    - Generate Webhook URL: 'True'
 
     - Use cUrl CA bundle: 'True'
     Enable this option to fix a cURL SSL Certificate issue that appears in some web-hosting environments where you do not have access to the PHP.ini file and therefore are not able to update server certificates.
