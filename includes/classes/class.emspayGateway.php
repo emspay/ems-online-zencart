@@ -314,11 +314,7 @@ class emspayGateway extends base
      */
     public function getWebhookUrl()
     {
-        if (ENABLE_SSL == 'true') {
-            $url = HTTPS_SERVER;
-        } else {
-            $url = HTTP_SERVER;
-        }
+        ENABLE_SSL ? $url = HTTPS_SERVER : $url = HTTP_SERVER;
         return $url . '/emspay_webhook.php';
     }
 
