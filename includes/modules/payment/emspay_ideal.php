@@ -179,7 +179,7 @@ class emspay_ideal extends emspayGateway
         global $order, $messageStack;
 
         try {
-            $emsOrder = $this->emspay->createOrder([
+            $emsOrder = $this->emspay->createOrder(array_filter([
                 'amount' => $this->gerOrderTotalInCents($order),              // amount in cents
                 'currency' => $this->getCurrency($order),              // currency
                 'description' => $this->getOrderDescription(),         // order description
@@ -194,7 +194,7 @@ class emspay_ideal extends emspayGateway
                         'payment_method_details' => ['issuer_id' => (string) $this->getIssuerId()]
                     ]
                 ]
-                ]);
+                ]));
             zen_redirect($emsOrder['transactions'][0]['payment_url']);
 
             if ($emsOrder['status'] == 'error') {

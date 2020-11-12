@@ -122,7 +122,7 @@ class emspay_creditcard extends emspayGateway
         global $order, $messageStack;
 
         try {
-            $emsOrder = $this->emspay->createOrder([
+            $emsOrder = $this->emspay->createOrder(array_filter([
                 'amount' => $this->gerOrderTotalInCents($order),              // amount in cents
                 'currency' => $this->getCurrency($order),              // currency
                 'description' => $this->getOrderDescription(),         // order description
@@ -136,7 +136,7 @@ class emspay_creditcard extends emspayGateway
                         'payment_method' => 'credit-card',
                     ]
             ]
-            ]);
+            ]));
             if ($emsOrder['status'] == 'error') {
                 $messageStack->add_session('checkout_payment', MODULE_PAYMENT_EMSPAY_CREDITCARD_ERROR_TRANSACTION, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
