@@ -67,16 +67,6 @@ class emspay extends emspayGateway
         ]);
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_EMSPAY_WEBHOOK_TEXT,
-            'configuration_description' => MODULE_PAYMENT_EMSPAY_WEBHOOK_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_EMSPAY_WEBHOOK',
-            'configuration_value' => 'True',
-            'configuration_group_id' => 6,
-            'sort_order' => 6,
-            'set_function' => "zen_cfg_select_option(array('True', 'False'), ",
-        ]);
-
-        $this->setConfigurationField([
             'configuration_title' => MODULE_PAYMENT_EMSPAY_ORDER_STATUS_COMPLETED_TEXT,
             'configuration_description' => MODULE_PAYMENT_EMSPAY_ORDER_STATUS_COMPLETED_DESCRIPTION,
             'configuration_key' => 'MODULE_PAYMENT_EMSPAY_ORDER_STATUS_COMPLETED',
@@ -155,7 +145,6 @@ class emspay extends emspayGateway
         return array(
             'MODULE_PAYMENT_EMSPAY_STATUS',
             'MODULE_PAYMENT_EMSPAY_API_KEY',
-            'MODULE_PAYMENT_EMSPAY_WEBHOOK',
             'MODULE_PAYMENT_EMSPAY_BUNDLE_CA',
             'MODULE_PAYMENT_EMSPAY_SORT_ORDER',
             'MODULE_PAYMENT_EMSPAY_ORDER_STATUS_ID',

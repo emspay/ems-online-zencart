@@ -12,7 +12,7 @@ class emspayGateway extends base
      *
      * @var string
      */
-    public $moduleVersion = '1.2.0';
+    public $moduleVersion = '1.2.1';
 
     /**
      * Payment method code.
@@ -314,16 +314,8 @@ class emspayGateway extends base
      */
     public function getWebhookUrl()
     {
-        if (MODULE_PAYMENT_EMSPAY_WEBHOOK == 'True') {
-            if (ENABLE_SSL == 'true') {
-                $url = HTTPS_SERVER;
-            } else {
-                $url = HTTP_SERVER;
-            }
-            return $url.'/emspay_webhook.php';
-        }
-
-        return null;
+        ENABLE_SSL ? $url = HTTPS_SERVER : $url = HTTP_SERVER;
+        return $url . '/emspay_webhook.php';
     }
 
     /**

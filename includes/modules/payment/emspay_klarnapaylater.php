@@ -151,7 +151,7 @@ class emspay_klarnapaylater extends emspayGateway
     {
         global $order, $messageStack;
         try {
-            $emsOrder = $this->emspay->createOrder([
+            $emsOrder = $this->emspay->createOrder(array_filter([
                 'amount' => $this->gerOrderTotalInCents($order),                // amount in cents
                 'currency' => $this->getCurrency($order),                       // currency
                 'description' => $this->getOrderDescription(),                  // order description
@@ -166,7 +166,7 @@ class emspay_klarnapaylater extends emspayGateway
                         'payment_method' => 'klarna-pay-later'
                     ]
                 ]
-            ]);
+            ]));
 
             static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($emsOrder));
             static::addOrderHistory($this->getOrderId(), static::getZenStatusId($emsOrder), $emsOrder['id']);
