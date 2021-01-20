@@ -314,7 +314,11 @@ class emspayGateway extends base
      */
     public function getWebhookUrl()
     {
-        ENABLE_SSL ? $url = HTTPS_SERVER : $url = HTTP_SERVER;
+        if (ENABLE_SSL == 'true') {
+            $url = HTTPS_SERVER;
+        } else {
+            $url = HTTP_SERVER;
+        }
         return $url . '/emspay_webhook.php';
     }
 
@@ -408,25 +412,23 @@ class emspayGateway extends base
     /**
      * Map EMS Online statuses to ZenCart.
      *
-     * @param $emsOrder
+     * @param array $emsOrder
      * @return null
      */
     public static function getZenStatusId($emsOrder)
     {
-        if ($emsOrder['status'] == 'completed') {
-            return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_COMPLETED;
+        switch ($emsOrder['status']) {
+            case 'completed' :
+                return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_COMPLETED;
+            case 'error' :
+                return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_ERROR;
+            case 'processing' :
+                return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_PROCESSING;
+            case 'cancelled' :
+                return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_CANCELLED;
+            default :
+                return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_PENDING;
         }
-        if ($emsOrder['status'] == 'error') {
-            return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_ERROR;
-        }
-        if ($emsOrder['status'] == 'processing') {
-            return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_PROCESSING;
-        }
-        if ($emsOrder['canceled'] == 'cancelled') {
-            return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_CANCELLED;
-        }
-
-        return MODULE_PAYMENT_EMSPAY_ORDER_STATUS_PENDING;
     }
 
     /**

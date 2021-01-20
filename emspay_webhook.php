@@ -15,11 +15,11 @@ try {
         $emsOrder = $emspay->getOrder($data['order_id']);
         if ($emsOrder) {
             emspayGateway::updateOrderStatus(
-                $emsOrder->getMerchantOrderId(),
+                $emsOrder['merchant_order_id'],
                 emspayGateway::getZenStatusId($emsOrder)
             );
             emspayGateway::addOrderHistory(
-                $emsOrder->getMerchantOrderId(),
+               $emsOrder['merchant_order_id'],
                 emspayGateway::getZenStatusId($emsOrder),
                 "Status Changed by EMS Online webhook call"
             );
