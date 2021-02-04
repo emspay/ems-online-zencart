@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/class.gingerGateway.php');
+require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/class.baseGingerGateway.php');
 
 /**
  * Class ginger_afterpay
@@ -157,7 +157,7 @@ class ginger_afterpay extends gingerGateway
         return [
             'id' => $this->code,
             'fields' => $fields,
-            'module' => "<img src='".DIR_WS_IMAGES."ginger/".$this->code.".png' /> ".$this->title
+            'module' => "<img src='".DIR_WS_IMAGES."emspay/".$this->code.".png' /> ".$this->title
         ];
     }
     
