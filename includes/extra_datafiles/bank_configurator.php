@@ -10,3 +10,8 @@ const GINGER_BANK_PREFIX = "emspay";
  */
 
 const GINGER_BANK_ENDPOINT = 'https://api.online.emspay.eu';
+
+/**
+ *
+ */
+const GINGER_DEFAULT_LANGUAGE = "english";

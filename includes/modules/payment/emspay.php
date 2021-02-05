@@ -5,7 +5,7 @@ require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/g
 /**
  * Class emspay
  */
-class emspay extends gingerGateway
+class emspay extends emspayGateway
 {
     public $code = GINGER_BANK_PREFIX;
 

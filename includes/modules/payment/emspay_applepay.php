@@ -5,7 +5,7 @@ require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/g
 /**
  * Class emspay_applepay
  */
-class emspay_applepay extends gingerGateway
+class emspay_applepay extends emspayGateway
 {
     public $code = 'applepay';
 

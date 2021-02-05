@@ -1,8 +1,7 @@
 <?php
-
 /**
  * Base Ginger Gateway
- * The gingerGateway class must extend this one and if needed override some methods.
+ * The {bank_name}Gateway class must extend this one and if needed override some methods.
  */
 class baseGingerGateway extends base
 {
@@ -19,11 +18,6 @@ class baseGingerGateway extends base
      * @var string
      */
     public $code;
-
-    /**
-     * Default language.
-     */
-    const GINGER_DEFAULT_LANGUAGE = 'english';
 
     /**
      * Module settings variables.
@@ -70,13 +64,15 @@ class baseGingerGateway extends base
 
     public static function getClient()
     {
-        $apiKey = gingerGateway::getApiKey();
+        $gateway_controller_name = implode('',[GINGER_BANK_PREFIX,'Gateway']);
+        $Gateway =  new $gateway_controller_name(false);
+        $apiKey = $Gateway->getApiKey();
         return is_null($apiKey) ? null : Ginger\Ginger::createClient(
             GINGER_BANK_ENDPOINT,
             $apiKey,
             constant(MODULE_PAYMENT_.strtoupper(GINGER_BANK_PREFIX)._BUNDLE_CA) == 'True' ?
                 [
-                    CURLOPT_CAINFO => gingerGateway::getCaCertPath()
+                    CURLOPT_CAINFO => $Gateway::getCaCertPath()
                 ] : []
         );
     }
@@ -88,7 +84,7 @@ class baseGingerGateway extends base
      */
     public static function loadLanguageFile($code)
     {
-        $language = $_SESSION['language']?:static::GINGER_DEFAULT_LANGUAGE;
+        $language = $_SESSION['language']?:GINGER_DEFAULT_LANGUAGE;
 
         require_once(zen_get_file_directory(
             DIR_FS_CATALOG.DIR_WS_LANGUAGES.$language.'/modules/payment/',
