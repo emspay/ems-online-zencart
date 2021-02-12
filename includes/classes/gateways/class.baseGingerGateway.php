@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base Ginger Gateway
  * The {bank_name}Gateway class must extend this one and if needed override some methods.
@@ -13,64 +14,26 @@ class baseGingerGateway extends base
     public $moduleVersion = '1.2.1';
 
     /**
-     * Payment method code.
-     *
-     * @var string
-     */
-    public $code;
-
-    /**
-     * Module settings variables.
-     *
-     * @var string
-     */
-    public $enabled, $title, $description, $sort_order, $email_footer;
-
-    /**
      * @var /Ginger/ApiClient Ginger Payments SDK client
      */
     protected $ginger;
 
     /**
-     *  Constructor for Ginger Gateway.
+     * @var string
      */
-    function __construct()
-    {
-        global $order;
+    protected $method;
 
-        static::loadLanguageFile($this->code);
-
-        if (is_object($order)) {
-            $this->update_status();
-            if ($this->isKlarnaPayLater()) {
-                $this->enabled = $this->enabled ? $this->gingerKlarnaPayLaterIpFiltering() : false;
-            }
-            if ($this->isAfterPay() && $this->enabled) {
-                $this->enabled = $this->gingerAfterPayIpFiltering() && $this->gingerAfterPayCountriesValidation($order);
-            }
-        }
-
-        if ($this->enabled === true) {
-            try {
-                $this->ginger = static::getClient();
-            } catch (Exception $exception) {
-                $this->title .= '<span class="alert">'.$exception->getMessage().'</span>';
-            }
-            if ($this->ginger === null) {
-                $this->title .= '<span class="alert">'.constant(MODULE_PAYMENT_.strtoupper(GINGER_BANK_PREFIX)._ERROR_API_KEY).'</span>';
-            }
-    }
-        }
+    public $code;
 
     public static function getClient()
     {
-        $gateway_controller_name = implode('',[GINGER_BANK_PREFIX,'Gateway']);
-        $Gateway =  new $gateway_controller_name(false);
+        $gateway_controller_name = implode('', [GINGER_BANK_PREFIX, 'Gateway']);
+        $Gateway = new $gateway_controller_name(false);
         $apiKey = $Gateway->getApiKey();
         return is_null($apiKey) ? null : Ginger\Ginger::createClient(
             GINGER_BANK_ENDPOINT,
             $apiKey,
-            constant(MODULE_PAYMENT_.strtoupper(GINGER_BANK_PREFIX)._BUNDLE_CA) == 'True' ?
+            constant(MODULE_PAYMENT_ . strtoupper(GINGER_BANK_PREFIX) . _BUNDLE_CA) == 'True' ?
                 [
                     CURLOPT_CAINFO => $Gateway::getCaCertPath()
                 ] : []
@@ -78,68 +41,109 @@ class baseGingerGateway extends base
     }
 
     /**
-     * Load translation file based on selected language.
+     * Check if AfterPay payment method is limited to specific set of IPs.
      *
-     * @param string $code
+     * @param $order
+     * @return mixed
      */
-    public static function loadLanguageFile($code)
+    public function gingerAfterPayCountriesValidation($order): bool
     {
-        $language = $_SESSION['language']?:GINGER_DEFAULT_LANGUAGE;
-
-        require_once(zen_get_file_directory(
-            DIR_FS_CATALOG.DIR_WS_LANGUAGES.$language.'/modules/payment/',
-            $code.'.php',
-            'false'
-        ));
+        $gingerAfterPayCountriesList = constant(MODULE_PAYMENT_ . strtoupper($this->code) . _COUNTRIES_AVAILABLE);
+        if (empty($gingerAfterPayCountriesList)) {
+            return true;
+        } else {
+            $countrylist = array_map("trim", explode(',', $gingerAfterPayCountriesList));
+            return in_array($order->billing['country']['iso_code_2'], $countrylist);
+        }
     }
 
     /**
-     * Check to see if module is installed.
+     * Get Ideal Issuers and create a html dropdown.
      *
-     * @return boolean
+     * @return array|null
      */
-    public function check()
+    public function getIdealFields()
     {
-        global $db;
+        global $messageStack;
 
-        if (!isset($this->_check)) {
-            $check_query = $db->Execute(
-                "SELECT `configuration_value` 
-                 FROM ".TABLE_CONFIGURATION." 
-                 WHERE `configuration_key` = 'MODULE_PAYMENT_".strtoupper($this->code)."_STATUS'"
-            );
-
-            $this->_check = $check_query->RecordCount();
+        try {
+            $gingerIssuers = $this->ginger->getIdealIssuers();
+        } catch (Exception $exception) {
+            $messageStack->add_session('checkout_payment', $exception->getMessage(), 'error');
+            return null;
         }
 
-        return $this->_check;
+        $issuers = [];
+        foreach ($gingerIssuers as $issuer) {
+            array_push($issuers, [
+                'id' => $issuer['id'],
+                'text' => $issuer['name']
+            ]);
+        }
+
+        return [
+            'title' => constant(MODULE_PAYMENT_ . strtoupper($this->code) . _ISSUER_SELECT),
+            'field' => zen_draw_pull_down_menu('issuer_id', $issuers)
+        ];
+    }
+
+
+    /**
+     * Get selected IssuerId from checkout page
+     *
+     * @return string
+     */
+    public function getIssuerId()
+    {
+        return zen_output_string_protected($_POST['issuer_id']);
     }
 
     /**
-     * Method un-installs the plugin.
+     * Get custom fields for AfterPay payment method for checkout page
+     *
+     * @return array[]
      */
-    public function remove()
+    public function getAfterPayFields(): array
     {
-        global $db;
+        global $order;
 
-        $db->Execute(
-            "DELETE FROM ".TABLE_CONFIGURATION." 
-             WHERE configuration_key in ('".implode("', '", $this->keys())."')"
+        return [
+            [
+                'title' => constant(MODULE_PAYMENT_ . strtoupper($this->code) . _DOB),
+                'field' => zen_draw_input_field($this->code . '_dob')
+            ], [
+                'title' => constant(MODULE_PAYMENT_ . strtoupper($this->code) . _GENDER),
+                'field' => zen_draw_pull_down_menu(
+                    $this->code . '_gender',
+                    [
+                        ['id' => '', 'text' => ''],
+                        ['id' => 'male', 'text' => constant(MODULE_PAYMENT_ . strtoupper($this->code) . _MALE)],
+                        ['id' => 'female', 'text' => constant(MODULE_PAYMENT_ . strtoupper($this->code) . _FEMALE)]
+                    ]
+                )
+            ],
+            [
+                'title' => sprintf('%s <a href="%s">%s</a>', constant(MODULE_PAYMENT_ . strtoupper($this->code) . _I_ACCEPT), $this->getTermsAndConditionUrlByCountryIso2Code($order->billing['country']['iso_code_2']), constant(MODULE_PAYMENT_ . strtoupper($this->code) . _TERMS_AND_CONDITIONS)),
+                'field' => zen_draw_checkbox_field($this->code . '_terms_and_conditions')
+            ]
+        ];
+    }
+
+    /**
+     * Save Bank References for BankTransfer order
+     *
+     * @param $gingerOrder
+     */
+    public function saveBankReferences($gingerOrder)
+    {
+        $bankReference = $gingerOrder['transactions'][0]['payment_method_details']['reference'];
+        $_SESSION[$this->code . '_reference'] = $bankReference;
+        $_SESSION[$this->code . '_order_id'] = $gingerOrder['transactions'][0]['order_id'];
+        $_SESSION['payment_method_messages'] = str_replace(
+            '{{reference}}',
+            $bankReference,
+            constant(MODULE_PAYMENT_ . strtoupper($this->code) . _INFORMATION)
         );
-    }
-
-    /**
-     * @param array $config
-     */
-    protected function setConfigurationField(array $config)
-    {
-        global $db;
-
-        $sql = "INSERT INTO ".TABLE_CONFIGURATION;
-        $sql .= ' ('.implode(', ', array_keys($config)).', date_added)';
-        $sql .= ' VALUES ("'.implode('", "', array_values($config)).'", now())';
-
-        $db->Execute($sql);
     }
 
     /**
@@ -160,6 +164,7 @@ class baseGingerGateway extends base
 
         $order_total_modules->clear_posts();
     }
+
     /**
      * Initiate EMS Online API client.
      *
@@ -168,70 +173,154 @@ class baseGingerGateway extends base
      */
     public static function getApiKey($code = GINGER_BANK_PREFIX)
     {
-        if (strlen(MODULE_PAYMENT_GINGER_KLARNA_TEST_API_KEY) === 32 && $code == 'ginger_klarnapaylater') {
+        if (strlen(MODULE_PAYMENT_GINGER_KLARNA_TEST_API_KEY) === 32 && $code == 'emspay_klarnapaylater') {
             $apiKey = MODULE_PAYMENT_GINGER_KLARNA_TEST_API_KEY;
-        } elseif (strlen(MODULE_PAYMENT_GINGER_AFTERPAY_TEST_API_KEY) === 32 && $code == 'ginger_afterpay') {
+        } elseif (strlen(MODULE_PAYMENT_GINGER_AFTERPAY_TEST_API_KEY) === 32 && $code == 'emspay_afterpay') {
             $apiKey = MODULE_PAYMENT_GINGER_AFTERPAY_TEST_API_KEY;
         } else {
-            $apiKey = constant(MODULE_PAYMENT_.strtoupper(GINGER_BANK_PREFIX)._API_KEY);
+            $apiKey = constant(MODULE_PAYMENT_ . strtoupper(GINGER_BANK_PREFIX) . _API_KEY);
         }
         return strlen($apiKey) == 32 ? $apiKey : null;
     }
 
     /**
-     *  func get Cacert.pem path
+     *  Getting CaCert path
      */
 
-    public static function getCaCertPath(){
-        return dirname(__DIR__).'/vendors/assets/cacert.pem';
+    public static function getCaCertPath()
+    {
+        return dirname(__DIR__) . '/vendors/assets/cacert.pem';
     }
 
-    public function getPaymentLink(&$order,&$messageStack){
+    /**
+     * Check if AfterPay payment method is limited to specific set of IPs.
+     *
+     * @return mixed
+     */
+    public function gingerAfterPayIpFiltering()
+    {
+        $gingerAfterPayIpList = constant(MODULE_PAYMENT_ . ($this->code) . _IP_FILTERING);
+
+        if (strlen($gingerAfterPayIpList) > 0) {
+            $ip_whitelist = array_map('trim', explode(",", $gingerAfterPayIpList));
+            if (!in_array($_SESSION['customers_ip_address'], $ip_whitelist)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Get Ginger order
+     *
+     * @return mixed
+     */
+    public function getGingerOrder()
+    {
+        global $order, $messageStack;
+
         try {
-            $gingerOrder = $this->ginger->createOrder(array_filter([
-                'amount' => $this->gerOrderTotalInCents($order),       // amount in cents
-                'currency' => $this->getCurrency($order),              // currency
-                'description' => $this->getOrderDescription(),         // order description
-                'merchant_order_id' => (string) $this->getOrderId(),   // merchantOrderId
-                'return_url' => $this->getReturnUrl(),                 // returnUrl
-                'customer' => $this->getCustomerInfo($order),          // customer
-                'extra' => $this->getPluginVersion(),                  // extra information
-                'webhook_url' => $this->getWebhookUrl(),               // webhook_url
-                'transactions' => [
-                    [
-                        'payment_method' => 'apple-pay',
-                    ]
-                ]
+            $ginger_order = $this->ginger->createOrder(array_filter([
+                'amount' => $this->gerOrderTotalInCents($order),                                                     // amount in cents
+                'currency' => $this->getCurrency($order),                                                            // currency
+                'description' => $this->getOrderDescription(),                                                       // order description
+                'merchant_order_id' => (string)$this->getOrderId(),                                                 // merchantOrderId
+                'return_url' => $this->getReturnUrl(),                                                               // returnUrl
+                'customer' => $this->getCustomerInfo($order),                                                        // customer
+                'extra' => $this->getPluginVersion(),                                                                // extra information
+                'webhook_url' => $this->getWebhookUrl(),                                                             // webhook_url
+                'order_lines' => $this->isRequiredOrderLines() ? $this->getOrderLines($order) : null,                // orderlines
+                'transactions' => array_filter([
+                    array_filter([
+                        'payment_method' => $this->getMethodNameFromCode(),
+                        'payment_method_details' => $this->getPaymentDetails()
+                    ])
+                ])
             ]));
 
-            if ($gingerOrder['status'] == 'error') {
-                $messageStack->add_session('checkout_payment', constant(MODULE_PAYMENT_.strtoupper(GINGER_BANK_PREFIX)._APPLEPAY_ERROR_TRANSACTION), 'error');
-                zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
+            if ($this->isRequiredOrderLines()) {
+                $this->saveOrderInHistory($order);
             }
-
-            zen_redirect($gingerOrder['transactions'][0]['payment_url']);
+            switch ($ginger_order['status']) {
+                case 'error' :
+                    $messageStack->add_session(
+                        'checkout_payment',
+                        $ginger_order['transactions'][0]['reason'] ?? constant(MODULE_PAYMENT_ . strtoupper($this->code) . _ERROR_TRANSACTION),
+                        'error'
+                    );
+                    zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
+                    break;
+                case 'canceled' :
+                    $messageStack->add_session(
+                        'checkout_payment',
+                        constant(MODULE_PAYMENT_ . strtoupper($this->code) . _ERROR_TRANSACTION_IS_CANCELLED),
+                        'error'
+                    );
+                    break;
+                default :
+                    //Return the array, response, from Ginger API
+                    return $ginger_order;
+            }
+            zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
         } catch (Exception $exception) {
-            $messageStack->add_session('checkout_payment', $exception->getMessage(), 'error');
+            $messageStack->add_session(
+                'checkout_payment',
+                $exception->getMessage(),
+                'error');
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
         }
+    }
+
+    public function getPaymentDetails()
+    {
+        switch ($this->getMethodNameFromCode()) {
+            case 'ideal' :
+                return [
+                    'issuer_id' => (string)$this->getIssuerId()
+                ];
+            default :
+                return null;
+        }
+    }
+
+    /**
+     * Simple exploding payment code to extract payment method name.
+     *
+     * @return string
+     */
+    public function getMethodNameFromCode(): string
+    {
+        return explode('_', $this->code)[1];
+    }
+
+    /**
+     * Save order on ZenCart backend.
+     *
+     * @param $order
+     */
+    public function saveOrderInHistory($order)
+    {
+        static::updateOrderStatus($this->getOrderId(), static::getZenStatusId($order));
+        static::addOrderHistory($this->getOrderId(), static::getZenStatusId($order), $order['transactions'][0]['order_id']);
     }
 
     /**
      * @param $order
      * @return int
      */
-    public function gerOrderTotalInCents($order)
+    public function gerOrderTotalInCents($order): int
     {
-        return (int) round($order->info['total'] * 100);
+        return (int)round($order->info['total'] * 100);
     }
 
     /**
      * @param $amount
      * @return int
      */
-    public function getAmountInCents($amount)
+    public function getAmountInCents($amount): int
     {
-        return (int) round($amount * 100);
+        return (int)round($amount * 100);
     }
 
     /**
@@ -250,9 +339,9 @@ class baseGingerGateway extends base
      *
      * @return string
      */
-    public function getOrderDescription()
+    public function getOrderDescription(): string
     {
-        return sprintf(MODULE_PAYMENT_.strtoupper(GINGER_BANK_PREFIX)._ORDER_DESCRIPTION, $this->getOrderId(), TITLE);
+        return sprintf(constant(MODULE_PAYMENT_ . strtoupper($this->code) . _ORDER_DESCRIPTION), $this->getOrderId(), TITLE);
     }
 
     /**
@@ -261,14 +350,14 @@ class baseGingerGateway extends base
      * @param $order
      * @return array
      */
-    public static function getAdditionalAddress($order)
+    public static function getAdditionalAddress($order): array
     {
         return [array_filter([
             'address_type' => 'billing',
             'address' => trim($order->billing['street_address'])
-                .' '.trim($order->billing['suburb'])
-                .' '.trim($order->billing['postcode'])
-                .' '.trim($order->billing['city']),
+                . ' ' . trim($order->billing['suburb'])
+                . ' ' . trim($order->billing['postcode'])
+                . ' ' . trim($order->billing['city']),
             'country' => $order->billing['country']['iso_code_2']])];
     }
 
@@ -276,25 +365,45 @@ class baseGingerGateway extends base
      * @param $order
      * @return array
      */
-    public function getCustomerInfo($order)
+    public function getCustomerInfo($order): array
     {
-        return array_filter([
+        $customer = array_filter([
             'address_type' => 'billing',
-            'merchant_customer_id' => (string) $_SESSION['customer_id'],
+            'merchant_customer_id' => (string)$_SESSION['customer_id'],
             'email_address' => $order->customer['email_address'],
             'first_name' => $order->customer['firstname'],
             'last_name' => $order->customer['lastname'],
             'address' => trim($order->billing['street_address'])
-                .' '.trim($order->billing['suburb'])
-                .' '.trim($order->billing['postcode'])
-                .' '.trim($order->billing['city']),
+                . ' ' . trim($order->billing['suburb'])
+                . ' ' . trim($order->billing['postcode'])
+                . ' ' . trim($order->billing['city']),
             'postal_code' => $order->billing['postcode'],
             'country' => $order->billing['country']['iso_code_2'],
             'phone_numbers' => [$order->customer['telephone']],
             'user_agent' => $_SERVER['HTTP_USER_AGENT'],
             'ip_address' => $_SESSION['customers_ip_address'],
             'locale' => $_SESSION['languages_code'],
+            $this->isRequiredOrderLines() ? $this->getAdditionalCustomerInfo($order) : null
         ]);
+
+        if ($this->isRequiredOrderLines()) {
+            $customer = array_merge($customer, $this->getAdditionalCustomerInfo($order));
+        }
+
+        return $customer;
+    }
+
+    /**
+     * @param $order
+     * @return array
+     */
+    protected function getAdditionalCustomerInfo($order): array
+    {
+        return [
+            'gender' => $this->getCustomPaymentField($this->code . '_gender'),
+            'birthdate' => $this->getCustomPaymentField($this->code . '_dob'),
+            'additional_address' => $this->getAdditionalAddress($order)
+        ];
     }
 
     /**
@@ -303,12 +412,11 @@ class baseGingerGateway extends base
      * @param string $field
      * @return string|null
      */
-    public function getCustomPaymentField($field)
+    public function getCustomPaymentField(string $field)
     {
         if (array_key_exists($field, $_POST) && strlen($_POST[$field]) > 0) {
             return zen_output_string_protected($_POST[$field]);
         }
-
         return null;
     }
 
@@ -325,34 +433,34 @@ class baseGingerGateway extends base
     /**
      * Obtain webhook URL based on site settings.
      *
-     * @return null|string
+     * @return string
      */
-    public function getWebhookUrl()
+    public function getWebhookUrl(): string
     {
         if (ENABLE_SSL == 'true') {
             $url = HTTPS_SERVER;
         } else {
             $url = HTTP_SERVER;
         }
-        return $url . '/'.GINGER_BANK_PREFIX.'_webhook.php';
+        return $url . '/' . GINGER_BANK_PREFIX . '_webhook.php';
     }
 
     /**
      * @return array
      */
-    public function getPluginVersion()
+    public function getPluginVersion(): array
     {
         return [
-            'plugin' => "ZenCart v".$this->moduleVersion
+            'plugin' => "ZenCart v" . $this->moduleVersion
         ];
     }
 
     /**
      * @return int
      */
-    public function getOrderId()
+    public function getOrderId(): int
     {
-        return (int) $_SESSION['order_summary']['order_number'];
+        return (int)$_SESSION['order_summary']['order_number'];
     }
 
     /**
@@ -360,11 +468,11 @@ class baseGingerGateway extends base
      * @param int $orderStatus
      * @param string $comment
      */
-    public static function addOrderHistory($orderId, $orderStatus, $comment = '')
+    public static function addOrderHistory(int $orderId, int $orderStatus, $comment = '')
     {
         global $db;
 
-        $sql = "INSERT INTO ".TABLE_ORDERS_STATUS_HISTORY." 
+        $sql = "INSERT INTO " . TABLE_ORDERS_STATUS_HISTORY . " 
                     (comments, orders_id, orders_status_id, customer_notified, date_added) 
                 VALUES 
                     (:orderComments, :orderID, :orderStatus, -1, now());";
@@ -377,14 +485,38 @@ class baseGingerGateway extends base
     }
 
     /**
+     * Set AfterPay order as 'Shipped' in Bank API.
+     *
+     * @param string $gingerOrderId
+     */
+    public function captureAfterPayOrder(string $gingerOrderId)
+    {
+        $ginger_order = $this->ginger->getOrder($gingerOrderId);
+        $transaction_id = !empty(current($ginger_order['transactions'])) ? current($ginger_order['transactions'])['id'] : null;
+        $this->ginger->captureOrderTransaction($ginger_order['id'], $transaction_id);
+    }
+
+    /**
+     * Set Klarna Pay Later order as 'Shipped' in EMS Online.
+     *
+     * @param string $gingerOrderId
+     */
+    public function captureKlarnaPayLaterOrder($gingerOrderId)
+    {
+        $ginger_order = $this->ginger->getOrder($gingerOrderId);
+        $transaction_id = !empty(current($ginger_order['transactions'])) ? current($ginger_order['transactions'])['id'] : null;
+        $this->ginger->captureOrderTransaction($ginger_order['id'], $transaction_id);
+    }
+
+    /**
      * @param int $orderId
      * @param int $orderStatus
      */
-    public static function updateOrderStatus($orderId, $orderStatus)
+    public static function updateOrderStatus(int $orderId, int $orderStatus)
     {
         global $db;
 
-        $sql = "UPDATE ".TABLE_ORDERS." 
+        $sql = "UPDATE " . TABLE_ORDERS . " 
                 SET 
                     orders_status = ':orderStatus', 
                     last_modified = NOW()
@@ -403,12 +535,12 @@ class baseGingerGateway extends base
      * @param int $orderId
      * @return array
      */
-    public function getOrderHistory($orderId)
+    public function getOrderHistory(int $orderId): array
     {
         global $db;
 
         $sql = "SELECT * 
-                FROM ".TABLE_ORDERS_STATUS_HISTORY." 
+                FROM " . TABLE_ORDERS_STATUS_HISTORY . " 
                 WHERE `orders_id` = ':orderID';";
 
         $sql = $db->bindVars($sql, ':orderID', $orderId, 'integer');
@@ -427,22 +559,22 @@ class baseGingerGateway extends base
     /**
      * Map EMS Online statuses to ZenCart.
      *
-     * @param array $gingerOrder
+     * @param array $ginger_order
      * @return null
      */
-    public static function getZenStatusId($gingerOrder)
+    public static function getZenStatusId(array $ginger_order)
     {
-        switch ($gingerOrder['status']) {
+        switch ($ginger_order['status']) {
             case 'completed' :
-                return constant(MODULE_PAYMENT_.strtoupper(GINGER_BANK_PREFIX)._ORDER_STATUS_COMPLETED);
+                return constant(MODULE_PAYMENT_ . strtoupper(GINGER_BANK_PREFIX) . _ORDER_STATUS_COMPLETED);
             case 'error' :
-                return constant(MODULE_PAYMENT_.strtoupper(GINGER_BANK_PREFIX)._ORDER_STATUS_ERROR);
+                return constant(MODULE_PAYMENT_ . strtoupper(GINGER_BANK_PREFIX) . _ORDER_STATUS_ERROR);
             case 'processing' :
-                return constant(MODULE_PAYMENT_.strtoupper(GINGER_BANK_PREFIX)._ORDER_STATUS_PROCESSING);
+                return constant(MODULE_PAYMENT_ . strtoupper(GINGER_BANK_PREFIX) . _ORDER_STATUS_PROCESSING);
             case 'cancelled' :
-                return constant(MODULE_PAYMENT_.strtoupper(GINGER_BANK_PREFIX)._ORDER_STATUS_CANCELLED);
+                return constant(MODULE_PAYMENT_ . strtoupper(GINGER_BANK_PREFIX) . _ORDER_STATUS_CANCELLED);
             default :
-                return constant(MODULE_PAYMENT_.strtoupper(GINGER_BANK_PREFIX)._ORDER_STATUS_PENDING);
+                return constant(MODULE_PAYMENT_ . strtoupper(GINGER_BANK_PREFIX) . _ORDER_STATUS_PENDING);
         }
     }
 
@@ -451,7 +583,7 @@ class baseGingerGateway extends base
      *
      * @param string $gingerOrderId
      */
-    public function statusRedirect($gingerOrderId)
+    public function statusRedirect(string $gingerOrderId)
     {
         global $messageStack;
 
@@ -463,13 +595,13 @@ class baseGingerGateway extends base
                 $this->emptyCart();
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_SUCCESS, '', 'SSL'));
             } elseif ($gingerOrder['status'] == 'processing' || $gingerOrder['status'] == 'new') {
-                zen_redirect(zen_href_link(FILENAME_.strtoupper(GINGER_BANK_PREFIX)._PENDING, '', 'SSL'));
+                zen_redirect(zen_href_link(FILENAME_ . strtoupper(GINGER_BANK_PREFIX) . _PENDING, '', 'SSL'));
             } elseif ($gingerOrder['status'] == 'cancelled'
                 || $gingerOrder['status'] == 'error'
                 || $gingerOrder['status'] == 'expired'
             ) {
                 static::loadLanguageFile(GINGER_BANK_PREFIX);
-                $reason = $gingerOrder['transactions'][0]['reason']?:MODULE_PAYMENT_.strtoupper(GINGER_BANK_PREFIX)._ERROR_TRANSACTION;
+                $reason = $gingerOrder['transactions'][0]['reason'] ?: MODULE_PAYMENT_ . strtoupper(GINGER_BANK_PREFIX) . _ERROR_TRANSACTION;
                 $messageStack->add_session('checkout_payment', $reason, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
             }
@@ -488,17 +620,17 @@ class baseGingerGateway extends base
     {
         global $order, $db;
 
-        if ($this->enabled && (int) $modulePaymentZone > 0 && isset($order->billing['country']['id'])) {
+        if ($this->enabled && (int)$modulePaymentZone > 0 && isset($order->billing['country']['id'])) {
             $check_flag = false;
 
             $check_query = $db->Execute(
                 "SELECT zone_id FROM "
-                .TABLE_ZONES_TO_GEO_ZONES
-                ." WHERE geo_zone_id = '"
-                .$modulePaymentZone
-                ."' AND zone_country_id = '"
-                .(int) $order->billing['country']['id']
-                ."' ORDER BY zone_id;"
+                . TABLE_ZONES_TO_GEO_ZONES
+                . " WHERE geo_zone_id = '"
+                . $modulePaymentZone
+                . "' AND zone_country_id = '"
+                . (int)$order->billing['country']['id']
+                . "' ORDER BY zone_id;"
             );
 
             while (!$check_query->EOF) {
@@ -597,14 +729,79 @@ class baseGingerGateway extends base
     {
         return null;
     }
-    
+
     protected function isKlarnaPayLater()
     {
-        return $this->code == 'ginger_klarnapaylater';
+        return $this->code == GINGER_BANK_PREFIX . '_klarnapaylater';
     }
-    
+
     protected function isAfterPay()
     {
-        return $this->code == 'ginger_afterpay';
+        return $this->code == GINGER_BANK_PREFIX . '_afterpay';
+    }
+
+    /**
+     *
+     */
+    public function isRequiredOrderLines(): bool
+    {
+        return in_array($this->getMethodNameFromCode(), ['afterpay', 'klarnapaylater']);
+    }
+
+    /**
+     * Generate order lines from the order
+     *
+     * @param order $order
+     * @return arrau|null
+     */
+    public function getOrderLines($order): array
+    {
+        $orderLines = [];
+        foreach ($order->products as $product) {
+            $orderLines[] = [
+                'name' => (string)$product['name'],
+                'currency' => 'EUR',
+                'type' => 'physical',
+                'amount' => $this->getAmountInCents(
+                    $product['final_price'] + zen_calculate_tax($product['final_price'], $product['tax'])
+                ),
+                'vat_percentage' => $this->getAmountInCents($product['tax']),
+                'quantity' => (int)$product['qty'],
+                'merchant_order_line_id' => (string)$product['id'],
+                'url' => zen_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $product['id'])
+            ];
+        }
+
+        if ($order->info['shipping_cost'] > 0) {
+            $orderLines[] = $this->getOrderShippingLine($order);
+        }
+
+        return $orderLines;
+    }
+
+    /**
+     * @param $order
+     * @return array
+     */
+    public function getOrderShippingLine($order): array
+    {
+        return [
+            'quantity' => 1,
+            'amount' => $this->getAmountInCents($order->info['shipping_cost'] + $order->info['shipping_tax']),
+            'name' => $order->info['shipping_method'],
+            'type' => 'shipping_fee',
+            'currency' => 'EUR',
+            'vat_percentage' => $this->getAmountInCents($this->calculateShippingTax($order)),
+            'merchant_order_line_id' => count($order->products) + 1
+        ];
+    }
+
+    /**
+     * @param $order
+     * @return float|int
+     */
+    public function calculateShippingTax($order)
+    {
+        return ($order->info['shipping_tax'] * 100) / $order->info['shipping_cost'];
     }
 }

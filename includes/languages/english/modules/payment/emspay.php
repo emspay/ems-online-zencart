@@ -1,6 +1,6 @@
 <?php
 $file_name = explode('.php',basename(__FILE__))[0];
-$prefix = strtoupper(explode("_", $file_name)[0]);
+$prefix = strtoupper($file_name);
 
 define('MODULE_PAYMENT_'.$prefix.'_TEXT_TITLE', "EMS Online");
 define('MODULE_PAYMENT_'.$prefix.'_TEXT_DESCRIPTION', "The official EMS Online ZenCart plugin.");
@@ -34,3 +34,4 @@ define('MODULE_PAYMENT_'.$prefix.'_ORDER_STATUS_SHIPPED_DESCRIPTION', "Select th
 
 define('MODULE_PAYMENT_'.$prefix.'_ERROR_API_KEY', "The API Key has not been set. Please enter a valid API Key.");
 define('MODULE_PAYMENT_'.$prefix.'_ERROR_TRANSACTION', "There was an error processing your payment. We apologize for the inconvenience. Please choose another payment method.");
+define('MODULE_PAYMENT_'.$prefix.'_ERROR_ALREADY_INSTALLED', "The EMS Online module is already installed.");

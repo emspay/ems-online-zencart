@@ -3,16 +3,16 @@ $method_name = strtoupper(explode('.php',basename(__FILE__))[0]);
 
 define('MODULE_PAYMENT_'.$method_name.'_ORDER_DESCRIPTION', "Your order %s at %s");
 
-define('MODULE_PAYMENT_'.$method_name.'_TEXT_TITLE', "Apple Pay");
+define('MODULE_PAYMENT_'.$method_name.'_TEXT_TITLE', "American Express");
 define('MODULE_PAYMENT_'.$method_name.'_TEXT_DESCRIPTION', "Payment method is provided by EMS Online.");
 
 define('MODULE_PAYMENT_'.$method_name.'_DISPLAY_TITLE_TEXT', "Payment method display name");
 define('MODULE_PAYMENT_'.$method_name.'_DISPLAY_TITLE_DESCRIPTION', "Payment method name that will be displayed to the customer.");
 
-define('MODULE_PAYMENT_'.$method_name.'_STATUS_TEXT', "Enable Apple Pay");
-define('MODULE_PAYMENT_'.$method_name.'_STATUS_DESCRIPTION', "Do you want to enable Apple Pay?");
+define('MODULE_PAYMENT_'.$method_name.'_STATUS_TEXT', "Enable American Express");
+define('MODULE_PAYMENT_'.$method_name.'_STATUS_DESCRIPTION', "Do you want to enable American Express?");
 
-define('MODULE_PAYMENT_'.$method_name.'_SORT_ORDER_TEXT', "Sort order for Apple Pay");
+define('MODULE_PAYMENT_'.$method_name.'_SORT_ORDER_TEXT', "Sort order for American Express");
 define('MODULE_PAYMENT_'.$method_name.'_SORT_ORDER_DESCRIPTION', "The payment method with the lowest order is displayed first.");
 
 define('MODULE_PAYMENT_'.$method_name.'_ZONE_TEXT', "Payment Method availability Zone");

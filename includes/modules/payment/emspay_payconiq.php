@@ -1,9 +1,9 @@
 <?php
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/gateways/autoload.php');
 /**
- * Class for Apple Pay payment method
+ * Class for Payconiq payment method
  */
-class emspay_applepay extends gingerPaymentDefault
+class emspay_payconiq extends gingerPaymentDefault
 {
-    public $code = 'applepay';
+    public $code = 'payconiq';
 }
