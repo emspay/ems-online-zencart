@@ -5,7 +5,7 @@ class emspayGateway extends baseGingerGateway
 {
     /**
      * @return string
-     * Specially for emspay_webhook.php
+     * Specially for ginger_webhook.php
      */
     public function getWebhookStatusUpdateDescription()
     {

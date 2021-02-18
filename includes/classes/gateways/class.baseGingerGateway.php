@@ -11,7 +11,7 @@ class baseGingerGateway extends base
      *
      * @var string
      */
-    public $moduleVersion = '1.2.1';
+    public $moduleVersion = '1.3.0';
 
     /**
      * @var /Ginger/ApiClient Ginger Payments SDK client
@@ -442,7 +442,7 @@ class baseGingerGateway extends base
         } else {
             $url = HTTP_SERVER;
         }
-        return $url . '/' . GINGER_BANK_PREFIX . '_webhook.php';
+        return $url . '/' . 'ginger_webhook.php';
     }
 
     /**
