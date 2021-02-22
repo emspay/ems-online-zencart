@@ -43,7 +43,6 @@ class gingerPaymentDefault extends gingerGateway
             }
         }
 
-
         if ($this->enabled === true) {
             try {
                 $this->ginger = static::getClient();
@@ -54,6 +53,7 @@ class gingerPaymentDefault extends gingerGateway
                 $this->title .= '<span class="alert">' . constant(MODULE_PAYMENT_ . strtoupper(GINGER_BANK_PREFIX) . _ERROR_API_KEY) . '</span>';
             }
         }
+
     }
 
     /**
@@ -135,6 +135,70 @@ class gingerPaymentDefault extends gingerGateway
         $sort_order += 1;
 
         return $sort_order;
+    }
+
+    /**
+     * Load translation file based on selected language.
+     *
+     * @param string $code
+     */
+    public function loadLanguageFile($code = null)
+    {
+        $language = $_SESSION['language'] ?: GINGER_DEFAULT_LANGUAGE;
+
+        require_once(zen_get_file_directory(
+            DIR_FS_CATALOG . DIR_WS_LANGUAGES . $language . '/modules/payment/',
+            $code ?? $this->code. '.php'
+        ));
+    }
+
+    /**
+     * Check to see if module is installed.
+     *
+     * @return boolean
+     */
+    public function check()
+    {
+        global $db;
+
+        if (!isset($this->_check)) {
+            $check_query = $db->Execute(
+                "SELECT `configuration_value` 
+                 FROM " . TABLE_CONFIGURATION . " 
+                 WHERE `configuration_key` = 'MODULE_PAYMENT_" . strtoupper($this->code) . "_STATUS'"
+            );
+
+            $this->_check = $check_query->RecordCount();
+        }
+
+        return $this->_check;
+    }
+
+    /**
+     * Method un-installs the plugin.
+     */
+    public function remove()
+    {
+        global $db;
+
+        $db->Execute(
+            "DELETE FROM " . TABLE_CONFIGURATION . " 
+             WHERE configuration_key in ('" . implode("', '", $this->keys()) . "')"
+        );
+    }
+
+    /**
+     * @param array $config
+     */
+    protected function setConfigurationField(array $config)
+    {
+        global $db;
+
+        $sql = "INSERT INTO " . TABLE_CONFIGURATION;
+        $sql .= ' (' . implode(', ', array_keys($config)) . ', date_added)';
+        $sql .= ' VALUES ("' . implode('", "', array_values($config)) . '", now())';
+
+        $db->Execute($sql);
     }
 
     /**
@@ -248,73 +312,5 @@ class gingerPaymentDefault extends gingerGateway
         return null;
     }
 
-    /**
-     * Load translation file based on selected language.
-     *
-     * @param string $code
-     */
-    public function loadLanguageFile($code = false)
-    {
-        $language = $_SESSION['language'] ?: GINGER_DEFAULT_LANGUAGE;
 
-        if (!$code){
-            $payment_name = $this->getMethodNameFromCode();
-            $code = is_null($payment_name) ? 'ginger' : implode('_', ['ginger', $payment_name]);
-        }
-        $_SESSION['ginger_language_prefix'] = GINGER_BANK_PREFIX;
-
-        require_once(zen_get_file_directory(
-            DIR_FS_CATALOG . DIR_WS_LANGUAGES . $language . '/modules/payment/',
-            $code. '.php'
-        ));
-    }
-
-    /**
-     * Check to see if module is installed.
-     *
-     * @return boolean
-     */
-    public function check()
-    {
-        global $db;
-
-        if (!isset($this->_check)) {
-            $check_query = $db->Execute(
-                "SELECT `configuration_value` 
-                 FROM " . TABLE_CONFIGURATION . " 
-                 WHERE `configuration_key` = 'MODULE_PAYMENT_" . strtoupper($this->code) . "_STATUS'"
-            );
-
-            $this->_check = $check_query->RecordCount();
-        }
-
-        return $this->_check;
-    }
-
-    /**
-     * Method un-installs the plugin.
-     */
-    public function remove()
-    {
-        global $db;
-
-        $db->Execute(
-            "DELETE FROM " . TABLE_CONFIGURATION . " 
-             WHERE configuration_key in ('" . implode("', '", $this->keys()) . "')"
-        );
-    }
-
-    /**
-     * @param array $config
-     */
-    protected function setConfigurationField(array $config)
-    {
-        global $db;
-
-        $sql = "INSERT INTO " . TABLE_CONFIGURATION;
-        $sql .= ' (' . implode(', ', array_keys($config)) . ', date_added)';
-        $sql .= ' VALUES ("' . implode('", "', array_values($config)) . '", now())';
-
-        $db->Execute($sql);
-    }
 }

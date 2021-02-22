@@ -171,9 +171,9 @@ class baseGingerGateway extends base
      */
     public static function getApiKey($code = GINGER_BANK_PREFIX)
     {
-        if (strlen(MODULE_PAYMENT_GINGER_KLARNA_TEST_API_KEY) === 32 && $code == 'ginger_klarnapaylater') {
+        if (strlen(MODULE_PAYMENT_GINGER_KLARNA_TEST_API_KEY) === 32 && $code == 'emspay_klarnapaylater') {
             $apiKey = MODULE_PAYMENT_GINGER_KLARNA_TEST_API_KEY;
-        } elseif (strlen(MODULE_PAYMENT_GINGER_AFTERPAY_TEST_API_KEY) === 32 && $code == 'ginger_afterpay') {
+        } elseif (strlen(MODULE_PAYMENT_GINGER_AFTERPAY_TEST_API_KEY) === 32 && $code == 'emspay_afterpay') {
             $apiKey = MODULE_PAYMENT_GINGER_AFTERPAY_TEST_API_KEY;
         } else {
             $apiKey = constant(MODULE_PAYMENT_ . strtoupper(GINGER_BANK_PREFIX) . _API_KEY);

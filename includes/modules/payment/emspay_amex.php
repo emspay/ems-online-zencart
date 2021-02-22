@@ -3,7 +3,7 @@ require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/g
 /**
  * Class for American Express payment method
  */
-class ginger_amex extends gingerPaymentDefault
+class emspay_amex extends gingerPaymentDefault
 {
     public $code = 'amex';
 }

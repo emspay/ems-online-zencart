@@ -3,7 +3,7 @@ require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/g
 /**
  * Class for iDEAL payment method
  */
-class ginger_ideal extends gingerPaymentDefault
+class emspay_ideal extends gingerPaymentDefault
 {
     public $code = 'ideal';
     /**

@@ -1,9 +1,9 @@
 <?php
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/gateways/autoload.php');
 /**
- * Class for PayPal payment method
+ * Class for WeChat payment method
  */
-class ginger_paypal extends gingerPaymentDefault
+class emspay_wechat extends gingerPaymentDefault
 {
-    public $code = 'paypal';
+    public $code = 'wechat';
 }

@@ -3,7 +3,7 @@ require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/g
 /**
  * Class for Credit Card payment method
  */
-class ginger_creditcard extends gingerPaymentDefault
+class emspay_creditcard extends gingerPaymentDefault
 {
     public $code = 'creditcard';
 }

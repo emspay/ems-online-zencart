@@ -1,5 +1,5 @@
 <?php
-$prefix = strtoupper($_SESSION['ginger_language_prefix']);
+$prefix = strtoupper(explode('.php',basename(__FILE__))[0]);
 
 define('MODULE_PAYMENT_'.$prefix.'_TEXT_TITLE', "EMS Online");
 define('MODULE_PAYMENT_'.$prefix.'_TEXT_DESCRIPTION', "The official EMS Online ZenCart plugin.");

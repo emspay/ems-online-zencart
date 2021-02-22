@@ -3,7 +3,7 @@ require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/g
 /**
  * Class for Klarna Pay Now payment method
  */
-class ginger_klarnapaynow extends gingerPaymentDefault
+class emspay_klarnapaynow extends gingerPaymentDefault
 {
     public $code = 'klarnapaynow';
 }

@@ -3,7 +3,7 @@ require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/g
 /**
  * Class for Bancontact payment method
  */
-class ginger_bancontact extends gingerPaymentDefault
+class emspay_bancontact extends gingerPaymentDefault
 {
     public $code = 'bancontact';
 }

@@ -3,7 +3,7 @@ require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/g
 /**
  * Class for Tikkie Payment Request payment method
  */
-class ginger_tikkiepaymentrequest extends gingerPaymentDefault
+class emspay_tikkiepaymentrequest extends gingerPaymentDefault
 {
     public $code = 'tikkiepaymentrequest';
 }
