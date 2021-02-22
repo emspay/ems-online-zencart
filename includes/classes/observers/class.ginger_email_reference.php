@@ -1,6 +1,6 @@
 <?php
 
-class emspay_email_reference extends base
+class ginger_email_reference extends base
 {
     function __construct()
     {

@@ -3,7 +3,7 @@ require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/g
 /**
  * Class for Apple Pay payment method
  */
-class emspay_applepay extends gingerPaymentDefault
+class ginger_applepay extends gingerPaymentDefault
 {
     public $code = 'applepay';
 }

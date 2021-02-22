@@ -5,17 +5,9 @@ require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/g
  * Class emspay
  */
 
-class emspay extends gingerPaymentDefault
+class ginger extends gingerPaymentDefault
 {
     public $code = GINGER_BANK_PREFIX;
-
-    /**
-     * Ginger payment library constructor.
-     */
-    function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Install function.

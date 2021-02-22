@@ -1,6 +1,6 @@
 <?php
 
-class gingerPaymentDefault extends emspayGateway
+class gingerPaymentDefault extends gingerGateway
 {
     /**
      * Payment method code.
@@ -27,13 +27,12 @@ class gingerPaymentDefault extends emspayGateway
             $this->code = implode('_', [GINGER_BANK_PREFIX, $this->code]);
         }
 
-        static::loadLanguageFile($this->code);
+        $this->loadLanguageFile();
 
         $this->title = constant(MODULE_PAYMENT_ . strtoupper($this->code) . _TEXT_TITLE);
         $this->description = constant(MODULE_PAYMENT_ . strtoupper($this->code) . _TEXT_DESCRIPTION);
         $this->sort_order = constant(MODULE_PAYMENT_ . strtoupper($this->code) . _SORT_ORDER);
         $this->enabled = ((constant(MODULE_PAYMENT_ . strtoupper($this->code) . _STATUS) == 'True') ? true : false);
-
         if (is_object($order)) {
             $this->update_status();
             if ($this->isKlarnaPayLater()) {
@@ -43,6 +42,7 @@ class gingerPaymentDefault extends emspayGateway
                 $this->enabled = $this->gingerAfterPayIpFiltering() && $this->gingerAfterPayCountriesValidation($order);
             }
         }
+
 
         if ($this->enabled === true) {
             try {
@@ -253,14 +253,19 @@ class gingerPaymentDefault extends emspayGateway
      *
      * @param string $code
      */
-    public static function loadLanguageFile(string $code)
+    public function loadLanguageFile($code = false)
     {
         $language = $_SESSION['language'] ?: GINGER_DEFAULT_LANGUAGE;
 
+        if (!$code){
+            $payment_name = $this->getMethodNameFromCode();
+            $code = is_null($payment_name) ? 'ginger' : implode('_', ['ginger', $payment_name]);
+        }
+        $_SESSION['ginger_language_prefix'] = GINGER_BANK_PREFIX;
+
         require_once(zen_get_file_directory(
             DIR_FS_CATALOG . DIR_WS_LANGUAGES . $language . '/modules/payment/',
-            $code . '.php',
-            'false'
+            $code. '.php'
         ));
     }
 

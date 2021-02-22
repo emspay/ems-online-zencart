@@ -1,5 +1,7 @@
 <?php
-$method_name = strtoupper(explode('.php',basename(__FILE__))[0]);
+$bank_prefix = $_SESSION['ginger_language_prefix'];
+$method_prefix = explode('_',explode('.php',basename(__FILE__))[0])[1];
+$method_name = strtoupper(implode('_', [$bank_prefix,$method_prefix]));
 
 define('MODULE_PAYMENT_'.$method_name.'_ORDER_DESCRIPTION', "Your order %s at %s");
 define('MODULE_PAYMENT_'.$method_name.'_ISSUER_SELECT', "Select your bank:");

@@ -27,15 +27,13 @@ class baseGingerGateway extends base
 
     public static function getClient()
     {
-        $gateway_controller_name = implode('', [GINGER_BANK_PREFIX, 'Gateway']);
-        $Gateway = new $gateway_controller_name(false);
-        $apiKey = $Gateway->getApiKey();
+        $apiKey = gingerGateway::getApiKey();
         return is_null($apiKey) ? null : Ginger\Ginger::createClient(
             GINGER_BANK_ENDPOINT,
             $apiKey,
             constant(MODULE_PAYMENT_ . strtoupper(GINGER_BANK_PREFIX) . _BUNDLE_CA) == 'True' ?
                 [
-                    CURLOPT_CAINFO => $Gateway::getCaCertPath()
+                    CURLOPT_CAINFO => gingerGateway::getCaCertPath()
                 ] : []
         );
     }
@@ -173,9 +171,9 @@ class baseGingerGateway extends base
      */
     public static function getApiKey($code = GINGER_BANK_PREFIX)
     {
-        if (strlen(MODULE_PAYMENT_GINGER_KLARNA_TEST_API_KEY) === 32 && $code == 'emspay_klarnapaylater') {
+        if (strlen(MODULE_PAYMENT_GINGER_KLARNA_TEST_API_KEY) === 32 && $code == 'ginger_klarnapaylater') {
             $apiKey = MODULE_PAYMENT_GINGER_KLARNA_TEST_API_KEY;
-        } elseif (strlen(MODULE_PAYMENT_GINGER_AFTERPAY_TEST_API_KEY) === 32 && $code == 'emspay_afterpay') {
+        } elseif (strlen(MODULE_PAYMENT_GINGER_AFTERPAY_TEST_API_KEY) === 32 && $code == 'ginger_afterpay') {
             $apiKey = MODULE_PAYMENT_GINGER_AFTERPAY_TEST_API_KEY;
         } else {
             $apiKey = constant(MODULE_PAYMENT_ . strtoupper(GINGER_BANK_PREFIX) . _API_KEY);
@@ -287,11 +285,11 @@ class baseGingerGateway extends base
     /**
      * Simple exploding payment code to extract payment method name.
      *
-     * @return string
+     * @return string|null
      */
-    public function getMethodNameFromCode(): string
+    public function getMethodNameFromCode()
     {
-        return explode('_', $this->code)[1];
+        return $this->code == GINGER_BANK_PREFIX ? null : explode('_', $this->code)[1];
     }
 
     /**
@@ -600,7 +598,7 @@ class baseGingerGateway extends base
                 || $gingerOrder['status'] == 'error'
                 || $gingerOrder['status'] == 'expired'
             ) {
-                static::loadLanguageFile(GINGER_BANK_PREFIX);
+                $this->loadLanguageFile(GINGER_BANK_PREFIX);
                 $reason = $gingerOrder['transactions'][0]['reason'] ?: MODULE_PAYMENT_ . strtoupper(GINGER_BANK_PREFIX) . _ERROR_TRANSACTION;
                 $messageStack->add_session('checkout_payment', $reason, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));

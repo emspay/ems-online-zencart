@@ -11,6 +11,6 @@ $autoLoadConfig[1][] = array(
 
 $autoLoadConfig[1][] = array(
     'autoType' => 'classInstantiate',
-    'className' => 'emspay_email_reference',
-    'objectName' => 'emspay_email_reference'
+    'className' => 'ginger_email_reference',
+    'objectName' => 'ginger_email_reference'
 );

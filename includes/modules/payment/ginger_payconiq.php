@@ -3,7 +3,7 @@ require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/g
 /**
  * Class for Payconiq payment method
  */
-class emspay_payconiq extends gingerPaymentDefault
+class ginger_payconiq extends gingerPaymentDefault
 {
     public $code = 'payconiq';
 }

@@ -4,7 +4,7 @@ require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/g
 /**
  * Class for AfterPay payment method
  */
-class emspay_afterpay extends gingerPaymentDefault
+class ginger_afterpay extends gingerPaymentDefault
 {
     const TERMS_CONDITION_URL_NL = 'https://www.afterpay.nl/nl/algemeen/betalen-met-afterpay/betalingsvoorwaarden';
     const TERMS_CONDITION_URL_BE = 'https://www.afterpay.be/be/footer/betalen-met-afterpay/betalingsvoorwaarden';

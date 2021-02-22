@@ -8,23 +8,19 @@ try {
     if (!is_array($data)) {
         throw new Exception('Invalid JSON!');
     }
-    /**
-     * Creating current bank Gateway;
-     */
-    $Gateway =  new (GINGER_BANK_PREFIX.'Gateway');
-    $ginger = $Gateway::getClient();
+    $ginger = gingerGateway::getClient();
 
     if ($data['event'] == 'status_changed') {
         $gingerOrder = $ginger->getOrder($data['order_id']);
         if ($gingerOrder) {
-            $Gateway::updateOrderStatus(
+            gingerGateway::updateOrderStatus(
                 $gingerOrder['merchant_order_id'],
-                $Gateway::getZenStatusId($gingerOrder)
+                gingerGateway::getZenStatusId($gingerOrder)
             );
-            $Gateway::addOrderHistory(
+            gingerGateway::addOrderHistory(
                $gingerOrder['merchant_order_id'],
-                $Gateway::getZenStatusId($gingerOrder),
-                $Gateway->getWebhookStatusUpdateDescription()
+                gingerGateway::getZenStatusId($gingerOrder),
+                gingerGateway::getWebhookStatusUpdateDescription()
             );
         }
     } else {

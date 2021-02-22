@@ -3,7 +3,7 @@ require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/includes/classes/g
 /**
  * Class for BankTransfer payment method
  */
-class emspay_banktransfer extends gingerPaymentDefault
+class ginger_banktransfer extends gingerPaymentDefault
 {
     /**
      * @var string
