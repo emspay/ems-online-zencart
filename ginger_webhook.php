@@ -1,4 +1,5 @@
-<?php
+<?php$method_name = strtoupper(explode('.php',basename(__FILE__))[0]);
+
 
 require_once('includes/application_top.php');
 require_once('includes/classes/gateways/autoload.php');

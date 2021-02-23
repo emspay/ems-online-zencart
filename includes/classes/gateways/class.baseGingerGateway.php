@@ -219,27 +219,31 @@ class baseGingerGateway extends base
         global $order, $messageStack;
 
         try {
-            $ginger_order = $this->ginger->createOrder(array_filter([
-                'amount' => $this->gerOrderTotalInCents($order),                                                     // amount in cents
-                'currency' => $this->getCurrency($order),                                                            // currency
-                'description' => $this->getOrderDescription(),                                                       // order description
-                'merchant_order_id' => (string)$this->getOrderId(),                                                 // merchantOrderId
-                'return_url' => $this->getReturnUrl(),                                                               // returnUrl
-                'customer' => $this->getCustomerInfo($order),                                                        // customer
-                'extra' => $this->getPluginVersion(),                                                                // extra information
-                'webhook_url' => $this->getWebhookUrl(),                                                             // webhook_url
-                'order_lines' => $this->isRequiredOrderLines() ? $this->getOrderLines($order) : null,                // orderlines
-                'transactions' => array_filter([
-                    array_filter([
-                        'payment_method' => $this->getMethodNameFromCode(),
-                        'payment_method_details' => $this->getPaymentDetails()
+            $ginger_order = $this->ginger->createOrder(
+                array_filter(
+                    [
+                        'amount' => $this->gerOrderTotalInCents($order),                                                     // amount in cents
+                        'currency' => $this->getCurrency($order),                                                            // currency
+                        'description' => $this->getOrderDescription(),                                                       // order description
+                        'merchant_order_id' => (string)$this->getOrderId(),                                                 // merchantOrderId
+                        'return_url' => $this->getReturnUrl(),                                                               // returnUrl
+                        'customer' => $this->getCustomerInfo($order),                                                        // customer
+                        'extra' => $this->getPluginVersion(),                                                                // extra information
+                        'webhook_url' => $this->getWebhookUrl(),                                                             // webhook_url
+                        'order_lines' => $this->isRequiredOrderLines() ? $this->getOrderLines($order) : null,                // orderlines
+                        'transactions' => array_filter([
+                            array_filter([
+                                'payment_method' => $this->getMethodNameFromCode(),
+                                'payment_method_details' => $this->getPaymentDetails()
+                            ])
+                        ])
                     ])
-                ])
-            ]));
+            );
 
             if ($this->isRequiredOrderLines()) {
                 $this->saveOrderInHistory($order);
             }
+
             switch ($ginger_order['status']) {
                 case 'error' :
                     $messageStack->add_session(
