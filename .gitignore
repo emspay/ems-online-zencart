@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 /build/
 /tests/
 .idea/
 .DS_Store
 /includes/classes/vendors/vendor
 
+=======
+.DS_Store
+/.idea/
+>>>>>>> origin/bank_func
