@@ -31,3 +31,7 @@
 
 * Removed WebHook option from all payments.
 * Update plugin description.
+
+** 1.2.2 **
+
+* Fixed EMS status mapping.
