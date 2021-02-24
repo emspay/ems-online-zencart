@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /build/
 /tests/
 .idea/
@@ -9,3 +10,7 @@
 .DS_Store
 /.idea/
 >>>>>>> origin/bank_func
+=======
+.DS_Store
+/.idea/
+>>>>>>> origin/main_func
