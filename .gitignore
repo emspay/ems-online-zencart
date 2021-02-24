@@ -1,0 +1,6 @@
+/build/
+/tests/
+.idea/
+.DS_Store
+/includes/classes/vendors/vendor
+
