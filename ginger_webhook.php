@@ -1,14 +1,14 @@
-<?php
+<?php$method_name = strtoupper(explode('.php',basename(__FILE__))[0]);
+
 
 require_once('includes/application_top.php');
-require_once('includes/classes/class.gingerGateway.php');
+require_once('includes/classes/gateways/autoload.php');
 
 try {
     $data = json_decode(file_get_contents("php://input"), true);
     if (!is_array($data)) {
         throw new Exception('Invalid JSON!');
     }
-
     $ginger = gingerGateway::getClient();
 
     if ($data['event'] == 'status_changed') {
@@ -21,7 +21,7 @@ try {
             gingerGateway::addOrderHistory(
                $gingerOrder['merchant_order_id'],
                 gingerGateway::getZenStatusId($gingerOrder),
-                "Status Changed by EMS Online webhook call"
+                gingerGateway::getWebhookStatusUpdateDescription()
             );
         }
     } else {

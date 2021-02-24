@@ -32,6 +32,9 @@
 * Removed WebHook option from all payments.
 * Update plugin description.
 
-** 1.2.2 **
+** 1.3.0 ** 
 
 * Fixed EMS status mapping.
+* Completed utilize duplicate code.
+* Bank/ginger prefixes were added to all function/files.
+* Plugin structure changes to supporting via GPE solution.
