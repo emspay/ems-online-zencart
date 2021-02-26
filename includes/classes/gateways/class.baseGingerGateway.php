@@ -233,7 +233,7 @@ class baseGingerGateway extends base
                         'order_lines' => $this->isRequiredOrderLines() ? $this->getOrderLines($order) : null,                // orderlines
                         'transactions' => array_filter([
                             array_filter([
-                                'payment_method' => $this->getMethodNameFromCode(),
+                                'payment_method' => GINGER_PAYMENT_MAPPING[$this->getMethodNameFromCode()],
                                 'payment_method_details' => $this->getPaymentDetails()
                             ])
                         ])

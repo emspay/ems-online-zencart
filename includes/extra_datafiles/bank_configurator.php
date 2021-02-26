@@ -19,7 +19,7 @@ define('GINGER_DEFAULT_LANGUAGE','english');
 /**
  * Mapping statuses from Platform to EMS API
  */
-const PAYMENT_MAPPING = [
+define('GINGER_PAYMENT_MAPPING',[
     'afterpay' => 'afterpay',
     'applepay' => 'apple-pay',
     'bancontact' => 'bancontact',
@@ -33,4 +33,4 @@ const PAYMENT_MAPPING = [
     'amex' => 'amex',
     'tikkiepaymentrequest' => 'tikkie-payment-request',
     'wechat' => 'wechat'
-];
+]);
