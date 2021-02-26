@@ -1,4 +1,4 @@
-<?php if ($_GET['failed']): ?>
+<?php if (filter_input(INPUT_GET, 'failed', FILTER_SANITIZE_STRING)): ?>
     <h3>
         <?php echo GINGER_ORDER_PENDING; ?>
     </h3>
@@ -22,7 +22,7 @@
     </script>
     <script language="JavaScript">
         var fallback_url = '<?php echo htmlspecialchars_decode(zen_href_link(FILENAME_GINGER_PENDING, '&failed=1', 'SSL')); ?>';
-        var validation_url = '<?php echo htmlspecialchars_decode(zen_href_link(FILENAME_CHECKOUT_PROCESS, '&order_id='.$_GET['order_id'], 'SSL')); ?>';
+        var validation_url = '<?php echo htmlspecialchars_decode(zen_href_link(FILENAME_CHECKOUT_PROCESS, '&order_id='.filter_input(INPUT_GET,'order_id', FILTER_SANITIZE_STRING), 'SSL')); ?>';
 
         $(document).ready(function () {
             var counter = 0;
