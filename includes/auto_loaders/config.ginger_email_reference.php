@@ -6,11 +6,11 @@ if (!defined('IS_ADMIN_FLAG')) {
 
 $autoLoadConfig[1][] = array(
     'autoType' => 'class',
-    'loadFile' => 'observers/class.emspay_email_reference.php'
+    'loadFile' => 'observers/class.ginger_email_reference.php'
 );
 
 $autoLoadConfig[1][] = array(
     'autoType' => 'classInstantiate',
-    'className' => 'emspay_email_reference',
-    'objectName' => 'emspay_email_reference'
+    'className' => 'ginger_email_reference',
+    'objectName' => 'ginger_email_reference'
 );

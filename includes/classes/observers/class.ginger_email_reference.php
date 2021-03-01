@@ -1,6 +1,6 @@
 <?php
 
-class emspay_email_reference extends base
+class ginger_email_reference extends base
 {
     function __construct()
     {
@@ -9,6 +9,6 @@ class emspay_email_reference extends base
 
     function update(&$class, $eventID, $one, &$email_order, $html_msg)
     {
-        $email_order = str_replace('{{reference}}', $_SESSION['emspay_banktransfer_reference'], $email_order);
+        $email_order = str_replace('{{reference}}', $_SESSION[GINGER_BANK_PREFIX.'_banktransfer_reference'], $email_order);
     }
 }
