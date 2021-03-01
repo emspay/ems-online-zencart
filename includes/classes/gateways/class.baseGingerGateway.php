@@ -597,7 +597,7 @@ class baseGingerGateway extends base
                 $this->emptyCart();
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_SUCCESS, '', 'SSL'));
             } elseif ($gingerOrder['status'] == 'processing' || $gingerOrder['status'] == 'new') {
-                zen_redirect(zen_href_link(FILENAME_ . strtoupper(GINGER_BANK_PREFIX) . _PENDING, '', 'SSL'));
+                zen_redirect(zen_href_link(FILENAME_GINGER_PENDING, '', 'SSL'));
             } elseif ($gingerOrder['status'] == 'cancelled'
                 || $gingerOrder['status'] == 'error'
                 || $gingerOrder['status'] == 'expired'
