@@ -40,3 +40,7 @@
 * Input_filter was added to all variables from the HTTP request.
 * Plugin structure changes to supporting via GPE solution.
 * Plugin code has been refactored to best supporting via GPE solution.
+
+## 1.3.1 ##
+
+* PHPUnit tests was added to cover GPE solution workability.

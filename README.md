@@ -1,7 +1,7 @@
 # EMS Online plugin for ZenCart
 
 ## About
-This is the offical EMS Online plugin.
+This is the official EMS Online plugin.
 
 EMS helps entrepreneurs with the best, smartest and most efficient payment systems. Both in your physical store and online in your webshop. With a wide range of payment methods you can serve every customer.
 
@@ -18,7 +18,7 @@ Free shopping cart plug-ins
 Payment page in the look & feel of your webshop
 Reports in the formats CAMT.053, MT940S, MT940 & CODA
 One clear dashboard for all your payment, turnover data and administration functions
-Promotion promotion extended!
+Promotion extended!
 
 Choose the EMS Online Payment Solution now and pay no subscription costs at € 9.95 throughout 2020!
 
@@ -69,24 +69,24 @@ Version 1.3.0
         - Status for a shipped order: 'Shipped'
 
 4. After configuring  EMS Online module, install the payment method you want to add to your payment page and click 'Install'.
-For every payment method you have to enable he payment module by setting the value to 'True' and click 'Update'.
+For every payment method you have to enable payment module by setting the value to 'True' and click 'Update'.
 
 5. Perform step 4 for every payment method you want to add to your payment page.
 
 6. Klarna specific configuration
 For the payment method Klarna there are several specific settings:
 
-    Test API key
+    * Test API key
 Copy the API Key of your test webshop in the Test API key field.
 When your Klarna application was approved an extra test webshop was created for you to use in your test with Klarna. The name of this webshop starts with ‘TEST Klarna’.
 
-    IP Filtering
+    * IP Filtering
 You can choose to offer Klarna only to a limited set of whitelisted IP addresses. You can use this for instance when you are in the testing phase and want to make sure that Klarna is not available yet for your customers.
-To do this enter the IP addresses that you want to whitelist, separate the addresses by a comma (“,”). The payment method Klarna will only be presented to customers who use a whitelisted IP address.
+To do this : the IP addresses that you want to whitelist, separate the addresses by a comma (“,”). The payment method Klarna will only be presented to customers who use a whitelisted IP address.
 If you want to offer Klarna to all your customers, you can leave the field empty.
 
 7. AfterPay specific configuration
 For the payment method Afterpay, refer to the specific settings for Klarna.
 
-    To allow AfterPay to be used for any other country just add its country code (in ISO 2 standard) to the "Countries available for AfterPay" field. Example: BE, NL, FR
+    * To allow AfterPay to be used for any other country just add its country code (in ISO 2 standard) to the "Countries available for AfterPay" field. Example: BE, NL, FR
 
