@@ -7,7 +7,7 @@ class gingerGateway extends baseGingerGateway
      * @return string
      * Specially for ginger_webhook.php
      */
-    public static function getWebhookStatusUpdateDescription()
+    public static function getWebhookStatusUpdateDescription(): string
     {
         return "Status Changed by EMS Online webhook call";
     }
