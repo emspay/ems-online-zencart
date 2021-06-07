@@ -18,9 +18,9 @@ class emspay_klarnapaylater extends gingerPaymentDefault
         $sort_order = parent::install();
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_GINGER_KLARNAPAYLATER_TEST_API_KEY_TEXT,
-            'configuration_description' => MODULE_PAYMENT_GINGER_KLARNAPAYLATER_TEST_API_KEY_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_GINGER_KLARNAPAYLATER_TEST_API_KEY',
+            'configuration_title' => constant(MODULE_PAYMENT_ . strtoupper($this->code) . _TEST_API_KEY_TEXT),
+            'configuration_description' => constant(MODULE_PAYMENT_ . strtoupper($this->code) . _TEST_API_KEY_DESCRIPTION),
+            'configuration_key' => 'MODULE_PAYMENT_' . strtoupper($this->code) . '_TEST_API_KEY',
             'configuration_value' => '',
             'configuration_group_id' => 6,
             'sort_order' => $sort_order
@@ -28,9 +28,9 @@ class emspay_klarnapaylater extends gingerPaymentDefault
         $sort_order += 1;
 
         $this->setConfigurationField([
-            'configuration_title' => MODULE_PAYMENT_GINGER_KLARNAPAYLATER_IP_FILTERING_TEXT,
-            'configuration_description' => MODULE_PAYMENT_GINGER_KLARNAPAYLATER_IP_FILTERING_DESCRIPTION,
-            'configuration_key' => 'MODULE_PAYMENT_GINGER_KLARNAPAYLATER_IP_FILTERING',
+            'configuration_title' => constant(MODULE_PAYMENT_ . strtoupper($this->code) . _IP_FILTERING_TEXT),
+            'configuration_description' => constant(MODULE_PAYMENT_ . strtoupper($this->code) . _IP_FILTERING_DESCRIPTION),
+            'configuration_key' => 'MODULE_PAYMENT_' . strtoupper($this->code) . '_IP_FILTERING',
             'configuration_value' => '',
             'configuration_group_id' => 6,
             'sort_order' => $sort_order
@@ -46,10 +46,11 @@ class emspay_klarnapaylater extends gingerPaymentDefault
      */
     public function keys(): array
     {
-        return array_merge(parent::keys(),
-            'MODULE_PAYMENT_GINGER_KLARNAPAYLATER_TEST_API_KEY',
-            'MODULE_PAYMENT_GINGER_KLARNAPAYLATER_IP_FILTERING'
-        );
+        $std_keys = parent::keys();
+        return array_merge($std_keys, [
+            'MODULE_PAYMENT_' . strtoupper($this->code) . '_TEST_API_KEY',
+            'MODULE_PAYMENT_' . strtoupper($this->code) . '_IP_FILTERING'
+        ]);
     }
 
     /**

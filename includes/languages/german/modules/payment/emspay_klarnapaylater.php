@@ -34,3 +34,6 @@ define('MODULE_PAYMENT_'.$method_name.'_ERROR_ALREADY_INSTALLED', "Das Klarna Pa
 define('MODULE_PAYMENT_'.$method_name.'_ERROR_TRANSACTION_IS_CANCELLED', "Leider können wir Ihren Kauf mit Klarna Pay Later derzeit nicht akzeptieren. Bitte wählen Sie eine andere Zahlungsmöglichkeit, um Ihre Bestellung abzuschließen. Wir entschuldigen uns für die Unannehmlichkeiten.");
 define('MODULE_PAYMENT_'.$method_name.'_ERROR_GENDER', "Sie haben kein Geschlecht ausgewählt. Bitte wählen Sie das richtige Geschlecht.");
 define('MODULE_PAYMENT_'.$method_name.'_ERROR_DOB', "Leider ist ein Fehler aufgetreten mit dem Geburtsdatum. Bitte geben Sie ihr Geburtsdatum im folgenden Format an: JJJJ-MM-TT, Z.B. 1980-12-31");
+
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_TEXT', "Zulässige Währungen");
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_DESCRIPTION', "Die Zahlungsmethode ist NUR für ausgewählte Währungen verfügbar. Sie können diese Liste verwalten und mit Währungen vergleichen, die von Ihrem Shop akzeptiert werden. <br> Wenn leer, werden die Shop-Währungen mit der Liste der Standardwährungen der Zahlungsanbieter verglichen. <br> Akzeptiertes Listenformat ist <i> CODE1, CODE2, CODE3 </i> Beispiel <i> USD, EUR, UAH </i>.");

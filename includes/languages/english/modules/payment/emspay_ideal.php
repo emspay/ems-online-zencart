@@ -22,3 +22,6 @@ define('MODULE_PAYMENT_'.$method_name.'_ZONE_DESCRIPTION', "If a zone is selecte
 define('MODULE_PAYMENT_'.$method_name.'_ERROR_TRANSACTION', "There was an error processing your payment. We apologize for the inconvenience. Please choose another payment method.");
 define('MODULE_PAYMENT_'.$method_name.'_ERROR_ALREADY_INSTALLED', "The iDEAL module is already installed.");
 define('MODULE_PAYMENT_'.$method_name.'_ERROR_ISSUER', "Please choose your iDEAL issuer bank.");
+
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_TEXT', "Allowed currencies");
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_DESCRIPTION', "The payment method will be available ONLY for selected currencies. You can manage this list and compare it with currencies that accepting by your shop. <br>If set empty - the shop currencies will be compared with the standard payment provider currencies list. <br> Accepted list format is <i>CODE1,CODE2,CODE3</i> example <i>USD,EUR,UAH</i>.");

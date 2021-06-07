@@ -35,3 +35,6 @@ define('MODULE_PAYMENT_'.$method_name.'_ERROR_TRANSACTION_IS_CANCELLED', "Malheu
 
 define('MODULE_PAYMENT_'.$method_name.'_ERROR_GENDER', "Vous n'avez pas sélectionné de sexe. Veuillez sélectionner le sexe correct.");
 define('MODULE_PAYMENT_'.$method_name.'_ERROR_DOB', "Il y avait une erreur avec la date de naissance que vous avez utilisée. Veuillez utiliser le format suivant pour entrer la date de naissance : AAAA-MM-JJ par ex.1980-12-31");
+
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_TEXT', "Devises autorisées");
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_DESCRIPTION', "Le mode de paiement sera disponible UNIQUEMENT pour les devises sélectionnées. Vous pouvez gérer cette liste et la comparer avec les devises acceptées par votre boutique. <br> Si ce paramètre est vide, les devises de la boutique seront comparées à la liste des devises du fournisseur de paiement standard. <br> Le format de liste accepté est <i> CODE1, CODE2, CODE3 </i> exemple <i> USD, EUR, UAH </i>.");

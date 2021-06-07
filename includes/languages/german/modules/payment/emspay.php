@@ -36,3 +36,5 @@ define('MODULE_PAYMENT_'.$prefix.'_ORDER_STATUS_SHIPPED_DESCRIPTION', "Wählen S
 
 define('MODULE_PAYMENT_'.$prefix.'_ERROR_API_KEY', "Der API-Schlüssel wurde nicht festgelegt. Bitte geben Sie einen gültigen API-Schlüssel ein.");
 define('MODULE_PAYMENT_'.$prefix.'_ERROR_TRANSACTION', "Leider ist ein Fehler bei der Verarbeitung Ihrer Bezahlung aufgetreten. Bitte versuchen Sie nochmals.");
+
+define('MODULE_PAYMENT_'.$prefix.'_WARNING_BAD_CURRENCIES_LIST',"<br>Die Einstellungen für zulässige Währungen werden im nicht richtigen Format eingegeben. Dieses Feld wird ignoriert.");

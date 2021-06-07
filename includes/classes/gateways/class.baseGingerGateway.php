@@ -11,7 +11,7 @@ class baseGingerGateway extends base
      *
      * @var string
      */
-    public $moduleVersion = '1.3.1';
+    public $moduleVersion = '1.3.2';
 
     /**
      * @var /Ginger/ApiClient Ginger Payments SDK client
@@ -52,6 +52,27 @@ class baseGingerGateway extends base
         } else {
             $countrylist = array_map("trim", explode(',', $gingerAfterPayCountriesList));
             return in_array($order->billing['country']['iso_code_2'], $countrylist);
+        }
+    }
+
+    public function gingerCurrenciesValidation($order): bool
+    {
+        global $messageStack;
+
+        $order_currency = $order->info['currency'];
+        try{
+        $this->ginger = $this->getClient();
+        $currencies = $this->ginger->getCurrencyList();
+        $ginger_available_currency = $currencies['payment_methods'][GINGER_PAYMENT_MAPPING[$this->getMethodNameFromCode()]]['currencies'];
+        if (in_array($order_currency, $ginger_available_currency)) {
+            return true;
+        } else {
+            $messageStack->add_session('checkout_payment', 'Some payment methods is not supported for selected currency', 'caution');
+            return false;
+        }
+        } catch (Exception $exception) {
+            $messageStack->add_session('checkout_payment', 'Error while applying currency check, message : '.$exception->getMessage(), 'warning');
+            exit;
         }
     }
 
@@ -209,6 +230,28 @@ class baseGingerGateway extends base
         return true;
     }
 
+    public function getInfoForGingerOrder($order)
+    {
+        return array_filter(
+            [
+                'amount' => $this->gerOrderTotalInCents($order),                                                     // amount in cents
+                'currency' => $this->getCurrency($order),                                                            // currency
+                'description' => $this->getOrderDescription(),                                                       // order description
+                'merchant_order_id' => (string)$this->getOrderId(),                                                  // merchantOrderId
+                'return_url' => $this->getReturnUrl(),                                                               // returnUrl
+                'customer' => $this->getCustomerInfo($order),                                                        // customer
+                'extra' => $this->getPluginVersion(),                                                                // extra information
+                'webhook_url' => $this->getWebhookUrl(),                                                             // webhook_url
+                'order_lines' => $this->isRequiredOrderLines() ? $this->getOrderLines($order) : null,                // order lines
+                'transactions' => array_filter([
+                    array_filter([
+                        'payment_method' => GINGER_PAYMENT_MAPPING[$this->getMethodNameFromCode()],
+                        'payment_method_details' => $this->getPaymentDetails()
+                    ])
+                ])
+            ]);
+    }
+
     /**
      * Get Ginger order
      *
@@ -219,36 +262,17 @@ class baseGingerGateway extends base
         global $order, $messageStack;
 
         try {
-            $ginger_order = $this->ginger->createOrder(
-                array_filter(
-                    [
-                        'amount' => $this->gerOrderTotalInCents($order),                                                     // amount in cents
-                        'currency' => $this->getCurrency($order),                                                            // currency
-                        'description' => $this->getOrderDescription(),                                                       // order description
-                        'merchant_order_id' => (string)$this->getOrderId(),                                                 // merchantOrderId
-                        'return_url' => $this->getReturnUrl(),                                                               // returnUrl
-                        'customer' => $this->getCustomerInfo($order),                                                        // customer
-                        'extra' => $this->getPluginVersion(),                                                                // extra information
-                        'webhook_url' => $this->getWebhookUrl(),                                                             // webhook_url
-                        'order_lines' => $this->isRequiredOrderLines() ? $this->getOrderLines($order) : null,                // orderlines
-                        'transactions' => array_filter([
-                            array_filter([
-                                'payment_method' => GINGER_PAYMENT_MAPPING[$this->getMethodNameFromCode()],
-                                'payment_method_details' => $this->getPaymentDetails()
-                            ])
-                        ])
-                    ])
-            );
+            $ginger_order = $this->ginger->createOrder($this->getInfoForGingerOrder($order));
 
             if ($this->isRequiredOrderLines()) {
-                $this->saveOrderInHistory($order);
+                $this->saveOrderInHistory($ginger_order);
             }
 
             switch ($ginger_order['status']) {
                 case 'error' :
                     $messageStack->add_session(
                         'checkout_payment',
-                        $ginger_order['transactions'][0]['reason'] ?? constant(MODULE_PAYMENT_ . strtoupper($this->code) . _ERROR_TRANSACTION),
+                        $ginger_order['transactions'][0]['customer_message'] ?? constant(MODULE_PAYMENT_ . strtoupper($this->code) . _ERROR_TRANSACTION),
                         'error'
                     );
                     zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
@@ -293,7 +317,8 @@ class baseGingerGateway extends base
      */
     public function getMethodNameFromCode()
     {
-        return $this->code == GINGER_BANK_PREFIX ? null : explode('_', $this->code)[1];
+        $method_array = explode('_', $this->code);
+        return $this->code == GINGER_BANK_PREFIX ? null : end($method_array);
     }
 
     /**
@@ -343,7 +368,7 @@ class baseGingerGateway extends base
      */
     public function getOrderDescription(): string
     {
-        return sprintf(constant(MODULE_PAYMENT_ . strtoupper($this->code) . _ORDER_DESCRIPTION), $this->getOrderId(), TITLE);
+        return sprintf(constant('MODULE_PAYMENT_' . strtoupper($this->code) . '_ORDER_DESCRIPTION'), $this->getOrderId(), TITLE);
     }
 
     /**
@@ -429,7 +454,7 @@ class baseGingerGateway extends base
      */
     public function getReturnUrl()
     {
-        return zen_href_link(FILENAME_CHECKOUT_PROCESS, '', 'SSL');
+        return function_exists('zen_href_link') ? zen_href_link(FILENAME_CHECKOUT_PROCESS, '', 'SSL') : 'localhost';
     }
 
     /**
@@ -603,8 +628,8 @@ class baseGingerGateway extends base
                 || $gingerOrder['status'] == 'expired'
             ) {
                 $this->loadLanguageFile(GINGER_BANK_PREFIX);
-                $reason = $gingerOrder['transactions'][0]['reason'] ?: MODULE_PAYMENT_ . strtoupper(GINGER_BANK_PREFIX) . _ERROR_TRANSACTION;
-                $messageStack->add_session('checkout_payment', $reason, 'error');
+                $customer_message = $gingerOrder['transactions'][0]['customer_message'] ?: MODULE_PAYMENT_ . strtoupper(GINGER_BANK_PREFIX) . _ERROR_TRANSACTION;
+                $messageStack->add_session('checkout_payment', $customer_message, 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
             }
         } catch (Exception $exception) {
@@ -750,6 +775,18 @@ class baseGingerGateway extends base
         return in_array($this->getMethodNameFromCode(), ['afterpay', 'klarnapaylater']);
     }
 
+    public function getAmountWithTax($final_price, $tax)
+    {
+        return $this->getAmountInCents(
+            $final_price + zen_calculate_tax($final_price, $tax)
+        );
+    }
+
+    public function getProductUrl($product_id)
+    {
+        return zen_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $product_id);
+    }
+
     /**
      * Generate order lines from the order
      *
@@ -762,15 +799,13 @@ class baseGingerGateway extends base
         foreach ($order->products as $product) {
             $orderLines[] = [
                 'name' => (string)$product['name'],
-                'currency' => 'EUR',
+                'currency' => $this->getCurrency($order),
                 'type' => 'physical',
-                'amount' => $this->getAmountInCents(
-                    $product['final_price'] + zen_calculate_tax($product['final_price'], $product['tax'])
-                ),
+                'amount' => $product['amount'] ?? $this->getAmountWithTax($product['final_price'], $product['tax']),
                 'vat_percentage' => $this->getAmountInCents($product['tax']),
                 'quantity' => (int)$product['qty'],
                 'merchant_order_line_id' => (string)$product['id'],
-                'url' => zen_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $product['id'])
+                'url' => $product['url'] ?? $this->getProductUrl($product['id'])
             ];
         }
 
@@ -792,9 +827,9 @@ class baseGingerGateway extends base
             'amount' => $this->getAmountInCents($order->info['shipping_cost'] + $order->info['shipping_tax']),
             'name' => $order->info['shipping_method'],
             'type' => 'shipping_fee',
-            'currency' => 'EUR',
+            'currency' => $this->getCurrency($order),
             'vat_percentage' => $this->getAmountInCents($this->calculateShippingTax($order)),
-            'merchant_order_line_id' => count($order->products) + 1
+            'merchant_order_line_id' => (string)(count($order->products) + 1)
         ];
     }
 

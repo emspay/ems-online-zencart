@@ -43,3 +43,6 @@ define('MODULE_PAYMENT_'.$method_name.'_TERMS_AND_CONDITIONS', "Gebruiksvoorwaar
 
 define('MODULE_PAYMENT_'.$method_name.'_COUNTRIES_AVAILABLE_TEXT', "Landen beschikbaar voor AfterPay");
 define('MODULE_PAYMENT_'.$method_name.'_COUNTRIES_AVAILABLE_DESCRIPTION', "Om AfterPay voor elk ander land te kunnen gebruiken, voegt u de landcode (in ISO 2-norm) toe aan het veld 'Beschikbare landen voor AfterPay';. <br> Voorbeeld: BE, NL, FR <br> Wenn das Feld leer ist, ist AfterPay fur alle Lander verfugbar.");
+
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_TEXT', "Toegestane valuta's");
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_DESCRIPTION', "De betalingsmethode is ALLEEN beschikbaar voor geselecteerde valuta's. U kunt deze lijst beheren en vergelijken met valuta's die door uw winkel worden geaccepteerd. <br> Indien leeg ingesteld, worden de valuta's van de winkel vergeleken met de standaardvalutalijst van de betalingsprovider. <br> Geaccepteerd lijstformaat is <i> CODE1, CODE2, CODE3 </i> voorbeeld <i> USD, EUR, UAH </i>.");

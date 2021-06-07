@@ -35,3 +35,6 @@ define('MODULE_PAYMENT_'.$method_name.'_ERROR_TRANSACTION_IS_CANCELLED', "Unfort
 
 define('MODULE_PAYMENT_'.$method_name.'_ERROR_GENDER', "You have not selected a gender. Please select the correct gender.");
 define('MODULE_PAYMENT_'.$method_name.'_ERROR_DOB', "There was an error with the date of birth that you entered. Please use the following format for entering the birth date : YYYY-MM-DD, e.g.: 1980-12-31");
+
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_TEXT', "Allowed currencies");
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_DESCRIPTION', "The payment method will be available ONLY for selected currencies. You can manage this list and compare it with currencies that accepting by your shop. <br>If set empty - the shop currencies will be compared with the standard payment provider currencies list. <br> Accepted list format is <i>CODE1,CODE2,CODE3</i> example <i>USD,EUR,UAH</i>.");

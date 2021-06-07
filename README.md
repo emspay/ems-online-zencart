@@ -69,7 +69,8 @@ Version 1.3.0
         - Status for a shipped order: 'Shipped'
 
 4. After configuring  EMS Online module, install the payment method you want to add to your payment page and click 'Install'.
-For every payment method you have to enable payment module by setting the value to 'True' and click 'Update'.
+* For every payment method you have to enable payment module by setting the value to 'True' and click 'Update'.
+* Each payment method has a Allowed currencies(settlement) setting with which it works. Depending on this setting, the selected store currency and the allowed currencies for the EMS gateway, payment methods will be filtered on the Checkout page. This setting can be edited for each payment method, if some currencies are not added, but the payment method works with it.
 
 5. Perform step 4 for every payment method you want to add to your payment page.
 

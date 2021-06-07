@@ -43,3 +43,6 @@ define('MODULE_PAYMENT_'.$method_name.'_TERMS_AND_CONDITIONS', "Nutzungsbedingun
 
 define('MODULE_PAYMENT_'.$method_name.'_COUNTRIES_AVAILABLE_TEXT', "Fur AfterPay verfugbare Lander");
 define('MODULE_PAYMENT_'.$method_name.'_COUNTRIES_AVAILABLE_DESCRIPTION', "Damit AfterPay fur jedes andere Land verwendet werden kann, fugen Sie einfach seinen Landercode (in ISO 2-Norm) in das Feld 'Fur AfterPay verfugbare Lander' ein.<br> Beispiel: BE, NL, FR <br> Als het veld leeg is, is AfterPay beschikbaar voor alle landen.");
+
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_TEXT', "Zulässige Währungen");
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_DESCRIPTION', "Die Zahlungsmethode ist NUR für ausgewählte Währungen verfügbar. Sie können diese Liste verwalten und mit Währungen vergleichen, die von Ihrem Shop akzeptiert werden. <br> Wenn leer, werden die Shop-Währungen mit der Liste der Standardwährungen der Zahlungsanbieter verglichen. <br> Akzeptiertes Listenformat ist <i> CODE1, CODE2, CODE3 </i> Beispiel <i> USD, EUR, UAH </i>.");

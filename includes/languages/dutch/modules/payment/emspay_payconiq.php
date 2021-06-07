@@ -20,3 +20,6 @@ define('MODULE_PAYMENT_'.$method_name.'_ZONE_DESCRIPTION', "Als een zone is gese
 
 define('MODULE_PAYMENT_'.$method_name.'_ERROR_TRANSACTION', "Helaas is er een fout opgetreden tijdens het verwerken van uw betaling. Probeer het alstublieft nogmaals.");
 define('MODULE_PAYMENT_'.$method_name.'_ERROR_ALREADY_INSTALLED', "De Payconiq module is al geïnstalleerd.");
+
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_TEXT', "Toegestane valuta's");
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_DESCRIPTION', "De betalingsmethode is ALLEEN beschikbaar voor geselecteerde valuta's. U kunt deze lijst beheren en vergelijken met valuta's die door uw winkel worden geaccepteerd. <br> Indien leeg ingesteld, worden de valuta's van de winkel vergeleken met de standaardvalutalijst van de betalingsprovider. <br> Geaccepteerd lijstformaat is <i> CODE1, CODE2, CODE3 </i> voorbeeld <i> USD, EUR, UAH </i>.");

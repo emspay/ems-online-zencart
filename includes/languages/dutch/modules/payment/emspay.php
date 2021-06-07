@@ -36,3 +36,5 @@ define('MODULE_PAYMENT_'.$prefix.'_ORDER_STATUS_SHIPPED_DESCRIPTION', "Selecteer
 
 define('MODULE_PAYMENT_'.$prefix.'_ERROR_API_KEY', "De API-sleutel is niet ingesteld. Voer een geldige API-sleutel in.");
 define('MODULE_PAYMENT_'.$prefix.'_ERROR_TRANSACTION', "Helaas is er een fout opgetreden tijdens het verwerken van uw betaling. Probeer het alstublieft nogmaals.");
+
+define('MODULE_PAYMENT_'.$prefix.'_WARNING_BAD_CURRENCIES_LIST',"<br>De instellingen voor toegestane valuta's zijn in een onjuist formaat ingevoerd, dit veld wordt genegeerd.");

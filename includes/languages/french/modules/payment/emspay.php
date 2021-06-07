@@ -36,3 +36,5 @@ define('MODULE_PAYMENT_'.$prefix.'_ORDER_STATUS_SHIPPED_DESCRIPTION', "Sélectio
 
 define('MODULE_PAYMENT_'.$prefix.'_ERROR_API_KEY', "La clé API n'a pas été définie. Veuillez entrer une clé d'API valide.");
 define('MODULE_PAYMENT_'.$prefix.'_ERROR_TRANSACTION', "Il y avait malheureusement un problème traitant votre paiement. Veuillez reessayer le paiement s'il vous plaît.");
+
+define('MODULE_PAYMENT_'.$prefix.'_WARNING_BAD_CURRENCIES_LIST',"<br>Les paramètres pour les devises autorisées saisies dans un format incorrect, ce champ sera ignoré.");

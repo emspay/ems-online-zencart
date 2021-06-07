@@ -43,3 +43,6 @@ define('MODULE_PAYMENT_'.$method_name.'_TERMS_AND_CONDITIONS', "Terms & Conditio
 
 define('MODULE_PAYMENT_'.$method_name.'_COUNTRIES_AVAILABLE_TEXT', "Countries available for AfterPay");
 define('MODULE_PAYMENT_'.$method_name.'_COUNTRIES_AVAILABLE_DESCRIPTION', "To allow AfterPay to be used for any other country just add its country code (in ISO 2 standard) to the 'Countries available for AfterPay' field. <br> Example: BE, NL, FR <br> If field is empty then AfterPay will be available for all countries.");
+
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_TEXT', "Allowed currencies");
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_DESCRIPTION', "The payment method will be available ONLY for selected currencies. You can manage this list and compare it with currencies that accepting by your shop. <br>If set empty - the shop currencies will be compared with the standard payment provider currencies list. <br> Accepted list format is <i>CODE1,CODE2,CODE3</i> example <i>USD,EUR,UAH</i>.");

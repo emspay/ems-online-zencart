@@ -43,3 +43,6 @@ define('MODULE_PAYMENT_'.$method_name.'_TERMS_AND_CONDITIONS', "Termes et condit
 
 define('MODULE_PAYMENT_'.$method_name.'_COUNTRIES_AVAILABLE_TEXT', "Pays disponibles pour AfterPay");
 define('MODULE_PAYMENT_'.$method_name.'_COUNTRIES_AVAILABLE_DESCRIPTION', "Pour autoriser AfterPay a etre utilise pour tout autre pays, ajoutez simplement son code de pays (dans la norme ISO 2) au champ 'Pays disponibles pour AfterPay'.<br> Exemple: BE, NL, FR <br> Si le champ est vide, AfterPay sera disponible pour tous les pays.");
+
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_TEXT', "Devises autorisées");
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_DESCRIPTION', "Le mode de paiement sera disponible UNIQUEMENT pour les devises sélectionnées. Vous pouvez gérer cette liste et la comparer avec les devises acceptées par votre boutique. <br> Si ce paramètre est vide, les devises de la boutique seront comparées à la liste des devises du fournisseur de paiement standard. <br> Le format de liste accepté est <i> CODE1, CODE2, CODE3 </i> exemple <i> USD, EUR, UAH </i>.");

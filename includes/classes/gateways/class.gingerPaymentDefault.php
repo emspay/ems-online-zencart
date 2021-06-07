@@ -37,9 +37,11 @@ class gingerPaymentDefault extends gingerGateway
             $this->update_status();
             if ($this->isKlarnaPayLater()) {
                 $this->enabled = $this->enabled ? $this->gingerKlarnaPayLaterIpFiltering() : false;
-            }
-            if ($this->isAfterPay() && $this->enabled) {
+            } elseif ($this->isAfterPay() && $this->enabled) {
                 $this->enabled = $this->gingerAfterPayIpFiltering() && $this->gingerAfterPayCountriesValidation($order);
+            }
+            if ($this->code != GINGER_BANK_PREFIX) {
+                $this->enabled = $this->gingerCurrenciesValidation($order);
             }
         }
 
@@ -73,6 +75,30 @@ class gingerPaymentDefault extends gingerGateway
         }
 
         return true;
+    }
+
+    public function getMethodNameWithoutBank()
+    {
+        $method_name = explode('_', $this->code);
+        return end($method_name);
+    }
+
+    function validateCurrenciesListFromSettings()
+    {
+        global $messageStack;
+
+        $currency_option = trim(constant(MODULE_PAYMENT_ . strtoupper($this->code) . _CURRENCIES));
+        $currency_list = explode(',', $currency_option);
+        $check = array_map(function ($code) {
+            $regex = "/^[A-Z]{3}$/";
+            if (!preg_match($regex, $code)) {
+                return false;
+            }
+            return true;
+        }, $currency_list);
+        if (in_array(false, $check)) {
+            $this->title .= '<span style="margin: 10px; background-color: yellow; color: black;">' . constant(MODULE_PAYMENT_ . strtoupper(GINGER_BANK_PREFIX) . _WARNING_BAD_CURRENCIES_LIST) . '</span>';
+        }
     }
 
     /**
@@ -148,7 +174,7 @@ class gingerPaymentDefault extends gingerGateway
 
         require_once(zen_get_file_directory(
             DIR_FS_CATALOG . DIR_WS_LANGUAGES . $language . '/modules/payment/',
-            $code ?? $this->code. '.php'
+            $code ?? $this->code . '.php'
         ));
     }
 
@@ -212,7 +238,8 @@ class gingerPaymentDefault extends gingerGateway
             'MODULE_PAYMENT_' . strtoupper($this->code) . '_DISPLAY_TITLE',
             'MODULE_PAYMENT_' . strtoupper($this->code) . '_STATUS',
             'MODULE_PAYMENT_' . strtoupper($this->code) . '_SORT_ORDER',
-            'MODULE_PAYMENT_' . strtoupper($this->code) . '_ZONE'
+            'MODULE_PAYMENT_' . strtoupper($this->code) . '_ZONE',
+            'MODULE_PAYMENT_' . strtoupper($this->code) . '_CURRENCIES'
         );
     }
 
@@ -245,16 +272,15 @@ class gingerPaymentDefault extends gingerGateway
      */
     public function getAdditionalPaymentFields()
     {
-        switch (explode('_', $this->code)[1])
-        {
+        switch ($this->getMethodNameWithoutBank()) {
             case 'afterpay' :
                 return $this->getAfterPayFields();
             case 'ideal' :
                 return [
                     $this->getIdealFields()
-                    ];
+                ];
             default :
-               return null;
+                return null;
         }
     }
 
@@ -263,7 +289,21 @@ class gingerPaymentDefault extends gingerGateway
      */
     public function before_process()
     {
-        if (in_array($this->code, [GINGER_BANK_PREFIX . '_afterpay'])) {
+        global $messageStack;
+
+        if (array_key_exists('order_id', $_GET)) {
+            $order_id = filter_input(INPUT_GET, 'order_id', FILTER_SANITIZE_STRING);
+            $ginger_order = $this->ginger->getOrder($order_id);
+            $transaction = current($ginger_order['transactions']);
+
+            if (key_exists('customer_message', $transaction)) {
+                $messageStack->add_session('checkout_payment', $transaction['customer_message'], 'error');
+                zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
+            }
+
+            $this->statusRedirect(filter_input(INPUT_GET, 'order_id', FILTER_SANITIZE_STRING));
+        }
+        if ($this->code == GINGER_BANK_PREFIX . '_afterpay' && !array_key_exists('order_id', $_GET)) {
             global $messageStack;
 
             if (empty($_POST[$this->code . '_gender'])) {
@@ -280,8 +320,6 @@ class gingerPaymentDefault extends gingerGateway
                 $messageStack->add_session('checkout_payment', constant(MODULE_PAYMENT_ . strtoupper($this->code) . _ERROR_TERMS_AND_CONDITIONS), 'error');
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
             }
-        } elseif (array_key_exists('order_id', $_GET)) {
-            $this->statusRedirect(filter_input(INPUT_GET, 'order_id', FILTER_SANITIZE_STRING));
         }
     }
 

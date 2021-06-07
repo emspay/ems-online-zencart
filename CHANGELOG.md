@@ -44,3 +44,17 @@
 ## 1.3.1 ##
 
 * PHPUnit tests was added to cover GPE solution workability.
+
+## 1.3.2 ##
+
+* Completely implemented multi-currency feature with synchronization with Ginger API.
+* Implemented stub `MockedOrderBuilder.php` for PHPUnit tests.
+* Implemented test coverage for createOrder function.
+* Implemented Google Pay payment method.  
+* Solved issue when the ginger pending message doesn't display for Afterpay payment method.
+* Solved issue when Afterpay payment method doesn't work properly.
+* Solved issue with the content of error message on returnUrl.
+* Solved issue when Klarna Pay Later had missing keys in translation files.
+* Solved issue when Klarna Pay Later doesn't install.
+* Solved issue UpdateOrderStatus function for payment methods with order lines.
+* Solved issue when bad currency list warning displays on the checkout page when not expected. 

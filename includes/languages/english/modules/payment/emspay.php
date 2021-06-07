@@ -34,3 +34,5 @@ define('MODULE_PAYMENT_'.$prefix.'_ORDER_STATUS_SHIPPED_DESCRIPTION', "Select th
 define('MODULE_PAYMENT_'.$prefix.'_ERROR_API_KEY', "The API Key has not been set. Please enter a valid API Key.");
 define('MODULE_PAYMENT_'.$prefix.'_ERROR_TRANSACTION', "There was an error processing your payment. We apologize for the inconvenience. Please choose another payment method.");
 define('MODULE_PAYMENT_'.$prefix.'_ERROR_ALREADY_INSTALLED', "The EMS Online module is already installed.");
+
+define('MODULE_PAYMENT_'.$prefix.'_WARNING_BAD_CURRENCIES_LIST',"<br>The settings for allowed currencies  entered in not right format, this field will be ignored.");

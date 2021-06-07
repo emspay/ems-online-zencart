@@ -35,3 +35,6 @@ define('MODULE_PAYMENT_'.$method_name.'_ERROR_TRANSACTION_IS_CANCELLED', "Helaas
 
 define('MODULE_PAYMENT_'.$method_name.'_ERROR_GENDER', "U hebt geen geslacht geselecteerd. Selecteer het juiste geslacht.");
 define('MODULE_PAYMENT_'.$method_name.'_ERROR_DOB', "Er is een fout opgetreden met de geboortedatum die u heeft opgegeven. Gebruik het volgende formaat voor het invoeren van de geboortedatum: JJJJ - MM - DD, bijv: 1980-12-31");
+
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_TEXT', "Toegestane valuta's");
+define('MODULE_PAYMENT_'.$method_name.'_MULTICURRENCIES_DESCRIPTION', "De betalingsmethode is ALLEEN beschikbaar voor geselecteerde valuta's. U kunt deze lijst beheren en vergelijken met valuta's die door uw winkel worden geaccepteerd. <br> Indien leeg ingesteld, worden de valuta's van de winkel vergeleken met de standaardvalutalijst van de betalingsprovider. <br> Geaccepteerd lijstformaat is <i> CODE1, CODE2, CODE3 </i> voorbeeld <i> USD, EUR, UAH </i>.");
